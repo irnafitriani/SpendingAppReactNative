@@ -7,47 +7,69 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  StyleSheet,
-  Text,
-  View
+  Navigator,
 } from 'react-native';
+import Registration from './app/components/registration'
+import Login from './app/components/login'
+import ForgotPassword from './app/components/forgotPassword'
 
 export default class SpendingApp extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  navForward(route) {
+    this.nav.push({
+      name: route.name
+    })
+  }
+
+  navBackward(route) {
+    this.nav.pop()
+  }
+
+  renderScene(route, nav) {
+    switch(route.name) {
+      case 'login':
+        return (
+          <Login
+            nav = {this.nav}
+            navForward={this.navForward.bind(this)}
+            navBackward={this.navBackward.bind(this)}
+           />
+        )
+      case 'signup':
+        return (
+          <Registration
+            nav = {this.nav}
+          />
+        )
+      case 'forgotpassword':
+        return (
+          <ForgotPassword
+            nav = {this.nav}
+          />
+        )
+
+    }
+  }
+
+  configureScene() {
+    return Navigator.SceneConfigs.FloatFromBottom;
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+      <Navigator
+        configureScene={this.configureScene}
+        initialRoute={{name: 'login', index: 0}}
+        ref={((nav) => {
+          this.nav = nav;
+        })}
+        renderScene={this.renderScene.bind(this)}
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
 
 AppRegistry.registerComponent('SpendingApp', () => SpendingApp);
