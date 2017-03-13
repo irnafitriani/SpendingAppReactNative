@@ -13,13 +13,8 @@ import {
 } from 'react-native';
 import Registration from './app/registration'
 import Login from './app/login'
+import Navigation from './app/navigation'
 
-export default class SpendingApp extends Component {
-  render() {
-    return(
-       <Login />
-    )
-  }
-}
 
-AppRegistry.registerComponent('SpendingApp', () => SpendingApp);
+
+AppRegistry.registerComponent('SpendingApp', () => Navigation);

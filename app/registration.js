@@ -6,7 +6,8 @@ import{
     View,
     Image,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    Navigator
 } from 'react-native'
 
 const background = require("../images/background.jpg");
@@ -15,6 +16,12 @@ const personIcon = require("../images/person.png");
 const mailIcon = require("../images/mail.png");
 
 export default class Registration extends Component{
+    goToSignIn(){
+        this.props.navigator.replace({
+            title: 'Login',
+            id: 'Login'
+        })
+    }
     render(){
         return(
             <Image 
@@ -100,7 +107,8 @@ export default class Registration extends Component{
                             <Text style={styles.buttonText}>Sign Up</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={.5}>
+                    <TouchableOpacity activeOpacity={.5}
+                        onPress={this.goToSignIn.bind(this)}>
                         <View>
                             <Text style={styles.loginText}>Already has an account, Sign In</Text>
                         </View>
