@@ -14,7 +14,7 @@ const lockIcon = require("../images/lock.png");
 const personIcon = require("../images/person.png");
 const mailIcon = require("../images/mail.png");
 
-export default class Registration extends Component{
+export default class Login extends Component{
     render(){
         return(
             <Image 
@@ -32,35 +32,7 @@ export default class Registration extends Component{
                             />
                         </View>
                         <TextInput
-                            placeholder="Name"
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
-                        />
-                    </View>
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <Image
-                                source={personIcon}
-                                style = {styles.icon}
-                                resizeMode="contain"
-                            />
-                        </View>
-                        <TextInput
                             placeholder="Username"
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
-                        />
-                    </View>
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <Image
-                                source={mailIcon}
-                                style = {styles.icon}
-                                resizeMode="contain"
-                            />
-                        </View>
-                        <TextInput
-                            placeholder="Email"
                             style={styles.input}
                             underlineColorAndroid="transparent"
                         />
@@ -80,29 +52,19 @@ export default class Registration extends Component{
                             underlineColorAndroid="transparent"
                         />
                     </View>
-                     <View style={styles.inputWrap}>
-                         <View style={styles.iconWrap}>
-                            <Image
-                                source={lockIcon}
-                                style = {styles.icon}
-                                resizeMode="contain"
-                            />
-                        </View>
-                        <TextInput
-                            placeholder="Confirm Password"
-                            secureTextEntry
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
-                        />
-                    </View>
                     <TouchableOpacity activeOpacity={.5}>
                         <View style={styles.button}>
-                            <Text style={styles.buttonText}>Sign Up</Text>
+                            <Text style={styles.buttonText}>Sign In</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={.5}>
                         <View>
-                            <Text style={styles.loginText}>Already has an account, Sign In</Text>
+                            <Text style={styles.signUp}>Do not have an account, Sign Up!</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity activeOpacity={.5}>
+                        <View>
+                            <Text style={styles.signUp}>ForgotPassword?</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -158,7 +120,7 @@ const styles = StyleSheet.create({
       fontSize: 18
 
   },
-  loginText: {
+  signUp: {
       color:"#FFF",
       backgroundColor:"transparent",
       textAlign: "center"

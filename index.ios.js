@@ -12,11 +12,12 @@ import {
   View
 } from 'react-native';
 import Registration from './app/registration'
+import Login from './app/login'
 
 export default class SpendingApp extends Component {
   render() {
     return(
-       <Registration />
+       <Login />
     )
   }
 }
