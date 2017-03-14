@@ -8,15 +8,6 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
 } from 'react-native';
-import Registration from './app/components/registration'
-import Login from './app/componnets/login'
+import Navigation from './app/navigation'
 
-export default class SpendingApp extends Component {
-  render() {
-    return(
-       <Login />
-    )
-  }
-}
-
-AppRegistry.registerComponent('SpendingApp', () => SpendingApp);
+AppRegistry.registerComponent('SpendingApp', () => Navigation);
