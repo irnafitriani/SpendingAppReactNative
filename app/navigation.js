@@ -3,6 +3,7 @@ import { Navigator, BackAndroid } from 'react-native'
 import Registration from './registration'
 import Login from './login'
 import ForgotPassword from './forgotPassword'
+import Tabbar from './tabbar'
 
 
 export default class Navigation extends Component{
@@ -35,6 +36,8 @@ export default class Navigation extends Component{
                 return(<Login navigator={ navigator } />)
             case 'ForgotPassword':
                 return(<ForgotPassword navigator={ navigator } />)
+            case 'Tabbar':
+                return(<Tabbar navigator={ navigator } />)
         }
     }
     render(){
