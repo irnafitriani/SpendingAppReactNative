@@ -6,6 +6,7 @@ import ForgotPassword from './forgotPassword'
 import AddTransaction from './addTransaction'
 import TransactionHistory from './transactionHistory'
 import TransactionDetail from './transactionDetail'
+import Tabbar from './tabbar'
 
 export default class Navigation extends Component{
     constructor() {
@@ -43,6 +44,8 @@ export default class Navigation extends Component{
                 return(<TransactionHistory navigator={ navigator } />)
             case 'TransactionDetail':
                 return(<TransactionDetail navigator={ navigator } />)
+            case 'Tabbar':
+                return(<Tabbar navigator={ navigator } selectedTab={route.selectedTab} />)
         }
     }
     render(){

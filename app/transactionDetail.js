@@ -9,8 +9,9 @@ import {
 export default class TransactionDetail extends React.Component {
     onGoBackPressed() {
         this.props.navigator.replace({
-            title: 'Transaction History',
-            id: 'TransactionHistory'
+            title: 'Dashboard',
+            id: 'Tabbar',
+            selectedTab: 'transaction' 
         })
     }
 

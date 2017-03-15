@@ -38,10 +38,11 @@ export default class Login extends Component{
         })
     }
 
-    onSignIn(){
+    signIn(){
         this.props.navigator.replace({
-            title: 'Transaction History',
-            id: 'TransactionHistory'
+            title: 'Dashboard',
+            id: 'Tabbar',
+            selectedTab: 'dashboard'
         })
     }
 
@@ -83,7 +84,7 @@ export default class Login extends Component{
                         />
                     </View>
                     <TouchableOpacity activeOpacity={.5}
-                        onPress={ this.onSignIn.bind(this) }>
+                        onPress= {this.signIn.bind(this)}>
                         <View style={styles.button}>
                             <Text style={styles.buttonText}>Sign In</Text>
                         </View>
