@@ -14,7 +14,7 @@ const lockIcon = require("../images/lock.png");
 const personIcon = require("../images/person.png");
 const mailIcon = require("../images/mail.png");
 
-export default class Registration extends Component{
+export default class ForgotPassword extends Component{
     goToSignIn(){
         this.props.navigator.replace({
             title: 'Login',

@@ -38,6 +38,13 @@ export default class Login extends Component{
         })
     }
 
+    onSignIn(){
+        this.props.navigator.replace({
+            title: 'Transaction History',
+            id: 'TransactionHistory'
+        })
+    }
+
     render(){
         return(
             <Image 
@@ -75,7 +82,8 @@ export default class Login extends Component{
                             underlineColorAndroid="transparent"
                         />
                     </View>
-                    <TouchableOpacity activeOpacity={.5}>
+                    <TouchableOpacity activeOpacity={.5}
+                        onPress={ this.onSignIn.bind(this) }>
                         <View style={styles.button}>
                             <Text style={styles.buttonText}>Sign In</Text>
                         </View>

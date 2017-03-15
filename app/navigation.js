@@ -3,7 +3,9 @@ import { Navigator, BackAndroid } from 'react-native'
 import Registration from './registration'
 import Login from './login'
 import ForgotPassword from './forgotPassword'
-
+import AddTransaction from './addTransaction'
+import TransactionHistory from './transactionHistory'
+import TransactionDetail from './transactionDetail'
 
 export default class Navigation extends Component{
     constructor() {
@@ -35,6 +37,12 @@ export default class Navigation extends Component{
                 return(<Login navigator={ navigator } />)
             case 'ForgotPassword':
                 return(<ForgotPassword navigator={ navigator } />)
+            case 'AddTransaction':
+                return(<AddTransaction navigator={ navigator } />)
+            case 'TransactionHistory':
+                return(<TransactionHistory navigator={ navigator } />)
+            case 'TransactionDetail':
+                return(<TransactionDetail navigator={ navigator } />)
         }
     }
     render(){
