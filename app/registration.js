@@ -7,8 +7,19 @@ import{
     Image,
     TextInput,
     TouchableOpacity,
-    Navigator
+    Navigator,
+    AsyncStorage
 } from 'react-native'
+import Firebase from 'firebase'
+  var config = {
+    apiKey: "AIzaSyCs_RvS8_cO1MveSv7y7WZLXkwlxP5Quls",
+    authDomain: "spendingapp-17154.firebaseapp.com",
+    databaseURL: "https://spendingapp-17154.firebaseio.com",
+    storageBucket: "spendingapp-17154.appspot.com",
+    messagingSenderId: "573996213059"
+  };
+  Firebase.initializeApp(config);
+  var rootRef = Firebase.database().ref()
 
 const background = require("../images/background.jpg");
 const lockIcon = require("../images/lock.png");
@@ -16,6 +27,46 @@ const personIcon = require("../images/person.png");
 const mailIcon = require("../images/mail.png");
 
 export default class Registration extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            loaded: true,
+            name: '',
+            email: '',
+            password:'',
+            confirmPassword: ''
+        }
+    }
+    signUp(){
+        this.setState({
+            loaded: false
+        })
+
+        Firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
+            .then((userData) => {
+                this.setState({
+                name: '',
+                email:'',
+                password:'',
+                confirmPassword:'',
+                loaded: true
+            })
+            AsyncStorage.setItem('userData', JSON.stringify(userData));
+            alert('data created');
+            })
+            .catch(function(error){
+                //Handle Errors
+                var errorCode = error.code;
+                var errorMessage = error.message;
+
+                if (errorCode == 'auth/weak-password'){
+                    alert('The password is too weak');
+                }else{
+                    alert(errorMessage);
+                }
+            })
+    }
+
     goToSignIn(){
         this.props.navigator.replace({
             title: 'Login',
@@ -42,20 +93,8 @@ export default class Registration extends Component{
                             placeholder="Name"
                             style={styles.input}
                             underlineColorAndroid="transparent"
-                        />
-                    </View>
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <Image
-                                source={personIcon}
-                                style = {styles.icon}
-                                resizeMode="contain"
-                            />
-                        </View>
-                        <TextInput
-                            placeholder="Username"
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
+                            onChangeText={(name) => this.setState({name})}
+                            value={this.state.name}
                         />
                     </View>
                     <View style={styles.inputWrap}>
@@ -70,6 +109,8 @@ export default class Registration extends Component{
                             placeholder="Email"
                             style={styles.input}
                             underlineColorAndroid="transparent"
+                            onChangeText={(email) => this.setState({email})}
+                            value={this.state.email}
                         />
                     </View>
                     <View style={styles.inputWrap}>
@@ -85,6 +126,8 @@ export default class Registration extends Component{
                             secureTextEntry
                             style={styles.input}
                             underlineColorAndroid="transparent"
+                            onChangeText={(password) => this.setState({password})}
+                            value={this.state.password}
                         />
                     </View>
                      <View style={styles.inputWrap}>
@@ -100,9 +143,12 @@ export default class Registration extends Component{
                             secureTextEntry
                             style={styles.input}
                             underlineColorAndroid="transparent"
+                            onChangeText={(confirmPassword) => this.setState({confirmPassword})}
+                            value={this.state.confirmPassword}
                         />
                     </View>
-                    <TouchableOpacity activeOpacity={.5}>
+                    <TouchableOpacity activeOpacity={.5}
+                        onPress={this.signUp.bind(this)}>
                         <View style={styles.button}>
                             <Text style={styles.buttonText}>Sign Up</Text>
                         </View>
