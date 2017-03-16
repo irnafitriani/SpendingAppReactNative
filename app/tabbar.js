@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import TabNavigator from 'react-native-tab-navigator'
 import Dashboard from './dashboard'
 import TransactionHistory from './transactionHistory'
+import Account from './account'
 import{
     View
 } from 'react-native'
@@ -36,7 +37,7 @@ export default class Tabbar extends Component{
                         selected={this.state.selectedTab === 'account'}
                         title = 'Account'
                         onPress={() => this.setState({selectedTab: 'account'})}>
-                        {<Dashboard 
+                        {<Account 
                             selectedTab={this.state.selectedTab}
                             navigator={this.props.navigator}/>}
                     </TabNavigator.Item>
