@@ -43,7 +43,7 @@ export default class Navigation extends Component{
             case 'TransactionHistory':
                 return(<TransactionHistory navigator={ navigator } />)
             case 'TransactionDetail':
-                return(<TransactionDetail navigator={ navigator } />)
+                return(<TransactionDetail navigator={ navigator } transaction={route.transaction} />)
             case 'Tabbar':
                 return(<Tabbar navigator={ navigator } selectedTab={route.selectedTab} />)
         }

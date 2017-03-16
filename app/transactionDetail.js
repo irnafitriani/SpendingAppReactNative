@@ -17,27 +17,29 @@ export default class TransactionDetail extends React.Component {
 
     render() {
         return(
-            <View>
-                <View style={styles.row}>
-                    <View style={styles.subRow}>
-                        <Text style={styles.label}>Date</Text>
-                        <Text style={styles.label}>:</Text>
+            <View style={styles.container}>
+                <View>
+                    <View style={styles.row}>
+                        <View style={styles.subRow}>
+                            <Text style={styles.label}>Date</Text>
+                            <Text style={styles.label}>:</Text>
+                        </View>
+                        <Text style={styles.label}>{this.props.transaction.date}</Text>
                     </View>
-                    <Text style={styles.label}>14/3/2017</Text>
-                </View>
-                <View style={styles.row}>
-                    <View style={styles.subRow}>
-                        <Text style={styles.label}>Amount</Text>
-                        <Text style={styles.label}>:</Text>
+                    <View style={styles.row}>
+                        <View style={styles.subRow}>
+                            <Text style={styles.label}>Amount</Text>
+                            <Text style={styles.label}>:</Text>
+                        </View>
+                        <Text style={styles.label}>Rp. {this.props.transaction.amount}</Text>
                     </View>
-                    <Text style={styles.label}>Rp. 10.000</Text>
-                </View>
-                <View style={styles.row}>
-                    <View style={styles.subRow}>
-                        <Text style={styles.label}>Description</Text>
-                        <Text style={styles.label}>:</Text>
+                    <View style={styles.row}>
+                        <View style={styles.subRow}>
+                            <Text style={styles.label}>Description</Text>
+                            <Text style={styles.label}>:</Text>
+                        </View>
+                        <Text style={styles.label}>{this.props.transaction.name}</Text>
                     </View>
-                    <Text style={styles.label}>Bought breakfast</Text>
                 </View>
                 <TouchableHighlight 
                     style={styles.button}
@@ -52,12 +54,8 @@ export default class TransactionDetail extends React.Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
-        borderWidth: 0,
-        borderBottomWidth: 2,
-        borderColor: '#e7e7e7',
         padding: 20,
         flex: 1,
-        flexDirection: 'row',
         justifyContent: 'space-between',
     },
     label: {
@@ -67,9 +65,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginLeft: 10,
-        marginRight: 10,
-        padding: 10,
+        paddingBottom: 10,
     },
     subRow: {
         flexDirection: 'row',
@@ -77,14 +73,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     button:{
-        backgroundColor: "#ffffff",
+        backgroundColor: "#0d0d0d",
         paddingVertical: 15,
         marginVertical: 15,
         alignItems: "center",
         justifyContent: "center"
     },
     buttonText:{
-        color:"#0d0d0d",
+        color:"#fff",
         fontSize: 18
 
     },

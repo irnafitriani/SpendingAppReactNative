@@ -7,10 +7,15 @@ import {
 } from 'react-native'
 
 export default class TransactionRow extends React.Component {
+    constructor() {
+        super()
+    }
+
     openTransactionDetail() {
         this.props.navigator.replace({
             title: 'Transaction Detail',
-            id: 'TransactionDetail'
+            id: 'TransactionDetail',
+            transaction: this.props.transaction,
         })
     }
 
@@ -19,7 +24,13 @@ export default class TransactionRow extends React.Component {
             <TouchableHighlight 
                 style={styles.container}
                 onPress={this.openTransactionDetail.bind(this)}>
-                <Text style={styles.label}>{this.props.transaction.name}</Text>
+                <View style={styles.rowWrapper}>
+                    <View style={styles.row}>
+                        <Text>Amount : Rp. {this.props.transaction.amount}</Text>
+                        <Text>{this.props.transaction.date}</Text>
+                    </View>
+                    <Text style={styles.label}>{this.props.transaction.name}</Text>
+                </View>
             </TouchableHighlight>
         )
     }
@@ -38,6 +49,16 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 20,
-        fontWeight: '300'
+        fontWeight: '300',
+    },
+    row: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    rowWrapper: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
 });

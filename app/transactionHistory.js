@@ -14,7 +14,10 @@ export default class TransactionHistory extends React.Component {
         super()
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         this.state = {
-            dataSource: ds.cloneWithRows([{name: 'transaction 1'}, {name: 'transaction 2'}])
+            dataSource: ds.cloneWithRows([
+                {name: 'transaction 1', amount: 12000, date: '15/3/2017'}, 
+                {name: 'transaction 2', amount: 20000, date: '16/3/2017'}
+            ])
         }
     }
 
