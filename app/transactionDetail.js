@@ -73,15 +73,16 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     button:{
-        backgroundColor: "#0d0d0d",
-        paddingVertical: 15,
+        backgroundColor: "#9b59b6",
+        borderRadius: 4,
+        paddingVertical: 10,
         marginVertical: 15,
         alignItems: "center",
         justifyContent: "center"
     },
     buttonText:{
         color:"#fff",
-        fontSize: 18
+        fontSize: 15
 
     },
 })

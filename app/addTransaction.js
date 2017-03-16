@@ -7,8 +7,14 @@ import {
     StyleSheet,
     View,
 } from 'react-native'
+import DatePicker from 'react-native-datepicker'
 
 export default class AddTransaction extends React.Component {
+    constructor() {
+        super()
+        this.state = {date: ''}
+    }
+
     onCancelPressed() {
         this.props.navigator.replace({
             title: 'Dashboard',
@@ -24,10 +30,29 @@ export default class AddTransaction extends React.Component {
     render() {
         return(
             <View style={styles.container}>
-                <View style={styles.rowWrapper}>
+                <View style={styles.rowContainer}>
                     <View style={styles.row}>
                         <Text style={styles.label}>Date</Text>
-                        <Text>14/3/2017</Text>
+                        <DatePicker
+                            style={{flex: 1}}
+                            date={this.state.date}
+                            mode="date"
+                            placeholder="select date"
+                            format="YYYY-MM-DD"
+                            confirmBtnText="Select"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                                dateIcon: {
+                                    position: 'absolute',
+                                    right: 0,
+                                    top: 4,
+                                },
+                                dateInput: {
+                                    marginRight: 36
+                                }
+                            }}
+                            onDateChange={(date) => {this.setState({date: date})}}
+                        />
                     </View>
                     <View style={styles.row}>
                         <Text style={styles.label}>Amount</Text>
@@ -64,25 +89,21 @@ export default class AddTransaction extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    row: {
-        flexDirection: 'row'
-    },
-    label: {
-        width: 100,
-        color: '#000',
-    },
     container: {        
         flex: 1,
         padding: 10
     },
-    buttonContainer: {
-        flexDirection: 'row',
-        padding: 10,
-        justifyContent: 'space-between'
+    row: {
+        padding: 5,
+        flexDirection: 'row'
     },
-    background: {
-        width: null,
-        height: null
+    rowContainer: {
+        flex: 1,
+    },
+    label: {
+        marginTop: 10,
+        width: 100,
+        color: '#000',
     },
     input:{
         backgroundColor: "#fff",
@@ -95,21 +116,26 @@ const styles = StyleSheet.create({
         borderColor: '#adadad',
         borderWidth: 1,
         flex: 1,
+        height: 120,
         justifyContent: 'flex-start',
+        textAlignVertical: 'top',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        padding: 5,
+        justifyContent: 'space-between'
     },
     button:{
+        borderRadius: 4,
         backgroundColor: "#9b59b6",
         flex: 1, 
-        padding: 15,
+        padding: 10,
         margin: 15,
         alignItems: "center",
         justifyContent: "center"
     },
     buttonText:{
-        color:"#0d0d0d",
-        fontSize: 18
-    },
-    rowWrapper: {
-        flex: 1,
+        color:"#fff",
+        fontSize: 15
     },
 });

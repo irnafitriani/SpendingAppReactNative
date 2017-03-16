@@ -26,7 +26,7 @@ export default class TransactionRow extends React.Component {
                 onPress={this.openTransactionDetail.bind(this)}>
                 <View style={styles.rowWrapper}>
                     <View style={styles.row}>
-                        <Text>Amount : Rp. {this.props.transaction.amount}</Text>
+                        <Text>Amount : Rp {this.props.transaction.amount}</Text>
                         <Text>{this.props.transaction.date}</Text>
                     </View>
                     <Text style={styles.label}>{this.props.transaction.name}</Text>
