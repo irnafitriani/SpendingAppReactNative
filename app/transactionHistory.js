@@ -45,6 +45,8 @@ export default class TransactionHistory extends React.Component {
                 />
                 <ActionButton 
                     buttonColor='#9b59b6'
+                    offsetX={15}
+                    offsetY={15}
                     onPress={this.addTransaction.bind(this)} />
             </View>
         )
