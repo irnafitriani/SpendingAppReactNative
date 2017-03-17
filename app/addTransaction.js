@@ -12,19 +12,29 @@ import DatePicker from 'react-native-datepicker'
 export default class AddTransaction extends React.Component {
     constructor() {
         super()
-        this.state = {date: ''}
+        this.state = {date: '', amount: 0, description: ''}
     }
 
     onCancelPressed() {
         this.props.navigator.replace({
             title: 'Dashboard',
             id: 'Tabbar',
-            selectedTab: 'transaction' 
+            selectedTab: 'transaction',
+            transactions: this.props.transactions
         })
     }
 
     onSavePressed() {
-
+        let trans = this.props.transactions
+        const allTransactions = trans.concat([{
+            name: this.state.description, amount: this.state.amount, date: this.state.date,
+        }])
+        this.props.navigator.replace({
+            title: 'Dashboard',
+            id: 'Tabbar',
+            selectedTab: 'transaction',
+            transactions: allTransactions
+        })
     }
 
     render() {
@@ -57,6 +67,7 @@ export default class AddTransaction extends React.Component {
                     <View style={styles.row}>
                         <Text style={styles.label}>Amount</Text>
                         <TextInput
+                            onChangeText={(amount) => {this.state.amount = amount}}
                             keyboardType='numeric'
                             style={styles.input}
                             underlineColorAndroid="transparent"
@@ -65,6 +76,7 @@ export default class AddTransaction extends React.Component {
                     <View style={styles.row}>
                         <Text style={styles.label}>Description</Text>
                         <TextInput
+                        onChangeText={(name) => {this.state.description = name}}
                             multiline={true}
                             style={styles.inputMultiLine}
                             underlineColorAndroid="transparent"

@@ -10,21 +10,33 @@ import ActionButton from 'react-native-action-button'
 import TransactionRow from './transactionRow'
 
 export default class TransactionHistory extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+        let transactions = [
+                    {name: 'mock transaction', amount: 12000, date: '2017-03-15'}, 
+                ]
+        if(this.props.transactions !== undefined) {
+            transactions = this.props.transactions
+        }
+
         this.state = {
-            dataSource: ds.cloneWithRows([
-                {name: 'transaction 1', amount: 12000, date: '15/3/2017'}, 
-                {name: 'transaction 2', amount: 20000, date: '16/3/2017'}
-            ])
+            dataSource: ds.cloneWithRows(transactions),
+            transactions: transactions
         }
     }
+
+    // componentWillReceiveProps(nextProps) {
+    //     const dataSource = this.state.dataSource.cloneWithRows(nextProps.transactions)
+    //     this.setState({dataSource})
+    //     console.log('receive next props')
+    // }
 
     addTransaction() {
         this.props.navigator.replace({
             title: 'Add Transaction',
-            id: 'AddTransaction'
+            id: 'AddTransaction',
+            transactions: this.state.transactions,
         })
     }
 
@@ -32,7 +44,8 @@ export default class TransactionHistory extends React.Component {
         return(
             <TransactionRow 
                 navigator={this.props.navigator}
-                transaction={transaction}/>
+                transaction={transaction}
+                transactions={this.state.transactions}/>
         )
     }
 

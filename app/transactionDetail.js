@@ -11,7 +11,8 @@ export default class TransactionDetail extends React.Component {
         this.props.navigator.replace({
             title: 'Dashboard',
             id: 'Tabbar',
-            selectedTab: 'transaction' 
+            selectedTab: 'transaction',
+            transactions: this.props.transactions,
         })
     }
 

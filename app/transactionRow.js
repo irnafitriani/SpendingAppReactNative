@@ -16,6 +16,7 @@ export default class TransactionRow extends React.Component {
             title: 'Transaction Detail',
             id: 'TransactionDetail',
             transaction: this.props.transaction,
+            transactions: this.props.transactions,
         })
     }
 
