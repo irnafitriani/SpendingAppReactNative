@@ -7,10 +7,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "firebase": "^3.7.2",
     "react": "15.4.2",
     "react-native": "0.42.0",
     "react-native-action-button": "^2.6.4",
     "react-native-datepicker": "^1.4.4",
+    "react-native-gifted-spinner": "^0.1.0",
     "react-native-tab-navigator": "^0.3.3"
   },
   "devDependencies": {

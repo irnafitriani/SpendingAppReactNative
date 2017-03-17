@@ -1,18 +1,19 @@
 import React from 'react'
 import {
-    DatePickerAndroid,
+    StyleSheet,
     Text,
     TextInput,
     TouchableHighlight,
-    StyleSheet,
     View,
 } from 'react-native'
 import DatePicker from 'react-native-datepicker'
+import Firebase from 'firebase'
 
 export default class AddTransaction extends React.Component {
     constructor() {
         super()
-        this.state = {date: '', amount: 0, description: ''}
+        this.state = {date: '', amount: '', description: ''}
+        this.taskRef = Firebase.database().ref();        
     }
 
     onCancelPressed() {
@@ -20,21 +21,17 @@ export default class AddTransaction extends React.Component {
             title: 'Dashboard',
             id: 'Tabbar',
             selectedTab: 'transaction',
-            transactions: this.props.transactions
         })
     }
 
     onSavePressed() {
-        let trans = this.props.transactions
-        const allTransactions = trans.concat([{
-            name: this.state.description, amount: this.state.amount, date: this.state.date,
-        }])
-        this.props.navigator.replace({
-            title: 'Dashboard',
-            id: 'Tabbar',
-            selectedTab: 'transaction',
-            transactions: allTransactions
-        })
+        if(this.state.description !== '' && this.state.amount !== '' && this.state.date !== '') {
+            this.taskRef.push({
+                name: this.state.description, amount: this.state.amount, date: this.state.date,
+            })
+        } else {
+            alert('Please fill all fields.')
+        }
     }
 
     render() {

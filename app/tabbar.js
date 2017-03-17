@@ -31,7 +31,6 @@ export default class Tabbar extends Component{
                         onPress={() => this.setState({selectedTab: 'transaction'})}>
                         {<TransactionHistory 
                             selectedTab={this.state.selectedTab}
-                            transactions={this.props.transactions}
                             navigator={this.props.navigator} />}
                     </TabNavigator.Item>
                     <TabNavigator.Item

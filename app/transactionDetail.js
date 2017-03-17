@@ -1,9 +1,9 @@
 import React from 'react'
 import {
-    View,
+    StyleSheet,
     Text,
     TouchableHighlight,
-    StyleSheet,
+    View,
 } from 'react-native'
 
 export default class TransactionDetail extends React.Component {
@@ -12,7 +12,6 @@ export default class TransactionDetail extends React.Component {
             title: 'Dashboard',
             id: 'Tabbar',
             selectedTab: 'transaction',
-            transactions: this.props.transactions,
         })
     }
 

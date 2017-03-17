@@ -1,22 +1,17 @@
 import React from 'react'
 import {
-    View,
+    StyleSheet,
     Text,
     TouchableHighlight,
-    StyleSheet,
+    View,
 } from 'react-native'
 
 export default class TransactionRow extends React.Component {
-    constructor() {
-        super()
-    }
-
     openTransactionDetail() {
         this.props.navigator.replace({
             title: 'Transaction Detail',
             id: 'TransactionDetail',
             transaction: this.props.transaction,
-            transactions: this.props.transactions,
         })
     }
 

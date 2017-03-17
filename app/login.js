@@ -7,9 +7,11 @@ import{
     Image,
     TextInput,
     TouchableOpacity,
-    Navigator
+    Navigator,
+    AsyncStorage
 } from 'react-native'
 import Registration from './registration'
+import Firebase from 'firebase'
 
 const background = require("../images/background.jpg");
 const lockIcon = require("../images/lock.png");
@@ -20,7 +22,9 @@ export default class Login extends Component{
     constructor(props){
         super(props)
         this.state ={
-
+            loading: false,
+            email: '',
+            password: ''
         }
     }
 
@@ -39,11 +43,27 @@ export default class Login extends Component{
     }
 
     signIn(){
-        this.props.navigator.replace({
-            title: 'Dashboard',
-            id: 'Tabbar',
-            selectedTab: 'dashboard'
+        this.setState({
+            loading: true
         })
+        Firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+            .then((userData) => {
+                this.setState({
+                    loading: false
+                })
+                AsyncStorage.setItem('userData', JSON.stringify(userData));
+                this.props.navigator.replace({
+                    title: 'Dashboard',
+                    id: 'Tabbar',
+                    selectedTab: 'dashboard'
+                })
+            })
+            .catch((error) => {
+                this.setState({
+                    loading: false
+                })
+            alert('Login Failed');
+            })
     }
 
     render(){
@@ -63,9 +83,11 @@ export default class Login extends Component{
                             />
                         </View>
                         <TextInput
-                            placeholder="Username"
+                            placeholder="Email"
                             style={styles.input}
                             underlineColorAndroid="transparent"
+                            onChangeText={(email) => this.setState({email})}
+                            value={this.state.email}
                         />
                     </View>
                     <View style={styles.inputWrap}>
@@ -81,6 +103,8 @@ export default class Login extends Component{
                             secureTextEntry
                             style={styles.input}
                             underlineColorAndroid="transparent"
+                            onChangeText={(password) => this.setState({password})}
+                            value={this.state.password}
                         />
                     </View>
                     <TouchableOpacity activeOpacity={.5}

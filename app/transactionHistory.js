@@ -1,42 +1,46 @@
 import React from 'react'
 import {
-    Image,
     ListView,
     StyleSheet,
-    Text,
     View,
 } from 'react-native'
 import ActionButton from 'react-native-action-button'
+import Firebase from 'firebase'
 import TransactionRow from './transactionRow'
 
 export default class TransactionHistory extends React.Component {
     constructor(props) {
         super(props)
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-        let transactions = [
-                    {name: 'mock transaction', amount: 12000, date: '2017-03-15'}, 
-                ]
-        if(this.props.transactions !== undefined) {
-            transactions = this.props.transactions
-        }
-
         this.state = {
-            dataSource: ds.cloneWithRows(transactions),
-            transactions: transactions
+            dataSource: ds,
         }
+        this.transRef = Firebase.database().ref();
     }
-
-    // componentWillReceiveProps(nextProps) {
-    //     const dataSource = this.state.dataSource.cloneWithRows(nextProps.transactions)
-    //     this.setState({dataSource})
-    //     console.log('receive next props')
-    // }
 
     addTransaction() {
         this.props.navigator.replace({
             title: 'Add Transaction',
             id: 'AddTransaction',
-            transactions: this.state.transactions,
+        })
+    }
+
+    componentDidMount() {
+        this.listenForTaskRef(this.transRef)
+    }
+
+    listenForTaskRef(transRef) {
+        transRef.on('value', (transactions) => {
+            var newTransactions = [];
+            transactions.forEach((transaction) => {
+                newTransactions.push({
+                    name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
+                })
+            })
+
+            this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(newTransactions)
+            })
         })
     }
 
@@ -44,8 +48,7 @@ export default class TransactionHistory extends React.Component {
         return(
             <TransactionRow 
                 navigator={this.props.navigator}
-                transaction={transaction}
-                transactions={this.state.transactions}/>
+                transaction={transaction}/>
         )
     }
 
@@ -60,7 +63,8 @@ export default class TransactionHistory extends React.Component {
                     buttonColor='#9b59b6'
                     offsetX={15}
                     offsetY={15}
-                    onPress={this.addTransaction.bind(this)} />
+                    onPress={this.addTransaction.bind(this)} 
+                />
             </View>
         )
     }
