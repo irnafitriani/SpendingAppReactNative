@@ -3,11 +3,14 @@ import{
     AppRegistry,
     StyleSheet,
     Text,
+    Alert,
     View,
     Image,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native'
+import Firebase from 'firebase'
 
 const background = require("../images/background.jpg");
 const lockIcon = require("../images/lock.png");
@@ -15,12 +18,41 @@ const personIcon = require("../images/person.png");
 const mailIcon = require("../images/mail.png");
 
 export default class ForgotPassword extends Component{
+        constructor(props){
+        super(props);
+        this.state = {
+            loading:false,
+            email: '',
+        }
+    }
     goToSignIn(){
         this.props.navigator.replace({
             title: 'Login',
             id: 'Login'
         })
     }
+    
+    resetPassword(){
+        this.setState({
+            loading: true
+        })
+        Firebase.auth().sendPasswordResetEmail(this.state.email)
+            .then(() =>{
+                Alert.alert('Reset Password','Email has been sent!',[{text:'OK', onPress: () => 
+                    this.setState({
+                        loading: false
+                    })
+                }])
+            })
+            .catch(function(error){
+                Alert.alert('Reset Password',error.message,[{text:'OK', onPress: () => 
+                    this.setState({
+                        loading: false
+                    })
+                }])
+            })
+    }
+
     render(){
         return(
             <Image 
@@ -41,13 +73,20 @@ export default class ForgotPassword extends Component{
                             placeholder="Email"
                             style={styles.input}
                             underlineColorAndroid="transparent"
+                            onChangeText={(email) => this.setState({email})}
+                            value={this.state.email}
                         />
                     </View>
-                    <TouchableOpacity activeOpacity={.5}>
+                    <TouchableOpacity activeOpacity={.5}
+                        onPress={this.resetPassword.bind(this)}>
                         <View style={styles.button}>
                             <Text style={styles.buttonText}>Reset Password</Text>
                         </View>
                     </TouchableOpacity>
+                    <ActivityIndicator
+                        animating = {this.state.loading}
+                        color='#111'
+                        size = 'large'></ActivityIndicator>
                     <TouchableOpacity activeOpacity={.5}
                         onPress={this.goToSignIn.bind(this)}>
                         <View>

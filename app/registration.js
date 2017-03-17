@@ -8,7 +8,9 @@ import{
     TextInput,
     TouchableOpacity,
     Navigator,
-    AsyncStorage
+    AsyncStorage,
+    Alert,
+    ActivityIndicator
 } from 'react-native'
 import Firebase from 'firebase'
   var config = {
@@ -30,7 +32,7 @@ export default class Registration extends Component{
     constructor(props){
         super(props);
         this.state = {
-            loaded: true,
+            loading: false,
             name: '',
             email: '',
             password:'',
@@ -39,7 +41,7 @@ export default class Registration extends Component{
     }
     signUp(){
         this.setState({
-            loaded: false
+            loading: true
         })
 
         Firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
@@ -49,10 +51,15 @@ export default class Registration extends Component{
                 email:'',
                 password:'',
                 confirmPassword:'',
-                loaded: true
+                loading: false
             })
             AsyncStorage.setItem('userData', JSON.stringify(userData));
-            alert('data created');
+            Alert.alert('Registration','User has been created',[{text:'OK', onPress: () =>
+                    this.props.navigator.replace({
+                    title: 'Login',
+                    id: 'Login',
+                    })
+                }])
             })
             .catch(function(error){
                 //Handle Errors
@@ -60,9 +67,17 @@ export default class Registration extends Component{
                 var errorMessage = error.message;
 
                 if (errorCode == 'auth/weak-password'){
-                    alert('The password is too weak');
+                    Alert.alert('Registration','The password is too weak',[{text:'OK', onPress: () =>
+                        this.setState({
+                            loading: false
+                        })
+                }])
                 }else{
-                    alert(errorMessage);
+                    Alert.alert('Registration',error.message,[{text:'OK', onPress: () =>
+                        this.setState({
+                            loading: false
+                        })
+                    }])
                 }
             })
     }
@@ -153,6 +168,10 @@ export default class Registration extends Component{
                             <Text style={styles.buttonText}>Sign Up</Text>
                         </View>
                     </TouchableOpacity>
+                     <ActivityIndicator
+                        animating = {this.state.loading}
+                        color='#111'
+                        size = 'large'></ActivityIndicator>
                     <TouchableOpacity activeOpacity={.5}
                         onPress={this.goToSignIn.bind(this)}>
                         <View>

@@ -11,7 +11,8 @@ export default class Tabbar extends Component{
     constructor(props){
         super(props)
         this.state ={
-            selectedTab : this.props.selectedTab
+            selectedTab : this.props.selectedTab,
+            userInfo : this.props.userInfo
         }
     }
     render(){

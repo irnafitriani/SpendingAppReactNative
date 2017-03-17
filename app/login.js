@@ -8,7 +8,9 @@ import{
     TextInput,
     TouchableOpacity,
     Navigator,
-    AsyncStorage
+    AsyncStorage,
+    ActivityIndicator,
+    Alert
 } from 'react-native'
 import Registration from './registration'
 import Firebase from 'firebase'
@@ -55,14 +57,17 @@ export default class Login extends Component{
                 this.props.navigator.replace({
                     title: 'Dashboard',
                     id: 'Tabbar',
-                    selectedTab: 'dashboard'
+                    selectedTab: 'dashboard',
+                    passProps:{
+                        userInfo: this.props.userInfo
+                    }
                 })
             })
             .catch((error) => {
                 this.setState({
                     loading: false
                 })
-            alert('Login Failed');
+            
             })
     }
 
@@ -125,6 +130,10 @@ export default class Login extends Component{
                             <Text style={styles.signUp}>Forgot Password?</Text>
                         </View>
                     </TouchableOpacity>
+                     <ActivityIndicator
+                        animating = {this.state.loading}
+                        color='#111'
+                        size = 'large'></ActivityIndicator>
                 </View>
             <View style={styles.container} />
 
