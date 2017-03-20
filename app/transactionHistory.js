@@ -1,7 +1,10 @@
 import React from 'react'
 import {
     ListView,
+    Picker,
     StyleSheet,
+    Text,
+    TouchableHighlight,
     View,
 } from 'react-native'
 import ActionButton from 'react-native-action-button'
@@ -25,8 +28,8 @@ export default class TransactionHistory extends React.Component {
         })
     }
 
-    componentDidMount() {
-        this.listenForTaskRef(this.transRef)
+    componentDidMount() {        
+        this.listenForTaskRef(this.transRef.orderByChild('amount'))
     }
 
     listenForTaskRef(transRef) {
@@ -55,9 +58,16 @@ export default class TransactionHistory extends React.Component {
     render() {
         return(
             <View style={styles.container}>
+                <View style={styles.wrapPicker}>
+                    <Picker mode='dropdown' style={styles.picker}>
+                        <Picker.Item label='amount' value='amount' />
+                        <Picker.Item label='date' value='date' />
+                    </Picker>
+                </View>
                 <ListView
                     dataSource={this.state.dataSource}
                     renderRow={this.renderRow.bind(this)}
+                    style={styles.list}
                 />
                 <ActionButton 
                     buttonColor='#9b59b6'
@@ -73,5 +83,17 @@ export default class TransactionHistory extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    list: {
+        flex: 1,        
+    },
+    picker: {
+        flexDirection: 'column-reverse',
+        width: 100,
+
+    },
+    wrapPicker: {
+        flex: 'row',
+        flexDirection: 'flex-end',
     }
 });
