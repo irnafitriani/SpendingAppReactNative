@@ -5,13 +5,34 @@ import {
     TouchableHighlight,
     View,
 } from 'react-native'
+import Firebase from 'firebase'
 
 export default class TransactionDetail extends React.Component {
+    constructor() {
+        super()
+        this.taskRef = Firebase.database().ref();        
+    }
+
     onGoBackPressed() {
         this.props.navigator.replace({
             title: 'Dashboard',
             id: 'Tabbar',
             selectedTab: 'transaction',
+        })
+    }
+
+    onDeletePressed() {
+        this.taskRef.child(this.props.transaction.key).remove()
+
+        // return to transactions list screen
+        this.onGoBackPressed()
+    }
+
+    onEditPressed() {
+        this.props.navigator.replace({
+            title: 'Edit Transaction',
+            id: 'AddTransaction',
+            transaction: this.props.transaction,
         })
     }
 
@@ -41,11 +62,24 @@ export default class TransactionDetail extends React.Component {
                         <Text style={styles.label}>{this.props.transaction.name}</Text>
                     </View>
                 </View>
-                <TouchableHighlight 
-                    style={styles.button}
-                    onPress={this.onGoBackPressed.bind(this)}>
-                    <Text style={styles.buttonText}>Go Back</Text>
-                </TouchableHighlight>
+
+                <View style={styles.row}>
+                    <TouchableHighlight 
+                        style={styles.button}
+                        onPress={this.onGoBackPressed.bind(this)}>
+                        <Text style={styles.buttonText}>Go Back</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight 
+                        style={styles.button}
+                        onPress={this.onDeletePressed.bind(this)}>
+                        <Text style={styles.buttonText}>Delete</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight 
+                        style={styles.button}
+                        onPress={this.onEditPressed.bind(this)}>
+                        <Text style={styles.buttonText}>Edit</Text>
+                    </TouchableHighlight>
+                </View>
             </View>
         )
     }
@@ -75,8 +109,11 @@ const styles = StyleSheet.create({
     button:{
         backgroundColor: "#9b59b6",
         borderRadius: 4,
-        paddingVertical: 10,
+        flex: 1,
+        marginLeft: 10, 
+        marginRight: 10, 
         marginVertical: 15,
+        paddingVertical: 10,
         alignItems: "center",
         justifyContent: "center"
     },

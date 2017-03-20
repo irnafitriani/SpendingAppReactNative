@@ -12,8 +12,18 @@ import Firebase from 'firebase'
 export default class AddTransaction extends React.Component {
     constructor() {
         super()
-        this.state = {date: '', amount: '', description: ''}
+        this.state = {key: '', date: '', amount: '', description: '', mode: ''}
         this.taskRef = Firebase.database().ref();        
+    }
+
+    componentWillMount() {
+        this.state.mode = this.props.mode
+        if(this.state.mode === 'Edit Transaction') {
+            this.state.key = this.props.transaction.key
+            this.state.date = this.props.transaction.date
+            this.state.amount = this.props.transaction.amount
+            this.state.description = this.props.transaction.name
+        }
     }
 
     onCancelPressed() {
@@ -26,9 +36,18 @@ export default class AddTransaction extends React.Component {
 
     onSavePressed() {
         if(this.state.description !== '' && this.state.amount !== '' && this.state.date !== '') {
-            this.taskRef.push({
-                name: this.state.description, amount: this.state.amount, date: this.state.date,
-            })
+            if(this.state.mode === 'Edit Transaction') {
+                this.taskRef.child(this.props.transaction.key).update({
+                    name: this.state.description, amount: this.state.amount, date: this.state.date,
+                })
+            } else {
+                this.taskRef.push({
+                    name: this.state.description, amount: this.state.amount, date: this.state.date,
+                })
+            }
+
+            // return to transactions list screen
+            this.onCancelPressed()
         } else {
             alert('Please fill all fields.')
         }
@@ -41,7 +60,7 @@ export default class AddTransaction extends React.Component {
                     <View style={styles.row}>
                         <Text style={styles.label}>Date</Text>
                         <DatePicker
-                            style={{flex: 1}}
+                            style={{flex: 1, alignItems:'flex-start'}}
                             date={this.state.date}
                             mode="date"
                             placeholder="select date"
@@ -55,7 +74,9 @@ export default class AddTransaction extends React.Component {
                                     top: 4,
                                 },
                                 dateInput: {
-                                    marginRight: 36
+                                    alignItems: 'flex-start',
+                                    marginRight: 36,
+                                    paddingLeft: 8, 
                                 }
                             }}
                             onDateChange={(date) => {this.setState({date: date})}}
@@ -64,19 +85,21 @@ export default class AddTransaction extends React.Component {
                     <View style={styles.row}>
                         <Text style={styles.label}>Amount</Text>
                         <TextInput
-                            onChangeText={(amount) => {this.state.amount = amount}}
+                            onChangeText={(amount) => {this.setState({amount})}}
                             keyboardType='numeric'
                             style={styles.input}
                             underlineColorAndroid="transparent"
+                            value={this.state.amount}
                         />
                     </View>
                     <View style={styles.row}>
                         <Text style={styles.label}>Description</Text>
                         <TextInput
-                        onChangeText={(name) => {this.state.description = name}}
+                        onChangeText={(description) => {this.setState({description})}}
                             multiline={true}
                             style={styles.inputMultiLine}
                             underlineColorAndroid="transparent"
+                            value={this.state.description}
                         />
                     </View>
                 </View>

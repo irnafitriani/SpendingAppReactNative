@@ -8,6 +8,7 @@ import {
 
 export default class TransactionRow extends React.Component {
     openTransactionDetail() {
+        console.log('key :' + this.props.transaction.key),
         this.props.navigator.replace({
             title: 'Transaction Detail',
             id: 'TransactionDetail',

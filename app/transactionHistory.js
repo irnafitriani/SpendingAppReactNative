@@ -34,7 +34,7 @@ export default class TransactionHistory extends React.Component {
             var newTransactions = [];
             transactions.forEach((transaction) => {
                 newTransactions.push({
-                    name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
+                    key: transaction.key, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
                 })
             })
 
