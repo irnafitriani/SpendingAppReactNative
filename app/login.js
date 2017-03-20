@@ -59,7 +59,8 @@ export default class Login extends Component{
                     id: 'Tabbar',
                     selectedTab: 'dashboard',
                     passProps:{
-                        userInfo: this.props.userInfo
+                        email: userData.email,
+                        name: userData.displayName,
                     }
                 })
             })
@@ -67,7 +68,7 @@ export default class Login extends Component{
                 this.setState({
                     loading: false
                 })
-            
+                alert(error.message)
             })
     }
 

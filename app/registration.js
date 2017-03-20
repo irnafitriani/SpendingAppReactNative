@@ -189,7 +189,7 @@ export default class Registration extends Component{
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   background: {
       width: null,
