@@ -9,7 +9,7 @@ export default class Dashboard extends Component{
     render(){
         return(
             <View style={styles.container}>
-                <Text style={styles.text}> this is dashboard </Text>
+                <Text style={styles.text}> {this.props.email} </Text>
             </View>
         )
     }

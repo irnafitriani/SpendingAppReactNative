@@ -6,10 +6,13 @@ import {
     ScrollView,
     ListView,
     TouchableHighlight,
-    Navigator
+    Navigator,
+    TextInput,
+    Image
 } from 'react-native'
 import Separator from './Helpers/separator'
 import Firebase from 'firebase'
+const background = require("../images/background.jpg");
 
 export default class Account extends Component{
     constructor(props){
@@ -23,10 +26,28 @@ export default class Account extends Component{
             email:'',
             password:'',
             userId:'',
-            loading: false
+            loading: false,
+            data : []
         }
     }
+    
+    componentWillMount() {
+        var user = Firebase.auth().currentUser;
+        var accountData = [];
+        if (user != null) {
+            user.providerData.forEach(function (profile) {
+                 accountData.push({
+                    key: profile.key, name: profile.displayName, email: profile.email, userId: profile.uid
+                })
+            })
 
+            this.setState({
+                data : accountData
+            })
+            console.log(accountData)
+            console.log(this.state.data)
+        }
+    }
     onLogoutPressed() {
         this.setState({
             loading : true
@@ -65,25 +86,58 @@ export default class Account extends Component{
     render(){
         var userInfo = this.props.userInfo;
         return(
-            <View style={styles.container}>
-                <ListView
-                    enableEmptySections={true}
-                    dataSource={this.state.dataSource}
-                    renderRow = {this.renderRow}
-                />
-                 <View style={styles.buttonContainer}>
-                    <TouchableHighlight 
-                        onPress={this.onLogoutPressed.bind(this)}
-                        style={styles.button}>
-                        <Text style={styles.buttonText}>Logout</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight 
-                        onPress={this.onSavePressed.bind(this)}
-                        style={styles.button}>
-                        <Text style={styles.buttonText}>Save</Text>
-                    </TouchableHighlight>
-                </View>
-            </View>
+             <Image 
+                style={[styles.background, styles.container]}
+                source={background}
+                resizeMode="cover">
+                    <View style={styles.container} />
+                        <View style={styles.wrapper}>
+                            <Text style={styles.rowTitle}>Name</Text>
+                            <View style={styles.inputWrap}>
+                                <TextInput
+                                    placeholder="Name"
+                                    style={styles.input}
+                                    underlineColorAndroid="transparent"
+                                    onChangeText={(name) => this.setState({name})}
+                                    value={this.state.name}
+                                />
+                            </View>
+                            <Text style={styles.rowTitle}>Email</Text>
+                            <View style={styles.inputWrap}>
+                                <TextInput
+                                    placeholder="Email"
+                                    style={styles.input}
+                                    underlineColorAndroid="transparent"
+                                    onChangeText={(name) => this.setState({email})}
+                                    value={this.state.name}
+                                />
+                            </View>
+                            <Text style={styles.rowTitle}>Password</Text>                          
+                             <View style={styles.inputWrap}>
+
+                                <TextInput
+                                    placeholder="Password"
+                                    style={styles.input}
+                                    underlineColorAndroid="transparent"
+                                    onChangeText={(name) => this.setState({password})}
+                                    value={this.state.name}
+                                />
+                            </View>
+                        <View style={styles.buttonContainer}>
+                            <TouchableHighlight 
+                                onPress={this.onLogoutPressed.bind(this)}
+                                style={styles.button}>
+                                <Text style={styles.buttonText}>Logout</Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight 
+                                onPress={this.onSavePressed.bind(this)}
+                                style={styles.button}>
+                                <Text style={styles.buttonText}>Save</Text>
+                            </TouchableHighlight>
+                        </View>
+                    </View>
+                <View style={styles.container} />
+            </Image>
         )
     }
 }
@@ -91,7 +145,10 @@ export default class Account extends Component{
 const styles = StyleSheet.create({
   container: {
     flex:1,
-    marginVertical: 50
+  },
+  background: {
+    width: null,
+    height: null
   },
   rowContainer:{
       padding : 10,
@@ -99,13 +156,13 @@ const styles = StyleSheet.create({
       marginVertical: 10
   },
   rowTitle:{
-      color: '#48BBEC',
       fontSize: 16
   }, 
   buttonContainer: {
         flexDirection: 'row',
-        padding: 5,
-        justifyContent: 'space-between'
+        paddingVertical: 5,
+        justifyContent: 'space-between',
+        marginVertical: 15
     },
     button:{
         borderRadius: 4,
@@ -120,4 +177,18 @@ const styles = StyleSheet.create({
         color:"#fff",
         fontSize: 15
     },
+    inputWrap:{
+      flexDirection: "row",
+      marginVertical: 10,
+      height: 40,
+      backgroundColor:"transparent"
+  },
+  input:{
+      flex : 1,
+      paddingHorizontal: 10,
+      backgroundColor: "#FFF"
+  },
+  wrapper:{
+      paddingHorizontal: 15
+  },
 })
