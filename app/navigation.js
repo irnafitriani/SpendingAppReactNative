@@ -51,7 +51,7 @@ export default class Navigation extends Component{
     render(){
         return(
             <Navigator 
-                initialRoute = {{id: 'Tabbar'}}
+                initialRoute = {{id: 'Login'}}
                 renderScene={this.renderScene.bind(this)}
                 configureScene={(route) => {
                     return Navigator.SceneConfigs.FloatFromRight;
