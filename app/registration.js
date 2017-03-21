@@ -39,6 +39,17 @@ export default class Registration extends Component{
             confirmPassword: ''
         }
     }
+    updateDisplayName(name){
+        var user = Firebase.auth().currentUser
+        console.log(user)
+         user.updateProfile({
+            displayName: name
+                    }).then(function() {
+                        console.log(name)
+                }, function(error) {
+                    alert(error.message)
+                });
+    }
     signUp(){
         this.setState({
             loading: true
@@ -46,20 +57,30 @@ export default class Registration extends Component{
 
         Firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
             .then((userData) => {
-                this.setState({
-                name: '',
-                email:'',
-                password:'',
-                confirmPassword:'',
-                loading: false
-            })
             AsyncStorage.setItem('userData', JSON.stringify(userData));
+            console.log("before update name")
+            console.log(userData.displayName)
             Alert.alert('Registration','User has been created',[{text:'OK', onPress: () =>
+                userData.updateProfile({
+                    displayName: this.state.name
+                }).then(() => {
+                    console.log(this.state.name)
+                    this.setState({
+                        name: '',
+                        email:'',
+                        password:'',
+                        confirmPassword:'',
+                        loading: false
+                    })
                     this.props.navigator.replace({
                     title: 'Login',
                     id: 'Login',
-                    })
-                }])
+                })
+                }, function(error) {
+                    alert(error.message)
+                })
+            }])
+            console.log("after update name")
             })
             .catch(function(error){
                 //Handle Errors

@@ -8,7 +8,8 @@ import {
     TouchableHighlight,
     Navigator,
     TextInput,
-    Image
+    Image,
+    ActivityIndicator
 } from 'react-native'
 import Separator from './Helpers/separator'
 import Firebase from 'firebase'
@@ -19,33 +20,27 @@ export default class Account extends Component{
         super(props);
         this.ds = new ListView.DataSource({rowHasChanged:(row1, row2) => row1 !== row2})
         this.state ={
-            dataSource: this.ds.cloneWithRows([{title: 'Name', value:''}, 
-                                                {title: 'Email',value: ''}
-                                                ,{title: 'Password', value: ''}]),
             name:'',
             email:'',
             password:'',
             userId:'',
-            loading: false,
-            data : []
+            loading: false
         }
     }
     
     componentWillMount() {
         var user = Firebase.auth().currentUser;
-        var accountData = [];
+        var accountData = []
         if (user != null) {
             user.providerData.forEach(function (profile) {
+                console.log(profile)
                  accountData.push({
                     key: profile.key, name: profile.displayName, email: profile.email, userId: profile.uid
                 })
             })
-
-            this.setState({
-                data : accountData
-            })
-            console.log(accountData)
-            console.log(this.state.data)
+            this.state.email = accountData[0].email
+            this.state.name = accountData[0].name
+            this.state.userId = accountData[0].userId
         }
     }
     onLogoutPressed() {
@@ -65,6 +60,21 @@ export default class Account extends Component{
     }
 
     onSavePressed() {
+          this.setState({
+            loading : true
+        })
+       var user = Firebase.auth().currentUser
+         user.updateProfile({
+            displayName: this.state.name,
+            email: this.state.email
+                    }).then(() => {
+                        this.setState({
+                        loading : false,
+                    })
+                    alert("Data has been saved!")
+                }, function(error) {
+                    alert(error.message)
+                });  
     }
     setData(profile){
         console.log(profile.email);
@@ -73,7 +83,7 @@ export default class Account extends Component{
             email: profile.email,
             userId: profile.uid, 
         })
-    }
+    }/*
      renderRow(rowData){
             return(
             <View style={styles.rowContainer}>
@@ -82,7 +92,7 @@ export default class Account extends Component{
                 <Separator />
             </View>
             )
-        }
+        }*/
     render(){
         var userInfo = this.props.userInfo;
         return(
@@ -108,8 +118,8 @@ export default class Account extends Component{
                                     placeholder="Email"
                                     style={styles.input}
                                     underlineColorAndroid="transparent"
-                                    onChangeText={(name) => this.setState({email})}
-                                    value={this.state.name}
+                                    onChangeText={(email) => this.setState({email})}
+                                    value={this.state.email}
                                 />
                             </View>
                             <Text style={styles.rowTitle}>Password</Text>                          
@@ -119,8 +129,8 @@ export default class Account extends Component{
                                     placeholder="Password"
                                     style={styles.input}
                                     underlineColorAndroid="transparent"
-                                    onChangeText={(name) => this.setState({password})}
-                                    value={this.state.name}
+                                    onChangeText={(password) => this.setState({password})}
+                                    value={this.state.password}
                                 />
                             </View>
                         <View style={styles.buttonContainer}>
@@ -137,6 +147,10 @@ export default class Account extends Component{
                         </View>
                     </View>
                 <View style={styles.container} />
+                <ActivityIndicator
+                        animating = {this.state.loading}
+                        color='#111'
+                        size = 'large'></ActivityIndicator>
             </Image>
         )
     }
