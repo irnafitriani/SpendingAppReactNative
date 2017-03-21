@@ -50,7 +50,26 @@ export default class Registration extends Component{
                     alert(error.message)
                 });
     }
+    validateForm() {
+        if(this.state.name === '' || this.state.email === '' || this.state.password === '' || this.state.confirmPassword === '') {
+            alert('Please fill all fields.')
+            return false
+        } else {
+            return true
+        }
+    }
+    validatePassword(password, confirmPassword) {
+        if(password !== confirmPassword) {
+            alert('Passwords invalid, confirm password is not equal.')
+            return false
+        } else {
+            return true
+        }
+    }
     signUp(){
+        if(!this.validateForm() || !this.validatePassword(this.state.password, this.state.confirmPassword)) {
+            return
+        }
         this.setState({
             loading: true
         })
@@ -88,7 +107,7 @@ export default class Registration extends Component{
                 var errorMessage = error.message;
 
                 if (errorCode == 'auth/weak-password'){
-                    Alert.alert('Registration','The password is too weak',[{text:'OK', onPress: () =>
+                    Alert.alert('Registration','The password is too weak',[{text:'OK', onPress: () => 
                         this.setState({
                             loading: false
                         })
