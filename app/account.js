@@ -23,6 +23,7 @@ export default class Account extends Component{
             name:'',
             email:'',
             password:'',
+            confirmPassword: '',
             userId:'',
             loading: false
         }
@@ -58,12 +59,27 @@ export default class Account extends Component{
                 alert(error.message);
             })
     }
-
+    validateForm() {
+        if(this.state.name === '' || this.state.email === '' || this.state.password === '' || this.state.confirmPassword === '') {
+            alert('Please fill all fields.')
+            return false
+        } else {
+            return true
+        }
+    }
+    validatePassword(password, confirmPassword) {
+        if(password !== confirmPassword) {
+            alert('Passwords invalid, confirm password is not equal.')
+            return false
+        } else {
+            return true
+        }
+    }    
     onSavePressed() {
         if (this.state.password !== ""){
             
         }
-          this.setState({
+        this.setState({
             loading : true
         })
        var user = Firebase.auth().currentUser
