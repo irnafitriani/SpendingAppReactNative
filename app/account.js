@@ -60,6 +60,9 @@ export default class Account extends Component{
     }
 
     onSavePressed() {
+        if (this.state.password !== ""){
+            
+        }
           this.setState({
             loading : true
         })

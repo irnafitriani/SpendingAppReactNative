@@ -101,7 +101,7 @@ export default class Registration extends Component{
             }])
             console.log("after update name")
             })
-            .catch(function(error){
+            .catch((error) => {
                 //Handle Errors
                 var errorCode = error.code;
                 var errorMessage = error.message;
