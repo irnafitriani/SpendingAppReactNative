@@ -11,6 +11,7 @@ import {
     Image,
     ActivityIndicator
 } from 'react-native'
+import Prompt from 'react-native-prompt'
 import Separator from './Helpers/separator'
 import Firebase from 'firebase'
 const background = require("../images/background.jpg");
@@ -25,7 +26,9 @@ export default class Account extends Component{
             password:'',
             confirmPassword: '',
             userId:'',
-            loading: false
+            loading: false,
+            promptVisible: false,
+            message: ''
         }
     }
     
@@ -77,15 +80,15 @@ export default class Account extends Component{
     }    
     onSavePressed() {
         if (this.state.password !== ""){
-            
-        }
-        this.setState({
-            loading : true
-        })
-       var user = Firebase.auth().currentUser
-         user.updateProfile({
-            displayName: this.state.name,
-            email: this.state.email
+           this.setState({
+               promptVisible: true
+           })
+           console.log(this.state.promptVisible)
+        }else{
+           var user = Firebase.auth().currentUser
+             user.updateProfile({
+                displayName: this.state.name,
+                email: this.state.email
                     }).then(() => {
                         this.setState({
                         loading : false,
@@ -94,6 +97,7 @@ export default class Account extends Component{
                 }, function(error) {
                     alert(error.message)
                 });  
+        }
     }
     setData(profile){
         console.log(profile.email);
@@ -141,11 +145,12 @@ export default class Account extends Component{
                                     value={this.state.email}
                                 />
                             </View>
-                            <Text style={styles.rowTitle}>Password</Text>                          
+                            <Text style={styles.rowTitle}>Change Password</Text>                          
                              <View style={styles.inputWrap}>
 
                                 <TextInput
-                                    placeholder="Password"
+                                    placeholder="Change Password"
+                                    secureTextEntry
                                     style={styles.input}
                                     underlineColorAndroid="transparent"
                                     onChangeText={(password) => this.setState({password})}
@@ -164,6 +169,14 @@ export default class Account extends Component{
                                 <Text style={styles.buttonText}>Save</Text>
                             </TouchableHighlight>
                         </View>
+                        <Text onPress={() => this.setState({promptVisible: true})}> Test Prompt</Text>
+                         <Prompt
+                            title="Say something"
+                            placeholder="Start typing"
+                            defaultValue="Hello"
+                            visible={this.state.promptVisible}
+                            onCancel={() => this.setState({ promptVisible: false, message: "You cancelled" })}
+                            onSubmit={(value) => this.setState({ promptVisible: false, message: `You said "${value}"` })}/>
                     </View>
                 <View style={styles.container} />
                 <ActivityIndicator
