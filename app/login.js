@@ -58,7 +58,8 @@ export default class Login extends Component{
                     title: 'Dashboard',
                     id: 'Tabbar',
                     selectedTab: 'dashboard',
-                    passProps:{
+                    userInfo:{
+                        userId: userData.uid,
                         email: userData.email,
                         name: userData.displayName,
                     }

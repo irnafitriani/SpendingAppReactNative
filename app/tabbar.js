@@ -24,6 +24,7 @@ export default class Tabbar extends Component{
                         onPress={() => this.setState({selectedTab: 'dashboard'})}>
                         {<Dashboard 
                             selectedTab={this.state.selectedTab}
+                            userInfo={this.props.userInfo}
                             navigator={this.props.navigator} />}
                     </TabNavigator.Item>
                     <TabNavigator.Item
@@ -32,6 +33,7 @@ export default class Tabbar extends Component{
                         onPress={() => this.setState({selectedTab: 'transaction'})}>
                         {<TransactionHistory 
                             selectedTab={this.state.selectedTab}
+                            userInfo={this.props.userInfo}
                             navigator={this.props.navigator} />}
                     </TabNavigator.Item>
                     <TabNavigator.Item
@@ -40,6 +42,7 @@ export default class Tabbar extends Component{
                         onPress={() => this.setState({selectedTab: 'account'})}>
                         {<Account 
                             selectedTab={this.state.selectedTab}
+                            userInfo={this.props.userInfo}
                             navigator={this.props.navigator}/>}
                     </TabNavigator.Item>
                 </TabNavigator>

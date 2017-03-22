@@ -39,13 +39,13 @@ export default class Navigation extends Component{
             case 'ForgotPassword':
                 return(<ForgotPassword navigator={ navigator } />)
             case 'AddTransaction':
-                return(<AddTransaction navigator={ navigator } transaction={route.transaction} mode={route.title }/>)
+                return(<AddTransaction navigator={ navigator } userInfo={route.userInfo} mode={route.title }/>)
             case 'TransactionHistory':
-                return(<TransactionHistory navigator={ navigator } />)
+                return(<TransactionHistory navigator={ navigator } userInfo={route.userInfo}/>)
             case 'TransactionDetail':
                 return(<TransactionDetail navigator={ navigator } transaction={route.transaction} />)
             case 'Tabbar':
-                return(<Tabbar navigator={ navigator } selectedTab={route.selectedTab} />)
+                return(<Tabbar navigator={ navigator } selectedTab={route.selectedTab} userInfo={route.userInfo}/>)
         }
     }
     render(){

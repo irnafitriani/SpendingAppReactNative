@@ -31,6 +31,7 @@ export default class AddTransaction extends React.Component {
             title: 'Dashboard',
             id: 'Tabbar',
             selectedTab: 'transaction',
+            userInfo: this.props.userInfo,
         })
     }
 
@@ -38,11 +39,11 @@ export default class AddTransaction extends React.Component {
         if(this.state.description !== '' && this.state.amount !== '' && this.state.date !== '') {
             if(this.state.mode === 'Edit Transaction') {
                 this.taskRef.child(this.props.transaction.key).update({
-                    name: this.state.description, amount: this.state.amount, date: this.state.date,
+                    userId: this.props.userInfo.userId, name: this.state.description, amount: this.state.amount, date: this.state.date,
                 })
             } else {
                 this.taskRef.push({
-                    name: this.state.description, amount: this.state.amount, date: this.state.date,
+                    userId: this.props.userInfo.userId, name: this.state.description, amount: this.state.amount, date: this.state.date,
                 })
             }
 
