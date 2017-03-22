@@ -85,6 +85,7 @@ export default class TransactionHistory extends React.Component {
         return(
             <TransactionRow 
                 navigator={this.props.navigator}
+                userInfo={this.props.userInfo}
                 transaction={transaction}/>
         )
     }

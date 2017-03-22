@@ -18,6 +18,7 @@ export default class TransactionDetail extends React.Component {
             title: 'Dashboard',
             id: 'Tabbar',
             selectedTab: 'transaction',
+            userInfo: this.props.userInfo
         })
     }
 
