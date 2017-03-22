@@ -83,7 +83,6 @@ export default class Account extends Component{
            this.setState({
                promptVisible: true
            })
-           console.log(this.state.promptVisible)
         }else{
            var user = Firebase.auth().currentUser
              user.updateProfile({
@@ -171,9 +170,8 @@ export default class Account extends Component{
                         </View>
                         <Text onPress={() => this.setState({promptVisible: true})}> Test Prompt</Text>
                          <Prompt
-                            title="Say something"
-                            placeholder="Start typing"
-                            defaultValue="Hello"
+                            title="Confirm Password"
+                            placeholder="Password"
                             visible={this.state.promptVisible}
                             onCancel={() => this.setState({ promptVisible: false, message: "You cancelled" })}
                             onSubmit={(value) => this.setState({ promptVisible: false, message: `You said "${value}"` })}/>
