@@ -46,13 +46,12 @@ export default class TransactionHistory extends React.Component {
         transRef.on('value', (transactions) => {
             var newTransactions = [];
             transactions.forEach((transaction) => {
-                console.log('key : ' + transaction.key)
                 if(transaction.val().userId === this.props.userInfo.userId) {
                     console.log('equal user id ' + this.props.userInfo.userId)   
+                    newTransactions.push({
+                        key: transaction.key, userId: transaction.val().userId, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
+                    })
                 }
-                newTransactions.push({
-                    key: transaction.key, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
-                })
             })
 
             this.setState({
