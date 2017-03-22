@@ -27,8 +27,7 @@ export default class Account extends Component{
             confirmPassword: '',
             userId:'',
             loading: false,
-            promptVisible: false,
-            message: '',
+            promptVisible: false
         }
     }
     
@@ -209,7 +208,7 @@ export default class Account extends Component{
                             placeholder="Password"
                             secureTextEntry
                             visible={this.state.promptVisible}
-                            onCancel={() => this.setState({ promptVisible: false, message: "You cancelled" })}
+                            onCancel={() => this.setState({ promptVisible: false, loading: false})}
                             onSubmit={(value) => {
                                 this.setState({
                                     promptVisible: false
