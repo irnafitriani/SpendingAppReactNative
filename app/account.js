@@ -28,7 +28,7 @@ export default class Account extends Component{
             userId:'',
             loading: false,
             promptVisible: false,
-            message: ''
+            message: '',
         }
     }
     
@@ -77,13 +77,48 @@ export default class Account extends Component{
         } else {
             return true
         }
+    }
+    onSubmitPassword(value){
+        if(value === this.state.password){
+            var user = Firebase.auth().currentUser
+            user.updatePassword(this.state.password)
+            .then(() =>{
+                //Update Success
+                user.updateProfile({
+                displayName: this.state.name,
+                email: this.state.email
+                    }).then(() => {
+                        this.setState({
+                        loading : false,
+                        promptVisible : false
+                    })
+                    alert("Data has been saved!")
+                }, function(error) {
+                    alert(error.message)
+                });  
+            })
+            .catch((error) => {
+                alert(error.message)
+                 this.setState({
+                        loading : false,
+                        promptVisible : false
+                    })
+            }) 
+        }else{
+             alert('xxx')
+              this.setState({
+                        loading : false,
+                        promptVisible : false
+                    })
+        }
+       
     }    
     onSavePressed() {
         if (this.state.password !== ""){
            this.setState({
-               promptVisible: true
+               promptVisible: true,
+               loading: true
            })
-           console.log(this.state.promptVisible)
         }else{
            var user = Firebase.auth().currentUser
              user.updateProfile({
@@ -169,14 +204,54 @@ export default class Account extends Component{
                                 <Text style={styles.buttonText}>Save</Text>
                             </TouchableHighlight>
                         </View>
-                        <Text onPress={() => this.setState({promptVisible: true})}> Test Prompt</Text>
                          <Prompt
-                            title="Say something"
-                            placeholder="Start typing"
-                            defaultValue="Hello"
+                            title="Confirm Password"
+                            placeholder="Password"
+                            secureTextEntry
                             visible={this.state.promptVisible}
                             onCancel={() => this.setState({ promptVisible: false, message: "You cancelled" })}
-                            onSubmit={(value) => this.setState({ promptVisible: false, message: `You said "${value}"` })}/>
+                            onSubmit={(value) => {
+                                this.setState({
+                                    promptVisible: false
+                                })
+                                if(value === this.state.password){
+                                    var user = Firebase.auth().currentUser
+                                    user.updatePassword(this.state.password)
+                                    .then(() =>{
+                                        //Update Success
+                                        user.updateProfile({
+                                        displayName: this.state.name,
+                                        email: this.state.email
+                                            }).then(() => {
+                                                this.setState({
+                                                loading : false,
+                                                promptVisible : false
+                                            })
+                                            alert("Data has been saved!")
+                                        }, function(error) {
+                                            this.setState({
+                                                loading : false,
+                                                promptVisible : false
+                                            })
+                                            alert(error.message)
+                                        });  
+                                    })
+                                    .catch((error) => {
+                                        this.setState({
+                                                loading : false,
+                                                promptVisible : false
+                                            })
+                                        alert(error.message)
+                                    }) 
+                                }else{
+                                    this.setState({
+                                            loading : false,
+                                            promptVisible : false
+                                            })
+                                    alert('Passwords invalid, confirm password is not equal.')
+                                }
+                            }}
+                                      />
                     </View>
                 <View style={styles.container} />
                 <ActivityIndicator
