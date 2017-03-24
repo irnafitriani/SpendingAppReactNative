@@ -34,6 +34,7 @@ export default class TransactionDetail extends React.Component {
             title: 'Edit Transaction',
             id: 'AddTransaction',
             transaction: this.props.transaction,
+            userInfo: this.props.userInfo,
         })
     }
 
