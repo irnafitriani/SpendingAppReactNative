@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    Picker
 } from 'react-native'
 import Firebase from 'firebase'
 import { Bar, StockLine, SmoothLine } from 'react-native-pathjs-charts'
@@ -15,22 +16,43 @@ export default class Dashboard extends Component{
             sortCategory: '',
             tempTrans: [[{'x': 0, 'y': 0}]]
         }
-        this.transRef = Firebase.database().ref();
+        this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
     }
-    componentWillMount() {        
+    componentWillMount() {
         this.listenForTaskRef(this.transRef)
     }
     listenForTaskRef(transRef) {
         transRef.on('value', (transactions) => {
+            // initialize the graphic start point
             var newTransactions = [{'x': 0, 'y': 0}];
             transactions.forEach((transaction) => {
                 if(transaction.val().userId === this.props.userInfo.userId) {
                     newTransactions.push({
                         "x": parseInt(transaction.val().date.substr(8)), "y": parseInt(transaction.val().amount)
                     })
+                // check if its on the same day with the last pushed transaction
+                var date = transaction.val().date.substr(8)
+                var amount = parseInt(transaction.val().amount)
+                var latest = newTransactions[ newTransactions.length - 1].x                    
+                if(latest === date) {
+                    // its on the same day, then sum the amount
+                    amount = newTransactions[ newTransactions.length - 1].y + amount
+
+                    // remove the old transaction
+                    newTransactions.pop()
+                }
+
+                // add transaction to the list
+                newTransactions.push({
+                    "x": date, "y": amount
+                })
                 }
             })
 
+            // add the graphic end point
+            newTransactions.push({'x': 32, 'y': 0})
+
+            // update tempTrans state
             this.setState({
                 tempTrans: [newTransactions],
             })

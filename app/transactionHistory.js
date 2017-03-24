@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{Component} from 'react'
 import {
     Image,
     ListView,
@@ -14,16 +14,16 @@ import TransactionRow from './transactionRow'
 
 const sortIcon = require("../images/sort.png");
 
-export default class TransactionHistory extends React.Component {
+export default class TransactionHistory extends Component {
     constructor(props) {
         super(props)
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         this.state = {
             dataSource: ds,
-            sortCategory: '',
-            tempTrans: []
+            sortCategory: 'amount',
+            tempTrans: [],
         }
-        this.transRef = Firebase.database().ref();
+        this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId)
     }
 
     addTransaction() {
@@ -34,60 +34,39 @@ export default class TransactionHistory extends React.Component {
         })
     }
 
-    componentWillMount(){
-        this.setDataByUserId()
+    componentWillMount() {        
+        var tempRef = this.transRef.ref.orderByChild('amount')
+        this.listenForTaskRef(tempRef)
     }
 
-    // componentDidMount() {        
-    //     this.listenForTaskRef(this.transRef.orderByChild('amount'))
-    // }
-
-    setTransList() {
-        console.log('set transaction list')
-    }
-
-    setDataByUserId(){
-        var ref = Firebase.database().ref()
-        ref.orderByChild("userId").equalTo(this.props.userInfo.userId).on("child_added",((snapshot) =>{
-            console.log(snapshot.val())
+    listenForTaskRef(transRef) {
+        transRef.on('value', (transactions) => {
             var newTransactions = [];
-            snapshot.forEach((transaction) =>{
-                console.log(transaction)
-                newTransactions.push({
-                        key: transaction.key, 
-                        name: transaction.val().name, 
-                        amount: transaction.val().amount, 
-                        date: transaction.val().date
+            transactions.forEach((transaction) => {
+                if(transaction.val().userId === this.props.userInfo.userId) {
+                    newTransactions.push({
+                        key: transaction.key, userId: transaction.val().userId, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
                     })
+                }
             })
             this.setState({
                 tempTrans: newTransactions,
                 dataSource: this.state.dataSource.cloneWithRows(newTransactions)
             })
-        }))
+        })
     }
-
-    // listenForTaskRef(transRef) {
-    //     transRef.on('value', (transactions) => {
-    //         var newTransactions = [];
-    //         transactions.forEach((transaction) => {
-    //             if(transaction.val().userId === this.props.userInfo.userId) {
-    //                 newTransactions.push({
-    //                     key: transaction.key, userId: transaction.val().userId, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
-    //                 })
-    //             }
-    //         })
-
-    //         this.setState({
-    //             tempTrans: newTransactions,
-    //             dataSource: this.state.dataSource.cloneWithRows(newTransactions)
-    //         })
-    //     })
-    // }
 
     onPickerChange(picker) {
         this.setState({sortCategory: picker})
-        // this.listenForTaskRef(this.transRef.orderByChild(picker))
+        var tempRef = this.transRef.ref.orderByChild(picker)
+        this.listenForTaskRef(tempRef)
+    }
+
+    orderList(picker){
+        console.log(picker)
+        var newArr = this.tempTrans.sort(this.tempTrans,picker,((n) =>{
+            return Math.sin(n)
+        }))
     }
 
     onSortPressed() {
@@ -121,9 +100,10 @@ export default class TransactionHistory extends React.Component {
                     <Text style={styles.label}>Sort by: </Text>
                     <Picker 
                         mode='dropdown' 
-                        onValueChange={(picker) => this.onPickerChange(picker)}
+                        onValueChange={(picker) => {this.onPickerChange(picker)}}
                         selectedValue={this.state.sortCategory}
-                        style={styles.picker}>
+                        style={{width: 100}}
+                        itemStyle={{fontSize: 15, color:'black'}}>
                         <Picker.Item label='amount' value='amount' />
                         <Picker.Item label='date' value='date' />
                     </Picker>
@@ -169,13 +149,16 @@ const styles = StyleSheet.create({
     picker: {
         flexDirection: 'row-reverse',
         width: 100,
-
+        justifyContent:'center',
     },
     toolbar: {
+        marginTop: 30,
+        height:40,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
         borderColor: '#adadad',
         borderBottomWidth: 1,
+        backgroundColor: '#c0c0c0'
     }
 });
