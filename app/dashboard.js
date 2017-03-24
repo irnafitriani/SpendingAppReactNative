@@ -25,7 +25,6 @@ export default class Dashboard extends Component{
             var newTransactions = [{'x': 0, 'y': 0}];
             transactions.forEach((transaction) => {
                 if(transaction.val().userId === this.props.userInfo.userId) {
-                    console.log('equal user id ' + this.props.userInfo.userId)   
                     newTransactions.push({
                         "x": parseInt(transaction.val().date.substr(8)), "y": parseInt(transaction.val().amount)
                     })

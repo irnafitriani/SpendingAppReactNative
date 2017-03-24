@@ -34,36 +34,60 @@ export default class TransactionHistory extends React.Component {
         })
     }
 
-    componentDidMount() {        
-        this.listenForTaskRef(this.transRef.orderByChild('amount'))
+    componentWillMount(){
+        this.setDataByUserId()
     }
+
+    // componentDidMount() {        
+    //     this.listenForTaskRef(this.transRef.orderByChild('amount'))
+    // }
 
     setTransList() {
         console.log('set transaction list')
     }
 
-    listenForTaskRef(transRef) {
-        transRef.on('value', (transactions) => {
+    setDataByUserId(){
+        var ref = Firebase.database().ref()
+        ref.orderByChild("userId").equalTo(this.props.userInfo.userId).on("child_added",((snapshot) =>{
+            console.log(snapshot.val())
             var newTransactions = [];
-            transactions.forEach((transaction) => {
-                if(transaction.val().userId === this.props.userInfo.userId) {
-                    console.log('equal user id ' + this.props.userInfo.userId)   
-                    newTransactions.push({
-                        key: transaction.key, userId: transaction.val().userId, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
+            snapshot.forEach((transaction) =>{
+                console.log(transaction)
+                newTransactions.push({
+                        key: transaction.key, 
+                        name: transaction.val().name, 
+                        amount: transaction.val().amount, 
+                        date: transaction.val().date
                     })
-                }
             })
-
             this.setState({
                 tempTrans: newTransactions,
                 dataSource: this.state.dataSource.cloneWithRows(newTransactions)
             })
-        })
+        }))
     }
+
+    // listenForTaskRef(transRef) {
+    //     transRef.on('value', (transactions) => {
+    //         var newTransactions = [];
+    //         transactions.forEach((transaction) => {
+    //             if(transaction.val().userId === this.props.userInfo.userId) {
+    //                 newTransactions.push({
+    //                     key: transaction.key, userId: transaction.val().userId, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
+    //                 })
+    //             }
+    //         })
+
+    //         this.setState({
+    //             tempTrans: newTransactions,
+    //             dataSource: this.state.dataSource.cloneWithRows(newTransactions)
+    //         })
+    //     })
+    // }
 
     onPickerChange(picker) {
         this.setState({sortCategory: picker})
-        this.listenForTaskRef(this.transRef.orderByChild(picker))
+        // this.listenForTaskRef(this.transRef.orderByChild(picker))
     }
 
     onSortPressed() {
