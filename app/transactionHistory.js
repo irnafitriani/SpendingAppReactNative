@@ -23,7 +23,8 @@ export default class TransactionHistory extends React.Component {
             sortCategory: '',
             tempTrans: []
         }
-        this.transRef = Firebase.database().ref();
+        // this.transRef = Firebase.database().ref();
+        this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
     }
 
     addTransaction() {
@@ -34,8 +35,8 @@ export default class TransactionHistory extends React.Component {
         })
     }
 
-    componentDidMount() {        
-        this.listenForTaskRef(this.transRef.orderByChild('amount'))
+    componentDidMount() {
+        this.listenForTaskRef(this.transRef.ref.orderByChild('amount'))
     }
 
     setTransList() {
@@ -47,7 +48,6 @@ export default class TransactionHistory extends React.Component {
             var newTransactions = [];
             transactions.forEach((transaction) => {
                 if(transaction.val().userId === this.props.userInfo.userId) {
-                    console.log('equal user id ' + this.props.userInfo.userId)   
                     newTransactions.push({
                         key: transaction.key, userId: transaction.val().userId, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
                     })
@@ -63,7 +63,7 @@ export default class TransactionHistory extends React.Component {
 
     onPickerChange(picker) {
         this.setState({sortCategory: picker})
-        this.listenForTaskRef(this.transRef.orderByChild(picker))
+        this.listenForTaskRef(this.transRef.ref.orderByChild(picker))
     }
 
     onSortPressed() {
