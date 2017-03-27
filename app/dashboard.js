@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
 } from 'react-native'
 import Firebase from 'firebase'
 import { Bar, StockLine, SmoothLine } from 'react-native-pathjs-charts'
