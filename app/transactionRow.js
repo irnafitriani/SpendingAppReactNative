@@ -24,8 +24,8 @@ export default class TransactionRow extends React.Component {
                 onPress={this.openTransactionDetail.bind(this)}>
                 <View style={styles.rowWrapper}>
                     <View style={styles.row}>
-                        <Text>Amount : Rp {this.props.transaction.amount}</Text>
-                        <Text>{this.props.transaction.date}</Text>
+                        <Text style={styles.titleText}>Amount : Rp {this.props.transaction.amount}</Text>
+                        <Text style={styles.titleText}>{this.props.transaction.date}</Text>
                     </View>
                     <Text style={styles.label}>{this.props.transaction.name}</Text>
                 </View>
@@ -36,7 +36,6 @@ export default class TransactionRow extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
         borderWidth: 0,
         borderBottomWidth: 2,
         borderColor: '#e7e7e7',
@@ -48,6 +47,10 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 20,
         fontWeight: '300',
+        color: "#ffffff"
+    },
+    titleText:{
+        color: "#ffffff"
     },
     row: {
         flex: 1,

@@ -277,7 +277,8 @@ const styles = StyleSheet.create({
       marginVertical: 10
   },
   rowTitle:{
-      fontSize: 16
+      fontSize: 16,
+      color: "#ffffff"
   }, 
   buttonContainer: {
         flexDirection: 'row',

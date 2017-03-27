@@ -13,7 +13,8 @@ import ActionButton from 'react-native-action-button'
 import Firebase from 'firebase'
 import TransactionRow from './transactionRow'
 
-const sortIcon = require("../images/sort.png");
+const sortIcon = require("../images/sort_white.png");
+const background = require("../images/background.jpg");
 
 export default class TransactionHistory extends Component {
     constructor(props) {
@@ -89,7 +90,11 @@ export default class TransactionHistory extends Component {
 
     render() {
         return(
-            <View style={styles.container}>
+            <Image 
+                style={styles.background}
+                source={background}
+                resizeMode="cover">
+                <View style={styles.container}>
                 <View style={styles.toolbar}>
                     <Text style={styles.label}>Sort by: </Text>
                     <Picker 
@@ -97,7 +102,7 @@ export default class TransactionHistory extends Component {
                         onValueChange={(picker) => {this.onPickerChange(picker)}}
                         selectedValue={this.state.sortCategory}
                         style={{width: 100}}
-                        itemStyle={{fontSize: 15, color:'black'}}>
+                        itemStyle={styles.itemStyle}>
                         <Picker.Item label='amount' value='amount' />
                         <Picker.Item label='date' value='date' />
                     </Picker>
@@ -121,6 +126,7 @@ export default class TransactionHistory extends Component {
                     onPress={this.addTransaction.bind(this)} 
                 />
             </View>
+        </Image>
         )
     }
 }
@@ -131,14 +137,17 @@ const styles = StyleSheet.create({
     },
     icon:{
         width: 20,
-        height: 20
+        height: 20,
     },
     label:{
         alignItems: 'center',
         justifyContent: 'center',
+        color: "#ffffff",
+        fontWeight: 'bold',
+        fontSize: 20
     },
     list: {
-        flex: 1,        
+        flex: 1, 
     },
     picker: {
         flexDirection: 'row-reverse',
@@ -153,6 +162,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         borderColor: '#adadad',
         borderBottomWidth: 1,
-        backgroundColor: '#c0c0c0'
+        backgroundColor:"black"
+    }, 
+    background: {
+        flex: 1,
+        height: null,
+        width: null,
+    },
+    itemStyle:{
+        fontSize: 15,
+        color:'#ffffff', 
+        fontWeight:'bold'
     }
 });

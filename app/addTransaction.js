@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     label: {
         marginTop: 10,
         width: 100,
-        color: '#000',
+        color: '#ffffff',
     },
     input:{
         backgroundColor: "#fff",

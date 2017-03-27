@@ -4,8 +4,10 @@ import {
     Text,
     TouchableHighlight,
     View,
+    Image
 } from 'react-native'
 import Firebase from 'firebase'
+const background = require('../images/background.jpg')
 
 export default class TransactionDetail extends React.Component {
     constructor() {
@@ -40,6 +42,10 @@ export default class TransactionDetail extends React.Component {
 
     render() {
         return(
+             <Image 
+                style={styles.background}
+                source={background}
+                resizeMode="cover">
             <View style={styles.container}>
                 <View>
                     <View style={styles.row}>
@@ -83,20 +89,26 @@ export default class TransactionDetail extends React.Component {
                     </TouchableHighlight>
                 </View>
             </View>
+        </Image>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
         padding: 20,
         flex: 1,
         justifyContent: 'space-between',
     },
+     background: {
+        flex: 1,
+        height: null,
+        width: null,
+    },
     label: {
         fontSize: 16,
-        fontWeight: '300'
+        fontWeight: '300',
+        color: '#ffffff'
     },
     row: {
         flexDirection: 'row',
