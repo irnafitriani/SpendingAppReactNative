@@ -7,6 +7,7 @@ import{
     Image,
     TextInput,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     Navigator,
     AsyncStorage,
     Alert,
@@ -23,6 +24,7 @@ import Firebase from 'firebase'
   Firebase.initializeApp(config);
   var rootRef = Firebase.database().ref()
 
+const dismissKeyboard = require('dismissKeyboard');
 const background = require("../images/background.jpg");
 const lockIcon = require("../images/lock.png");
 const personIcon = require("../images/person.png");
@@ -130,99 +132,101 @@ export default class Registration extends Component{
     }
     render(){
         return(
-            <Image 
-                style={[styles.background, styles.container]}
-                source={background}
-                resizeMode="cover">
-            <View style={styles.container} />
-                <View style={styles.wrapper}>
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <Image
-                                source={personIcon}
-                                style = {styles.icon}
-                                resizeMode="contain"
-                            />
+            <TouchableWithoutFeedback
+                onPress={() => dismissKeyboard()}
+                style={{flex: 1}}>
+                <Image 
+                    style={[styles.background, styles.container]}
+                    source={background}
+                    resizeMode="cover">
+                    <View style={styles.container} />
+                        <View style={styles.wrapper}>
+                            <View style={styles.inputWrap}>
+                                <View style={styles.iconWrap}>
+                                    <Image
+                                        source={personIcon}
+                                        style = {styles.icon}
+                                        resizeMode="contain"
+                                    />
+                                </View>
+                                <TextInput
+                                    placeholder="Name"
+                                    style={styles.input}
+                                    underlineColorAndroid="transparent"
+                                    onChangeText={(name) => this.setState({name})}
+                                    value={this.state.name}
+                                />
+                            </View>
+                            <View style={styles.inputWrap}>
+                                <View style={styles.iconWrap}>
+                                    <Image
+                                        source={mailIcon}
+                                        style = {styles.icon}
+                                        resizeMode="contain"
+                                    />
+                                </View>
+                                <TextInput
+                                    placeholder="Email"
+                                    style={styles.input}
+                                    underlineColorAndroid="transparent"
+                                    onChangeText={(email) => this.setState({email})}
+                                    value={this.state.email}
+                                />
+                            </View>
+                            <View style={styles.inputWrap}>
+                                <View style={styles.iconWrap}>
+                                    <Image
+                                        source={lockIcon}
+                                        style = {styles.icon}
+                                        resizeMode="contain"
+                                    />
+                                </View>
+                                <TextInput
+                                    placeholder="Password"
+                                    secureTextEntry
+                                    style={styles.input}
+                                    underlineColorAndroid="transparent"
+                                    onChangeText={(password) => this.setState({password})}
+                                    value={this.state.password}
+                                />
+                            </View>
+                            <View style={styles.inputWrap}>
+                                <View style={styles.iconWrap}>
+                                    <Image
+                                        source={lockIcon}
+                                        style = {styles.icon}
+                                        resizeMode="contain"
+                                    />
+                                </View>
+                                <TextInput
+                                    placeholder="Confirm Password"
+                                    secureTextEntry
+                                    style={styles.input}
+                                    underlineColorAndroid="transparent"
+                                    onChangeText={(confirmPassword) => this.setState({confirmPassword})}
+                                    value={this.state.confirmPassword}
+                                />
+                            </View>
+                            <TouchableOpacity activeOpacity={.5}
+                                onPress={this.signUp.bind(this)}>
+                                <View style={styles.button}>
+                                    <Text style={styles.buttonText}>Sign Up</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <ActivityIndicator
+                                animating = {this.state.loading}
+                                color='#111'
+                                size = 'large'></ActivityIndicator>
+                            <TouchableOpacity activeOpacity={.5}
+                                onPress={this.goToSignIn.bind(this)}>
+                                <View>
+                                    <Text style={styles.loginText}>Already has an account, Sign In</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                        <TextInput
-                            placeholder="Name"
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
-                            onChangeText={(name) => this.setState({name})}
-                            value={this.state.name}
-                        />
-                    </View>
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <Image
-                                source={mailIcon}
-                                style = {styles.icon}
-                                resizeMode="contain"
-                            />
-                        </View>
-                        <TextInput
-                            placeholder="Email"
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
-                            onChangeText={(email) => this.setState({email})}
-                            value={this.state.email}
-                        />
-                    </View>
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <Image
-                                source={lockIcon}
-                                style = {styles.icon}
-                                resizeMode="contain"
-                            />
-                        </View>
-                        <TextInput
-                            placeholder="Password"
-                            secureTextEntry
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
-                            onChangeText={(password) => this.setState({password})}
-                            value={this.state.password}
-                        />
-                    </View>
-                     <View style={styles.inputWrap}>
-                         <View style={styles.iconWrap}>
-                            <Image
-                                source={lockIcon}
-                                style = {styles.icon}
-                                resizeMode="contain"
-                            />
-                        </View>
-                        <TextInput
-                            placeholder="Confirm Password"
-                            secureTextEntry
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
-                            onChangeText={(confirmPassword) => this.setState({confirmPassword})}
-                            value={this.state.confirmPassword}
-                        />
-                    </View>
-                    <TouchableOpacity activeOpacity={.5}
-                        onPress={this.signUp.bind(this)}>
-                        <View style={styles.button}>
-                            <Text style={styles.buttonText}>Sign Up</Text>
-                        </View>
-                    </TouchableOpacity>
-                     <ActivityIndicator
-                        animating = {this.state.loading}
-                        color='#111'
-                        size = 'large'></ActivityIndicator>
-                    <TouchableOpacity activeOpacity={.5}
-                        onPress={this.goToSignIn.bind(this)}>
-                        <View>
-                            <Text style={styles.loginText}>Already has an account, Sign In</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            <View style={styles.container} />
-
-            </Image>
-
+                    <View style={styles.container} />
+                </Image>
+            </TouchableWithoutFeedback>
         );
     }
 }

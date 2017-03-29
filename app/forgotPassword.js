@@ -8,10 +8,12 @@ import{
     Image,
     TextInput,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     ActivityIndicator
 } from 'react-native'
 import Firebase from 'firebase'
 
+const dismissKeyboard = require('dismissKeyboard');
 const background = require("../images/background.jpg");
 const lockIcon = require("../images/lock.png");
 const personIcon = require("../images/person.png");
@@ -55,48 +57,51 @@ export default class ForgotPassword extends Component{
 
     render(){
         return(
-            <Image 
-                style={[styles.background, styles.container]}
-                source={background}
-                resizeMode="cover">
-            <View style={styles.container} />
-                <View style={styles.wrapper}>
-                    <View style={styles.inputWrap}>
-                        <View style={styles.iconWrap}>
-                            <Image
-                                source={mailIcon}
-                                style = {styles.icon}
-                                resizeMode="contain"
-                            />
+            <TouchableWithoutFeedback
+                onPress={() => dismissKeyboard()}
+                style={{flex: 1}}>
+                <Image 
+                    style={[styles.background, styles.container]}
+                    source={background}
+                    resizeMode="cover">
+                    <View style={styles.container} />
+                        <View style={styles.wrapper}>
+                            <View style={styles.inputWrap}>
+                                <View style={styles.iconWrap}>
+                                    <Image
+                                        source={mailIcon}
+                                        style = {styles.icon}
+                                        resizeMode="contain"
+                                    />
+                                </View>
+                                <TextInput
+                                    placeholder="Email"
+                                    style={styles.input}
+                                    underlineColorAndroid="transparent"
+                                    onChangeText={(email) => this.setState({email})}
+                                    value={this.state.email}
+                                />
+                            </View>
+                            <TouchableOpacity activeOpacity={.5}
+                                onPress={this.resetPassword.bind(this)}>
+                                <View style={styles.button}>
+                                    <Text style={styles.buttonText}>Reset Password</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <ActivityIndicator
+                                animating = {this.state.loading}
+                                color='#111'
+                                size = 'large'></ActivityIndicator>
+                            <TouchableOpacity activeOpacity={.5}
+                                onPress={this.goToSignIn.bind(this)}>
+                                <View>
+                                    <Text style={styles.loginText}>Back to Sign In</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                        <TextInput
-                            placeholder="Email"
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
-                            onChangeText={(email) => this.setState({email})}
-                            value={this.state.email}
-                        />
-                    </View>
-                    <TouchableOpacity activeOpacity={.5}
-                        onPress={this.resetPassword.bind(this)}>
-                        <View style={styles.button}>
-                            <Text style={styles.buttonText}>Reset Password</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <ActivityIndicator
-                        animating = {this.state.loading}
-                        color='#111'
-                        size = 'large'></ActivityIndicator>
-                    <TouchableOpacity activeOpacity={.5}
-                        onPress={this.goToSignIn.bind(this)}>
-                        <View>
-                            <Text style={styles.loginText}>Back to Sign In</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            <View style={styles.container} />
-
-            </Image>
+                    <View style={styles.container} />
+                </Image>
+            </TouchableWithoutFeedback>
 
         );
     }

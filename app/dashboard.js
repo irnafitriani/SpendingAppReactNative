@@ -78,13 +78,13 @@ export default class Dashboard extends Component{
     }
     onNextPress() {
         if(!this.state.disable) {
-        var month = this.state.currentMonth + 1;
-        if(month > 11) {
-            month = month - 12
-        }
-        this.getSelectedMonthData(month)
-        this.setState({currentMonth: month})
-        this.disableButtonNav(month)
+            var month = this.state.currentMonth + 1;
+            if(month > 11) {
+                month = month - 12
+            }
+            this.getSelectedMonthData(month)
+            this.setState({currentMonth: month})
+            this.disableButtonNav(month)
         }
     }
     onPrevPress() {

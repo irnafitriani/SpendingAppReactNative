@@ -6,6 +6,7 @@ import {
     ScrollView,
     ListView,
     TouchableHighlight,
+    TouchableWithoutFeedback,
     Navigator,
     TextInput,
     Image,
@@ -15,6 +16,7 @@ import Prompt from 'react-native-prompt'
 import Separator from './Helpers/separator'
 import Firebase from 'firebase'
 const background = require("../images/background.jpg");
+const dismissKeyboard = require('dismissKeyboard')
 
 export default class Account extends Component{
     constructor(props){
@@ -141,124 +143,119 @@ export default class Account extends Component{
             email: profile.email,
             userId: profile.uid, 
         })
-    }/*
-     renderRow(rowData){
-            return(
-            <View style={styles.rowContainer}>
-                <Text style={styles.rowTitle}>{rowData.title}</Text>
-                <Text style={styles.rowContent}>{rowData.value}</Text>
-                <Separator />
-            </View>
-            )
-        }*/
+    }
     render(){
         var userInfo = this.props.userInfo;
         return(
-             <Image 
-                style={[styles.background, styles.container]}
-                source={background}
-                resizeMode="cover">
-                    <View style={styles.container} />
-                        <View style={styles.wrapper}>
-                            <Text style={styles.rowTitle}>Name</Text>
-                            <View style={styles.inputWrap}>
-                                <TextInput
-                                    placeholder="Name"
-                                    style={styles.input}
-                                    underlineColorAndroid="transparent"
-                                    onChangeText={(name) => this.setState({name})}
-                                    value={this.state.name}
-                                />
-                            </View>
-                            <Text style={styles.rowTitle}>Email</Text>
-                            <View style={styles.inputWrap}>
-                                <TextInput
-                                    placeholder="Email"
-                                    style={styles.input}
-                                    underlineColorAndroid="transparent"
-                                    onChangeText={(email) => this.setState({email})}
-                                    value={this.state.email}
-                                />
-                            </View>
-                            <Text style={styles.rowTitle}>Change Password</Text>                          
-                             <View style={styles.inputWrap}>
+            <TouchableWithoutFeedback
+                onPress={() => dismissKeyboard()}
+                style={{flex: 1}}>
+                <Image 
+                    style={[styles.background, styles.container]}
+                    source={background}
+                    resizeMode="cover">
+                        <View style={styles.container} />
+                            <View style={styles.wrapper}>
+                                <Text style={styles.rowTitle}>Name</Text>
+                                <View style={styles.inputWrap}>
+                                    <TextInput
+                                        placeholder="Name"
+                                        style={styles.input}
+                                        underlineColorAndroid="transparent"
+                                        onChangeText={(name) => this.setState({name})}
+                                        value={this.state.name}
+                                    />
+                                </View>
+                                <Text style={styles.rowTitle}>Email</Text>
+                                <View style={styles.inputWrap}>
+                                    <TextInput
+                                        placeholder="Email"
+                                        style={styles.input}
+                                        underlineColorAndroid="transparent"
+                                        onChangeText={(email) => this.setState({email})}
+                                        value={this.state.email}
+                                    />
+                                </View>
+                                <Text style={styles.rowTitle}>Change Password</Text>                          
+                                <View style={styles.inputWrap}>
 
-                                <TextInput
-                                    placeholder="Change Password"
-                                    secureTextEntry
-                                    style={styles.input}
-                                    underlineColorAndroid="transparent"
-                                    onChangeText={(password) => this.setState({password})}
-                                    value={this.state.password}
-                                />
+                                    <TextInput
+                                        placeholder="Change Password"
+                                        secureTextEntry
+                                        style={styles.input}
+                                        underlineColorAndroid="transparent"
+                                        onChangeText={(password) => this.setState({password})}
+                                        value={this.state.password}
+                                    />
+                                </View>
+                            <View style={styles.buttonContainer}>
+                                <TouchableHighlight 
+                                    onPress={this.onLogoutPressed.bind(this)}
+                                    style={styles.button}>
+                                    <Text style={styles.buttonText}>Logout</Text>
+                                </TouchableHighlight>
+                                <TouchableHighlight 
+                                    onPress={this.onSavePressed.bind(this)}
+                                    style={styles.button}>
+                                    <Text style={styles.buttonText}>Save</Text>
+                                </TouchableHighlight>
                             </View>
-                        <View style={styles.buttonContainer}>
-                            <TouchableHighlight 
-                                onPress={this.onLogoutPressed.bind(this)}
-                                style={styles.button}>
-                                <Text style={styles.buttonText}>Logout</Text>
-                            </TouchableHighlight>
-                            <TouchableHighlight 
-                                onPress={this.onSavePressed.bind(this)}
-                                style={styles.button}>
-                                <Text style={styles.buttonText}>Save</Text>
-                            </TouchableHighlight>
-                        </View>
-                         <Prompt
-                            title="Confirm Password"
-                            placeholder="Password"
-                            secureTextEntry
-                            visible={this.state.promptVisible}
-                            onCancel={() => this.setState({ promptVisible: false, message: "You cancelled" })}
-                            onSubmit={(value) => {
-                                this.setState({
-                                    promptVisible: false
-                                })
-                                if(value === this.state.password){
-                                    var user = Firebase.auth().currentUser
-                                    user.updatePassword(this.state.password)
-                                    .then(() =>{
-                                        //Update Success
-                                        user.updateProfile({
-                                        displayName: this.state.name,
-                                        email: this.state.email
-                                            }).then(() => {
-                                                this.setState({
-                                                loading : false,
-                                                promptVisible : false
-                                            })
-                                            alert("Data has been saved!")
-                                        }, function(error) {
-                                            this.setState({
-                                                loading : false,
-                                                promptVisible : false
-                                            })
-                                            alert(error.message)
-                                        });  
+                            <Prompt
+                                title="Confirm Password"
+                                placeholder="Password"
+                                secureTextEntry
+                                visible={this.state.promptVisible}
+                                onCancel={() => this.setState({ promptVisible: false, message: "You cancelled" })}
+                                onSubmit={(value) => {
+                                    this.setState({
+                                        promptVisible: false
                                     })
-                                    .catch((error) => {
+                                    if(value === this.state.password){
+                                        var user = Firebase.auth().currentUser
+                                        user.updatePassword(this.state.password)
+                                        .then(() =>{
+                                            //Update Success
+                                            user.updateProfile({
+                                            displayName: this.state.name,
+                                            email: this.state.email
+                                                }).then(() => {
+                                                    this.setState({
+                                                    loading : false,
+                                                    promptVisible : false
+                                                })
+                                                alert("Data has been saved!")
+                                            }, function(error) {
+                                                this.setState({
+                                                    loading : false,
+                                                    promptVisible : false
+                                                })
+                                                alert(error.message)
+                                            });  
+                                        })
+                                        .catch((error) => {
+                                            this.setState({
+                                                    loading : false,
+                                                    promptVisible : false
+                                                })
+                                            alert(error.message)
+                                        }) 
+                                    }else{
                                         this.setState({
                                                 loading : false,
                                                 promptVisible : false
-                                            })
-                                        alert(error.message)
-                                    }) 
-                                }else{
-                                    this.setState({
-                                            loading : false,
-                                            promptVisible : false
-                                            })
-                                    alert('Passwords invalid, confirm password is not equal.')
-                                }
-                            }}
-                                      />
-                    </View>
-                <View style={styles.container} />
-                <ActivityIndicator
-                        animating = {this.state.loading}
-                        color='#111'
-                        size = 'large'></ActivityIndicator>
-            </Image>
+                                                })
+                                        alert('Passwords invalid, confirm password is not equal.')
+                                    }
+                                }}
+                                        />
+                        </View>
+                    <View style={styles.container} />
+                    <ActivityIndicator
+                            animating = {this.state.loading}
+                            color='#111'
+                            size = 'large'></ActivityIndicator>
+                </Image>
+            </TouchableWithoutFeedback>
         )
     }
 }

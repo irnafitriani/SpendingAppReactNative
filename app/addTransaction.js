@@ -5,12 +5,14 @@ import {
     Text,
     TextInput,
     TouchableHighlight,
+    TouchableWithoutFeedback,
     View,
 } from 'react-native'
 import DatePicker from 'react-native-datepicker'
 import Firebase from 'firebase'
 
 const background = require('../images/background.jpg')
+const dismissKeyboard = require('dismissKeyboard')
 
 export default class AddTransaction extends React.Component {
     constructor() {
@@ -59,73 +61,77 @@ export default class AddTransaction extends React.Component {
 
     render() {
         return(
-            <Image 
-                style={styles.background}
-                source={background}
-                resizeMode="cover">
-                <View style={styles.container}>
-                    <View style={styles.rowContainer}>
-                        <View style={styles.row}>
-                            <Text style={styles.label}>Date</Text>
-                            <DatePicker
-                                style={{flex: 1, alignItems:'flex-start'}}
-                                date={this.state.date}
-                                mode="date"
-                                placeholder="select date"
-                                format="YYYY-MM-DD"
-                                confirmBtnText="Select"
-                                cancelBtnText="Cancel"
-                                customStyles={{
-                                    dateIcon: {
-                                        position: 'absolute',
-                                        right: 0,
-                                        top: 4,
-                                    },
-                                    dateInput: {
-                                        alignItems: 'flex-start',
-                                        marginRight: 36,
-                                        paddingLeft: 8, 
-                                        backgroundColor: '#fff'
-                                    }
-                                }}
-                                onDateChange={(date) => {this.setState({date: date})}}
-                            />
+            <TouchableWithoutFeedback
+                onPress={() => dismissKeyboard()}
+                style={{flex: 1}}>
+                <Image 
+                    style={styles.background}
+                    source={background}
+                    resizeMode="cover">
+                    <View style={styles.container}>
+                        <View style={styles.rowContainer}>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Date</Text>
+                                <DatePicker
+                                    style={{flex: 1, alignItems:'flex-start'}}
+                                    date={this.state.date}
+                                    mode="date"
+                                    placeholder="select date"
+                                    format="YYYY-MM-DD"
+                                    confirmBtnText="Select"
+                                    cancelBtnText="Cancel"
+                                    customStyles={{
+                                        dateIcon: {
+                                            position: 'absolute',
+                                            right: 0,
+                                            top: 4,
+                                        },
+                                        dateInput: {
+                                            alignItems: 'flex-start',
+                                            marginRight: 36,
+                                            paddingLeft: 8, 
+                                            backgroundColor: '#fff'
+                                        }
+                                    }}
+                                    onDateChange={(date) => {this.setState({date: date})}}
+                                />
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Amount</Text>
+                                <TextInput
+                                    onChangeText={(amount) => {this.setState({amount})}}
+                                    keyboardType='numeric'
+                                    style={styles.input}
+                                    underlineColorAndroid="transparent"
+                                    value={this.state.amount}
+                                />
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Description</Text>
+                                <TextInput
+                                onChangeText={(description) => {this.setState({description})}}
+                                    multiline={true}
+                                    style={styles.inputMultiLine}
+                                    underlineColorAndroid="transparent"
+                                    value={this.state.description}
+                                />
+                            </View>
                         </View>
-                        <View style={styles.row}>
-                            <Text style={styles.label}>Amount</Text>
-                            <TextInput
-                                onChangeText={(amount) => {this.setState({amount})}}
-                                keyboardType='numeric'
-                                style={styles.input}
-                                underlineColorAndroid="transparent"
-                                value={this.state.amount}
-                            />
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.label}>Description</Text>
-                            <TextInput
-                            onChangeText={(description) => {this.setState({description})}}
-                                multiline={true}
-                                style={styles.inputMultiLine}
-                                underlineColorAndroid="transparent"
-                                value={this.state.description}
-                            />
+                        <View style={styles.buttonContainer}>
+                            <TouchableHighlight 
+                                onPress={this.onCancelPressed.bind(this)}
+                                style={styles.button}>
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableHighlight>
+                            <TouchableHighlight 
+                                onPress={this.onSavePressed.bind(this)}
+                                style={styles.button}>
+                                <Text style={styles.buttonText}>Save</Text>
+                            </TouchableHighlight>
                         </View>
                     </View>
-                    <View style={styles.buttonContainer}>
-                        <TouchableHighlight 
-                            onPress={this.onCancelPressed.bind(this)}
-                            style={styles.button}>
-                            <Text style={styles.buttonText}>Cancel</Text>
-                        </TouchableHighlight>
-                        <TouchableHighlight 
-                            onPress={this.onSavePressed.bind(this)}
-                            style={styles.button}>
-                            <Text style={styles.buttonText}>Save</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View>
-            </Image>
+                </Image>
+            </TouchableWithoutFeedback>
         )
     }
 }
