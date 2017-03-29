@@ -5,8 +5,14 @@ import Dashboard from './dashboard'
 import TransactionHistory from './transactionHistory'
 import Account from './account'
 import{
-    View
+    View,
+    Image
 } from 'react-native'
+const showChart = require("../images/show_chart.png")
+const showHistory = require("../images/description.png")
+const selectedChart = require("../images/show_chart_white.png")
+const selectedHistory = require("../images/description_white.png")
+const showAccount = require("../images/person.png")
 
 export default class Tabbar extends Component{
     constructor(props){
@@ -50,6 +56,7 @@ export default class Tabbar extends Component{
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'dashboard'}
                         title = 'Dashboard'
+                        renderIcon={() => <Image source={showChart} style={{width: 24, height: 24}} />}
                         onPress={() => this.setState({selectedTab: 'dashboard'})}>
                         {<Dashboard 
                             selectedTab={this.state.selectedTab}
@@ -59,6 +66,7 @@ export default class Tabbar extends Component{
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'transaction'}
                         title = 'Transaction History'
+                        renderIcon = {() => <Image source={showHistory} style={{width: 24, height: 24}} />}
                         onPress={() => this.setState({selectedTab: 'transaction'})}>
                         {<TransactionHistory 
                             selectedTab={this.state.selectedTab}
@@ -68,6 +76,7 @@ export default class Tabbar extends Component{
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'account'}
                         title = 'Account'
+                        renderIcon = {() => <Image source={showAccount} style={{width: 24, height: 24}} />}
                         onPress={() => this.setState({selectedTab: 'account'})}>
                         {<Account 
                             selectedTab={this.state.selectedTab}
