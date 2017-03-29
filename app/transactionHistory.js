@@ -102,7 +102,7 @@ export default class TransactionHistory extends Component {
                         mode='dropdown' 
                         onValueChange={(picker) => {this.onPickerChange(picker)}}
                         selectedValue={this.state.sortCategory}
-                        style={{width: 100}}
+                        style={styles.picker}
                         itemStyle={styles.itemStyle}>
                         <Picker.Item label='amount' value='amount' />
                         <Picker.Item label='date' value='date' />
@@ -151,9 +151,8 @@ const styles = StyleSheet.create({
         flex: 1, 
     },
     picker: {
-        flexDirection: 'row-reverse',
+        color: "#ffffff",
         width: 100,
-        justifyContent:'center',
     },
     toolbar: {
         marginTop: (Platform.OS === 'ios') ? 30 : 0,
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
     },
     itemStyle:{
         fontSize: 15,
-        color:'#ffffff', 
+        color:'#AED581', 
         fontWeight:'bold'
     }
 });

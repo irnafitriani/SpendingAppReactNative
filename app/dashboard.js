@@ -9,9 +9,10 @@ import {
 } from 'react-native'
 import Firebase from 'firebase'
 import { Bar, StockLine, SmoothLine } from 'react-native-pathjs-charts'
+const background = require("../images/background.jpg");
 
-const arrowLeft = require('../images/arrow_left_black.png')
-const arrowRight = require('../images/arrow_right_black.png')
+const arrowLeft = require('../images/arrow_left_white.png')
+const arrowRight = require('../images/arrow_right_white.png')
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                 'August', 'September', 'October', 'November', 'December']
 const maxDates = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -23,8 +24,8 @@ export default class Dashboard extends Component{
             data: '',
             sortCategory: '',
             tempTrans: [[{'x': 0, 'y': 0}]],
-            currentDate: new Date(),           
             currentMonth: new Date().getMonth(), 
+            disable: true,
         }
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
         console.log('constructor')
@@ -76,12 +77,15 @@ export default class Dashboard extends Component{
             )
     }
     onNextPress() {
+        if(!this.state.disable) {
         var month = this.state.currentMonth + 1;
         if(month > 11) {
             month = month - 12
         }
         this.getSelectedMonthData(month)
         this.setState({currentMonth: month})
+        this.disableButtonNav(month)
+        }
     }
     onPrevPress() {
         var month = this.state.currentMonth - 1;
@@ -90,6 +94,11 @@ export default class Dashboard extends Component{
         }
         this.getSelectedMonthData(month)
         this.setState({currentMonth: month})
+        this.disableButtonNav(month)
+    }
+    disableButtonNav(month) {
+        var result = month === new Date().getMonth() ? true : false
+        this.setState({disable: result})
     }
     getSelectedMonthData(month) {
         // get min date
@@ -112,7 +121,7 @@ export default class Dashboard extends Component{
         let optionsLine = {
             width: 250,
             height: 250,
-            color: '#2980B9',
+            color: '#ffffff',
             margin: {
                 top: 10,
                 left: 35,
@@ -135,7 +144,7 @@ export default class Dashboard extends Component{
                 fontFamily: 'Arial',
                 fontSize: 8,
                 fontWeight: true,
-                fill: '#34495E'
+                fill: '#ffffff'
                 }
             },
             axisY: {
@@ -150,52 +159,71 @@ export default class Dashboard extends Component{
                 fontFamily: 'Arial',
                 fontSize: 8,
                 fontWeight: true,
-                fill: '#34495E'
+                fill: '#ffffff'
                 }
             }
         }
         return(
-            <View style={styles.container}>
-                <View style={styles.nav}>
-                    <TouchableHighlight
-                        onPress={this.onPrevPress.bind(this)}>
-                        <View style={styles.buttonWrapper}>
-                            <Image source={arrowLeft}/>
-                            <Text>Prev</Text>
-                        </View>
-                    </TouchableHighlight>
-                    <Text style={styles.text}> {months[this.state.currentMonth]} </Text>
-                    <TouchableHighlight
-                        onPress={this.onNextPress.bind(this)}>
-                        <View style={styles.buttonWrapper}>
-                            <Text>Next</Text>
-                            <Image source={arrowRight}/>
-                        </View>
-                    </TouchableHighlight>
+            <Image 
+                style={[styles.background, styles.container]}
+                source={background}
+                resizeMode="cover">
+                <View style={styles.container}>
+                    <View style={styles.nav}>
+                        <TouchableHighlight
+                            onPress={this.onPrevPress.bind(this)}
+                            underlayColor='#adadad'>
+                            <View style={styles.buttonWrapper}>
+                                <Image source={arrowLeft}/>
+                                <Text style={styles.label}>Prev</Text>
+                            </View>
+                        </TouchableHighlight>
+                        <Text style={styles.text}> {months[this.state.currentMonth]} </Text>
+                        <TouchableHighlight
+                            onPress={this.onNextPress.bind(this)}
+                            underlayColor='#adadad'>
+                            <View style={styles.buttonWrapper}>
+                                <Text style={{color: this.state.disable? '#adadad' : '#ffffff'}}>Next</Text>
+                                <Image source={arrowRight} style={{tintColor: this.state.disable? '#adadad' : '#ffffff'}}/>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
+                    {this.setData(optionsLine, this.state.tempTrans)}
                 </View>
-                {this.setData(optionsLine, this.state.tempTrans)}
-            </View>
+            </Image>
         )
     }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex:1
-  },
-  nav: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginTop: (Platform.OS === 'ios') ? 30 : 0,   
-  },
-  buttonWrapper: {
-      flexDirection: 'row',
-      margin: 10,
-  },
-  buttonText: {},
-  text:{
+    container: {
+        flex:1
+    },
+    nav: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: (Platform.OS === 'ios') ? 30 : 0,   
+    },
+    buttonWrapper: {
+        flexDirection: 'row',
+        margin: 10,
+    },
+    text:{
       paddingVertical: 30,
-      textAlign: "center"
-  }
+      textAlign: "center",
+      color: "#ffffff"
+    },
+    image:{
+        tintColor: '#fff',
+    },
+    background: {
+        flex: 1,
+        height: null,
+        width: null,
+    },
+    label:{
+        color: "#ffffff"
+    },
+
 })
