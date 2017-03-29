@@ -25,13 +25,15 @@ export default class Dashboard extends Component{
             sortCategory: '',
             tempTrans: [[{'x': 0, 'y': 0}]],
             currentMonth: new Date().getMonth(), 
-            disable: true,
+            nextDisable: true,
+            prevDisable: false,
         }
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
         console.log('constructor')
     }
     componentWillMount() {
         this.listenForTaskRef(this.transRef)
+        this.disablePrevButtonNav(this.state.currentMonth)
     }
     listenForTaskRef(transRef) {
         transRef.on('value', (transactions) => {
@@ -84,21 +86,31 @@ export default class Dashboard extends Component{
             }
             this.getSelectedMonthData(month)
             this.setState({currentMonth: month})
-            this.disableButtonNav(month)
+            this.disablePrevButtonNav(month)
+            this.disableNextButtonNav(month)
         }
     }
     onPrevPress() {
-        var month = this.state.currentMonth - 1;
-        if(month < 0) {
-            month = month + 12
+        if(!this.state.prevDisable){
+            var month = this.state.currentMonth - 1;
+            if(month < 0) {
+                month = month + 12
+            }
+            this.getSelectedMonthData(month)
+            this.setState({currentMonth: month})
+            this.disableNextButtonNav(month)
+            this.disablePrevButtonNav(month)
         }
-        this.getSelectedMonthData(month)
-        this.setState({currentMonth: month})
-        this.disableButtonNav(month)
     }
-    disableButtonNav(month) {
+
+    disablePrevButtonNav(month){
+        var result = month === 0 ? true : false
+        this.setState({prevDisable: result})
+    }
+
+    disableNextButtonNav(month) {
         var result = month === new Date().getMonth() ? true : false
-        this.setState({disable: result})
+        this.setState({nextDisable: result})
     }
     getSelectedMonthData(month) {
         // get min date
@@ -174,8 +186,8 @@ export default class Dashboard extends Component{
                             onPress={this.onPrevPress.bind(this)}
                             underlayColor='#adadad'>
                             <View style={styles.buttonWrapper}>
-                                <Image source={arrowLeft}/>
-                                <Text style={styles.label}>Prev</Text>
+                                <Image source={arrowLeft} style={{tintColor: this.state.prevDisable? '#adadad' : '#ffffff'}}/>
+                                <Text style={{color: this.state.prevDisable? '#adadad' : '#ffffff'}}>Prev</Text>
                             </View>
                         </TouchableHighlight>
                         <Text style={styles.text}> {months[this.state.currentMonth]} </Text>
@@ -183,8 +195,8 @@ export default class Dashboard extends Component{
                             onPress={this.onNextPress.bind(this)}
                             underlayColor='#adadad'>
                             <View style={styles.buttonWrapper}>
-                                <Text style={{color: this.state.disable? '#adadad' : '#ffffff'}}>Next</Text>
-                                <Image source={arrowRight} style={{tintColor: this.state.disable? '#adadad' : '#ffffff'}}/>
+                                <Text style={{color: this.state.nextDisable? '#adadad' : '#ffffff'}}>Next</Text>
+                                <Image source={arrowRight} style={{tintColor: this.state.nextDisable? '#adadad' : '#ffffff'}}/>
                             </View>
                         </TouchableHighlight>
                     </View>
