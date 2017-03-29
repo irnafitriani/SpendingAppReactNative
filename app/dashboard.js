@@ -9,9 +9,10 @@ import {
 } from 'react-native'
 import Firebase from 'firebase'
 import { Bar, StockLine, SmoothLine } from 'react-native-pathjs-charts'
+const background = require("../images/background.jpg");
 
-const arrowLeft = require('../images/arrow_left_black.png')
-const arrowRight = require('../images/arrow_right_black.png')
+const arrowLeft = require('../images/arrow_left_white.png')
+const arrowRight = require('../images/arrow_right_white.png')
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                 'August', 'September', 'October', 'November', 'December']
 
@@ -78,7 +79,7 @@ export default class Dashboard extends Component{
         let optionsLine = {
             width: 250,
             height: 250,
-            color: '#2980B9',
+            color: '#ffffff',
             margin: {
                 top: 10,
                 left: 35,
@@ -101,7 +102,7 @@ export default class Dashboard extends Component{
                 fontFamily: 'Arial',
                 fontSize: 8,
                 fontWeight: true,
-                fill: '#34495E'
+                fill: '#ffffff'
                 }
             },
             axisY: {
@@ -116,31 +117,36 @@ export default class Dashboard extends Component{
                 fontFamily: 'Arial',
                 fontSize: 8,
                 fontWeight: true,
-                fill: '#34495E'
+                fill: '#ffffff'
                 }
             }
         }
         return(
-            <View style={styles.container}>
-                <View style={styles.nav}>
-                    <TouchableHighlight
-                        onPress={this.onPrevPress.bind(this)}>
-                        <View style={styles.buttonWrapper}>
-                            <Image source={arrowLeft}/>
-                            <Text>Prev</Text>
-                        </View>
-                    </TouchableHighlight>
-                    <Text style={styles.text}> {months[this.state.currentDate.getMonth()]} </Text>
-                    <TouchableHighlight
-                        onPress={this.onNextPress.bind(this)}>
-                        <View style={styles.buttonWrapper}>
-                            <Text>Next</Text>
-                            <Image source={arrowRight}/>
-                        </View>
-                    </TouchableHighlight>
+            <Image 
+                style={[styles.background, styles.container]}
+                source={background}
+                resizeMode="cover">
+                <View style={styles.container}>
+                    <View style={styles.nav}>
+                        <TouchableHighlight
+                            onPress={this.onPrevPress.bind(this)}>
+                            <View style={styles.buttonWrapper}>
+                                <Image source={arrowLeft}/>
+                                <Text style={styles.label}>Prev</Text>
+                            </View>
+                        </TouchableHighlight>
+                        <Text style={styles.text}> {months[this.state.currentDate.getMonth()]} </Text>
+                        <TouchableHighlight
+                            onPress={this.onNextPress.bind(this)}>
+                            <View style={styles.buttonWrapper}>
+                                <Text style={styles.label}>Next</Text>
+                                <Image source={arrowRight}/>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
+                    {this.setData(optionsLine, this.state.tempTrans)}
                 </View>
-                {this.setData(optionsLine, this.state.tempTrans)}
-            </View>
+            </Image>
         )
     }
 }
@@ -162,6 +168,15 @@ const styles = StyleSheet.create({
   buttonText: {},
   text:{
       paddingVertical: 30,
-      textAlign: "center"
-  }
+      textAlign: "center",
+      color: "#ffffff"
+  },
+    background: {
+        flex: 1,
+        height: null,
+        width: null,
+    },
+    label:{
+        color: "#ffffff"
+    }
 })
