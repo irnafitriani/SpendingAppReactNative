@@ -45,6 +45,7 @@ export default class TransactionHistory extends Component {
         transRef.on('value', (transactions) => {
             var newTransactions = [];
             transactions.forEach((transaction) => {
+                console.log(transaction.val())
                 if(transaction.val().userId === this.props.userInfo.userId) {
                     newTransactions.push({
                         key: transaction.key, userId: transaction.val().userId, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
