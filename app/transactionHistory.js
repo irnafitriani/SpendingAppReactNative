@@ -22,7 +22,7 @@ export default class TransactionHistory extends Component {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         this.state = {
             dataSource: ds,
-            sortCategory: 'amount',
+            sortCategory: 'date',
             tempTrans: [],
         }
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId)
@@ -37,7 +37,7 @@ export default class TransactionHistory extends Component {
     }
 
     componentWillMount() {        
-        var tempRef = this.transRef.ref.orderByChild('amount')
+        var tempRef = this.transRef.ref.orderByChild('date')
         this.listenForTaskRef(tempRef)
     }
 
@@ -66,7 +66,10 @@ export default class TransactionHistory extends Component {
     }
 
     onSortPressed() {
-        console.log('sorting is pressed')
+        if(this.state.tempTrans.length === 0) {
+            return
+        }
+
         var temp = []
         var i = this.state.tempTrans.length - 1
         this.state.tempTrans.forEach((trans) => {
@@ -104,8 +107,8 @@ export default class TransactionHistory extends Component {
                         selectedValue={this.state.sortCategory}
                         style={styles.picker}
                         itemStyle={styles.itemStyle}>
-                        <Picker.Item label='amount' value='amount' />
                         <Picker.Item label='date' value='date' />
+                        <Picker.Item label='amount' value='amount' />
                     </Picker>
                     <TouchableHighlight
                         onPress={this.onSortPressed.bind(this)}>
@@ -122,8 +125,8 @@ export default class TransactionHistory extends Component {
                 />
                 <ActionButton 
                     buttonColor='#9b59b6'
-                    offsetX={15}
-                    offsetY={15}
+                    offsetX={0}
+                    offsetY={0}
                     onPress={this.addTransaction.bind(this)} 
                 />
             </View>

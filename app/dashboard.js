@@ -32,7 +32,7 @@ export default class Dashboard extends Component{
         console.log('constructor')
     }
     componentWillMount() {
-        this.listenForTaskRef(this.transRef)
+        this.getSelectedMonthData(this.state.currentMonth)
         this.disablePrevButtonNav(this.state.currentMonth)
     }
     listenForTaskRef(transRef) {
@@ -63,7 +63,7 @@ export default class Dashboard extends Component{
             })
 
             // add the graphic end point
-            newTransactions.push({'x': 32, 'y': 0})
+            newTransactions.push({'x': this.state.currentMonth === 1 ? 30 : 35, 'y': 0})
 
             // update tempTrans state
             this.setState({
@@ -79,13 +79,13 @@ export default class Dashboard extends Component{
             )
     }
     onNextPress() {
-        if(!this.state.disable) {
+        if(!this.state.nextDisable) {
             var month = this.state.currentMonth + 1;
             if(month > 11) {
                 month = month - 12
             }
-            this.getSelectedMonthData(month)
             this.setState({currentMonth: month})
+            this.getSelectedMonthData(month)
             this.disablePrevButtonNav(month)
             this.disableNextButtonNav(month)
         }
@@ -96,18 +96,16 @@ export default class Dashboard extends Component{
             if(month < 0) {
                 month = month + 12
             }
-            this.getSelectedMonthData(month)
             this.setState({currentMonth: month})
+            this.getSelectedMonthData(month)
             this.disableNextButtonNav(month)
             this.disablePrevButtonNav(month)
         }
     }
-
     disablePrevButtonNav(month){
         var result = month === 0 ? true : false
         this.setState({prevDisable: result})
     }
-
     disableNextButtonNav(month) {
         var result = month === new Date().getMonth() ? true : false
         this.setState({nextDisable: result})
