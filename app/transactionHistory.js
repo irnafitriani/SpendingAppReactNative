@@ -33,6 +33,8 @@ export default class TransactionHistory extends Component {
             title: 'Add Transaction',
             id: 'AddTransaction',
             userInfo: this.props.userInfo,
+            selectedTab : this.props.selectedTab,
+            navigator: this.props.navigator,
         })
     }
 
@@ -45,10 +47,12 @@ export default class TransactionHistory extends Component {
         transRef.on('value', (transactions) => {
             var newTransactions = [];
             transactions.forEach((transaction) => {
-                console.log(transaction.val())
+                // console.log(transaction.val())
                 if(transaction.val().userId === this.props.userInfo.userId) {
                     newTransactions.push({
-                        key: transaction.key, userId: transaction.val().userId, name: transaction.val().name, amount: transaction.val().amount, date: transaction.val().date
+                        key: transaction.key, userId: transaction.val().userId, name: transaction.val().name, 
+                        amount: transaction.val().amount, date: transaction.val().date, 
+                        category: transaction.val().category,
                     })
                 }
             })
@@ -56,6 +60,10 @@ export default class TransactionHistory extends Component {
                 tempTrans: newTransactions,
                 dataSource: this.state.dataSource.cloneWithRows(newTransactions)
             })
+
+            if(this.state.sortCategory === 'date') {
+                this.onSortPressed()
+            }
         })
     }
 
@@ -87,6 +95,7 @@ export default class TransactionHistory extends Component {
         return(
             <TransactionRow 
                 navigator={this.props.navigator}
+                selectedTab={this.props.selectedTab}
                 userInfo={this.props.userInfo}
                 transaction={transaction}/>
         )

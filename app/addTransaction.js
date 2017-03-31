@@ -1,24 +1,44 @@
 import React from 'react'
 import {
+    BackAndroid,
     Image,
     StyleSheet,
     Text,
     TextInput,
     TouchableHighlight,
+    TouchableOpacity,
     TouchableWithoutFeedback,
     View,
 } from 'react-native'
 import DatePicker from 'react-native-datepicker'
+import ReactNativePicker from 'react-native-picker'
 import Firebase from 'firebase'
 
 const background = require('../images/background.jpg')
 const dismissKeyboard = require('dismissKeyboard')
 
 export default class AddTransaction extends React.Component {
-    constructor() {
-        super()
-        this.state = {key: '', date: '', amount: '', description: '', mode: ''}
+    constructor(props) {
+        super(props)
+        this.state = {key: '', date: '', amount: '', description: '', mode: '', category: '', isCatPickerOpen: false}
         this.taskRef = Firebase.database().ref();        
+
+        BackAndroid.removeEventListener('hardwareBackPress', () => {})
+        BackAndroid.addEventListener('hardwareBackPress', () => {
+            if(this.state.isCatPickerOpen) {
+                ReactNativePicker.hide()
+                this.setCatPickerShow(false)
+            } else {
+                console.log('selected tab ', this.props.selectedTab)
+                this.props.navigator.replace({
+                    title: 'Tabbar',
+                    id: 'Tabbar',
+                    selectedTab : this.props.selectedTab,
+                    userInfo: this.props.userInfo,
+                });
+                return true;
+            }
+        })
     }
 
     componentWillMount() {
@@ -28,10 +48,12 @@ export default class AddTransaction extends React.Component {
             this.state.date = this.props.transaction.date
             this.state.amount = this.props.transaction.amount.toString()
             this.state.description = this.props.transaction.name
+            this.state.category = this.props.transaction.category
         }
     }
 
     onCancelPressed() {
+        ReactNativePicker.hide()
         this.props.navigator.replace({
             title: 'Dashboard',
             id: 'Tabbar',
@@ -44,11 +66,13 @@ export default class AddTransaction extends React.Component {
         if(this.state.description !== '' && this.state.amount !== '' && this.state.date !== '') {
             if(this.state.mode === 'Edit Transaction') {
                 this.taskRef.child(this.props.transaction.key).update({
-                    userId: this.props.userInfo.userId, name: this.state.description, amount: this.state.amount, date: this.state.date,
+                    userId: this.props.userInfo.userId, name: this.state.description, 
+                    amount: parseInt(this.state.amount), date: this.state.date, category: this.state.category,
                 })
             } else {
                 this.taskRef.push({
-                    userId: this.props.userInfo.userId, name: this.state.description, amount: parseInt(this.state.amount), date: this.state.date,
+                    userId: this.props.userInfo.userId, name: this.state.description, 
+                    amount: parseInt(this.state.amount), date: this.state.date, category: this.state.category,
                 })
             }
 
@@ -57,6 +81,34 @@ export default class AddTransaction extends React.Component {
         } else {
             alert('Please fill all fields.')
         }
+    }
+
+    showCategoryPicker() {
+        ReactNativePicker.init({
+            pickerData: ['cat 1', 'cat 2', 'cat 3'],
+            selectedValue: [this.state.category],
+            onPickerConfirm: pickedValue => {
+                if (pickedValue[0] !== '') {
+                    this.setState({
+                        category: pickedValue[0]
+                    })
+                }
+            },
+            onPickerCancel: pickedValue => {
+                console.log('category cancel ', pickedValue)
+            },
+            onPickerSelect: pickedValue => {
+                console.log('category select ', pickedValue)
+            }
+        })
+        ReactNativePicker.show();
+        this.setCatPickerShow(true)
+    }
+
+    setCatPickerShow(isDisplayed) {
+        this.setState({
+            isCatPickerOpen: isDisplayed
+        })
     }
 
     render() {
@@ -107,16 +159,25 @@ export default class AddTransaction extends React.Component {
                                 />
                             </View>
                             <View style={styles.row}>
+                                <Text style={styles.label}>Category</Text>
+                                <TouchableOpacity onPress={this.showCategoryPicker.bind(this)} style={{flex: 1}}>
+                                    <TextInput
+                                        editable={false}
+                                        style={styles.input}
+                                        underlineColorAndroid="transparent"
+                                        value={this.state.category}/>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.row}>
                                 <Text style={styles.label}>Description</Text>
                                 <TextInput
-                                onChangeText={(description) => {this.setState({description})}}
+                                    onChangeText={(description) => {this.setState({description})}}
                                     multiline={true}
                                     style={styles.inputMultiLine}
                                     underlineColorAndroid="transparent"
                                     value={this.state.description}
                                 />
                             </View>
-                        </View>
                         <View style={styles.buttonContainer}>
                             <TouchableHighlight 
                                 onPress={this.onCancelPressed.bind(this)}
@@ -128,6 +189,7 @@ export default class AddTransaction extends React.Component {
                                 style={styles.button}>
                                 <Text style={styles.buttonText}>Save</Text>
                             </TouchableHighlight>
+                        </View>
                         </View>
                     </View>
                 </Image>

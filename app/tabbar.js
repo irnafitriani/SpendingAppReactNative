@@ -34,8 +34,8 @@ export default class Tabbar extends Component{
             // }
         })
         BackAndroid.addEventListener('hardwareBackPress', () => {
-            const routes = this.props.navigator.getCurrentRoutes();
-            route = routes[routes.length - 1];
+            // const routes = this.props.navigator.getCurrentRoutes();
+            // route = routes[routes.length - 1];
                 this.props.navigator.replace({
                     title: 'Tabbar',
                     id: 'Tabbar',

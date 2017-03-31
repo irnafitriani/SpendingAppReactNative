@@ -36,6 +36,7 @@ export default class TransactionDetail extends React.Component {
             title: 'Edit Transaction',
             id: 'AddTransaction',
             transaction: this.props.transaction,
+            selectedTab : this.props.selectedTab,
             userInfo: this.props.userInfo,
         })
     }

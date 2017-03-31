@@ -12,6 +12,7 @@ export default class TransactionRow extends React.Component {
         this.props.navigator.replace({
             title: 'Transaction Detail',
             id: 'TransactionDetail',
+            selectedTab : this.props.selectedTab,
             transaction: this.props.transaction,
             userInfo: this.props.userInfo,
         })
