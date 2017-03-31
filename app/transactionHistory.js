@@ -24,6 +24,7 @@ export default class TransactionHistory extends Component {
             dataSource: ds,
             sortCategory: 'date',
             tempTrans: [],
+            firstMount: false
         }
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId)
     }
@@ -40,6 +41,7 @@ export default class TransactionHistory extends Component {
 
     componentWillMount() {        
         var tempRef = this.transRef.ref.orderByChild('date')
+        this.setState({ firstMount: true})
         this.listenForTaskRef(tempRef)
     }
 
@@ -61,8 +63,9 @@ export default class TransactionHistory extends Component {
                 dataSource: this.state.dataSource.cloneWithRows(newTransactions)
             })
 
-            if(this.state.sortCategory === 'date') {
+            if(this.state.firstMount === true) {
                 this.onSortPressed()
+                this.setState({ firstMount : false})
             }
         })
     }
