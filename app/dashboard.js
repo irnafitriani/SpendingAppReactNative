@@ -35,6 +35,7 @@ export default class Dashboard extends Component{
         this.getSelectedMonthData(this.state.currentMonth)
         this.disablePrevButtonNav(this.state.currentMonth)
     }
+
     listenForTaskRef(transRef) {
         transRef.on('value', (transactions) => {
             // initialize the graphic start point

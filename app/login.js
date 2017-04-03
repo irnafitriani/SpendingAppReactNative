@@ -56,6 +56,7 @@ export default class Login extends Component{
                     loading: false
                 })
                 AsyncStorage.setItem('userData', JSON.stringify(userData));
+                console.log(userData)
                 this.props.navigator.replace({
                     title: 'Dashboard',
                     id: 'Tabbar',
