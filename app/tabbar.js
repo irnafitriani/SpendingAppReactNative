@@ -4,6 +4,7 @@ import TabNavigator from 'react-native-tab-navigator'
 import Dashboard from './dashboard'
 import TransactionHistory from './transactionHistory'
 import Account from './account'
+import Settings from './settings'
 import{
     View,
     Image
@@ -13,6 +14,7 @@ const showHistory = require("../images/description.png")
 const selectedChart = require("../images/show_chart_white.png")
 const selectedHistory = require("../images/description_white.png")
 const showAccount = require("../images/person.png")
+const settingsIcon = require("../images/settings_black.png")
 
 export default class Tabbar extends Component{
     constructor(props){
@@ -72,6 +74,16 @@ export default class Tabbar extends Component{
                             selectedTab={this.state.selectedTab}
                             userInfo={this.props.userInfo}
                             navigator={this.props.navigator} />}
+                    </TabNavigator.Item>
+                     <TabNavigator.Item
+                        selected={this.state.selectedTab === 'settings'}
+                        title = 'Settings'
+                        renderIcon = {() => <Image source={settingsIcon} style={{width: 24, height: 24}} />}
+                        onPress={() => this.setState({selectedTab: 'settings'})}>
+                        {<Settings 
+                            selectedTab={this.state.selectedTab}
+                            userInfo={this.props.currData}
+                            navigator={this.props.navigator}/>}
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'account'}
