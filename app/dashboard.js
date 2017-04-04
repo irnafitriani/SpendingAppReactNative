@@ -279,7 +279,7 @@ export default class Dashboard extends Component{
                 month = month - 12
             }
             this.setState({currentMonth: month})
-            this.getSelectedMonthData(month, this.state.category)
+            this.getSelectedMonthData(month, this.state.sortCategory)
             this.disablePrevButtonNav(month)
             this.disableNextButtonNav(month)
         }
@@ -291,7 +291,7 @@ export default class Dashboard extends Component{
                 month = month + 12
             }
             this.setState({currentMonth: month})
-            this.getSelectedMonthData(month, this.state.category)
+            this.getSelectedMonthData(month, this.state.sortCategory)
             this.disableNextButtonNav(month)
             this.disablePrevButtonNav(month)
         }
@@ -304,7 +304,7 @@ export default class Dashboard extends Component{
         var result = month === new Date().getMonth() ? true : false
         this.setState({nextDisable: result})
     }
-    getSelectedMonthData(month) {
+    getSelectedMonthData(month, category) {
         // get min date
         var minDate = new Date()
         minDate.setMonth(month)
@@ -316,7 +316,8 @@ export default class Dashboard extends Component{
         maxDate.setDate(max)
 
         // get the data filtered by current month
-        if(this.state.sortCategory === 'All') {
+        // if(this.state.sortCategory === 'All') {
+        if(category === 'All') {
             this.listenForTaskRef(this.transRef.ref.orderByChild('date').startAt(minDate.toISOString()).endAt(maxDate.toISOString()))
         } else {
             this.listenForTransRefPie(this.transRef.ref.orderByChild('date').startAt(minDate.toISOString()).endAt(maxDate.toISOString()))
@@ -324,8 +325,8 @@ export default class Dashboard extends Component{
     }
     pickerChange(category) {
         // set sort category
-        this.getSelectedMonthData(this.state.currentMonth)
         this.setState({sortCategory: category})
+        this.getSelectedMonthData(this.state.currentMonth, category)
     }
     render(){
         return(
