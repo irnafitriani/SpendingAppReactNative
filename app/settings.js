@@ -36,11 +36,27 @@ export default class Settings extends Component{
     }
 
     componentWillMount(){
+        this.listenForSettings()
         var listCurrency = []
         Utils.currency.forEach((currency) =>{
            listCurrency.push(currency.name ) 
         })
         this.setState({currencyList : listCurrency})
+    }
+
+    listenForSettings(){
+      var settingRef = Firebase.database().ref().child('settings')
+        settingRef.on('value',(snap) =>{
+            var settings = []
+            snap.forEach((child) =>{
+                settings.push({
+                    userId : child.userId,
+                    currency: child.currency,
+                    budget : child.budget
+                })
+            })
+            console.log(settings.userId)
+        })
     }
 
     showCurrencyPicker() {
@@ -62,6 +78,22 @@ export default class Settings extends Component{
         })
         ReactNativePicker.show()
         this.setCatPickerShow(true)
+    }
+
+
+    onSavePressed(){
+        var settingRef = Firebase.database().ref().child('settings')
+         if(this.state.name !== '' && this.props.userInfo !== '') {
+                this.settingRef.push({
+                    userId: this.props.userInfo.userId, 
+                    name: this.state.name, 
+                    budget: parseInt(this.state.budget), 
+                })
+
+            // return to transactions list screen
+        } else {
+            alert('Please fill all fields.')
+        }
     }
 
     setCatPickerShow(isDisplayed) {
@@ -106,7 +138,8 @@ export default class Settings extends Component{
                                 </View>
                         </View>
                         <View style={styles.buttonContainer}>
-                                <TouchableHighlight 
+                                <TouchableHighlight
+                                    onPress={this.onSavePressed.bind(this)} 
                                     style={styles.button}>
                                     <Text style={styles.buttonText}>Save</Text>
                                 </TouchableHighlight>

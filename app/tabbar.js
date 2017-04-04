@@ -82,7 +82,7 @@ export default class Tabbar extends Component{
                         onPress={() => this.setState({selectedTab: 'settings'})}>
                         {<Settings 
                             selectedTab={this.state.selectedTab}
-                            userInfo={this.props.currData}
+                            userInfo={this.props.userInfo}
                             navigator={this.props.navigator}/>}
                     </TabNavigator.Item>
                     <TabNavigator.Item
