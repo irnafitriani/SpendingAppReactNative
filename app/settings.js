@@ -45,7 +45,7 @@ export default class Settings extends Component{
     }
 
     listenForSettings(){
-      var settingRef = Firebase.database().ref().child('settings')
+      var settingRef = Firebase.database().ref('settings').orderByChild('userId').equalTo(this.props.userInfo.userId)
         settingRef.on('value',(snap) =>{
             var settings = []
             snap.forEach((child) =>{

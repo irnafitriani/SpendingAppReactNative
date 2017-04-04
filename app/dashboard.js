@@ -139,7 +139,6 @@ export default class Dashboard extends Component{
         )
     }
     setData() {
-        console.log('set data')
         if(this.state.sortCategory === 'Date') {
             return this.setDataLine()
         } else {
