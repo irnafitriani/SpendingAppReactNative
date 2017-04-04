@@ -85,7 +85,7 @@ export default class AddTransaction extends React.Component {
 
     showCategoryPicker() {
         ReactNativePicker.init({
-            pickerData: ['cat 1', 'cat 2', 'cat 3'],
+            pickerData: ['Food & Beverage', 'Grocey & Amenities', 'Healt', 'Entertainment', 'Transportation'],
             selectedValue: [this.state.category],
             onPickerConfirm: pickedValue => {
                 if (pickedValue[0] !== '') {

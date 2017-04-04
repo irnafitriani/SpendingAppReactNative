@@ -22,9 +22,9 @@ export default class Dashboard extends Component{
      constructor(props) {
         super(props)
         this.state = {
+            visible: false,
             data: '',
-            sortCategory: 'All',
-            // tempTrans: [[{'x': 0, 'y': 0}]],
+            sortCategory: 'Date',
             tempTransLine: [],
             tempTransPie: [],
             currentMonth: new Date().getMonth(), 
@@ -32,13 +32,11 @@ export default class Dashboard extends Component{
             prevDisable: false,
         }
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
-        console.log('constructor')
     }
     componentWillMount() {
         this.getSelectedMonthData(this.state.currentMonth)
         this.disablePrevButtonNav(this.state.currentMonth)
     }
-
     listenForTaskRef(transRef) {
         transRef.on('value', (transactions) => {
             // initialize the graphic start point
@@ -88,15 +86,15 @@ export default class Dashboard extends Component{
     listenForTransRefPie(transRef) {
         transRef.on('value', (transactions) => {
             // initialize the graphic start point
-            var categories = ['cat 1', 'cat 2', 'cat 3', 'none']
-            var amounts = [0, 0, 0, 0]
+            var categories = ['Food & Beverage', 'Grocey & Amenities', 'Healt', 'Entertainment', 'Transportation']
+            var amounts = [0, 0, 0, 0, 0]
             var counter = 0
 
             // add transactions to the graphic
             transactions.forEach((transaction) => {
                 if(transaction.val().userId === this.props.userInfo.userId) {
                     counter = counter + 1
-                    var cat = transaction.val().category === undefined ? 'none' : transaction.val().category
+                    var cat = transaction.val().category // === undefined ? 'none' : transaction.val().category
                     var amount = parseInt(transaction.val().amount)
 
                     if(cat === categories[0]) {
@@ -105,25 +103,20 @@ export default class Dashboard extends Component{
                         amounts[1] = amounts[1] + amount
                     } else if(cat === categories[2]) {
                         amounts[2] = amounts[2] + amount
-                    } else {
+                    } else if(cat === categories[3]) {
                         amounts[3] = amounts[3] + amount
+                    } else {
+                        amounts[4] = amounts[4] + amount
                     }
                 }
             })
 
-            let data = [{
-                'name': categories[0],
-                'total': amounts[0]
-            }, {
-                'name': categories[1],
-                'total': amounts[1]
-            }, {
-                'name': categories[2],
-                'total': amounts[2]
-            }, {
-                'name': categories[3],
-                'total': amounts[3]
-            }]
+            let data = []
+            for(i = 0; i < categories.length; i++) {
+                if(amounts[i] !== 0) {
+                    data.push({'name': categories[i], 'total': amounts[i]})
+                }
+            }
 
             // update tempTransPie state
             if(counter > 0) {
@@ -138,9 +131,16 @@ export default class Dashboard extends Component{
             }
         })
     }
+    displayNoData(){ 
+        return(
+            <View>
+                <Text style={{color: '#fff', margin: 20}}>No data to display</Text>
+            </View>
+        )
+    }
     setData() {
         console.log('set data')
-        if(this.state.sortCategory === 'All') {
+        if(this.state.sortCategory === 'Date') {
             return this.setDataLine()
         } else {
             return this.setDataPie()
@@ -192,14 +192,8 @@ export default class Dashboard extends Component{
                 }
             }
         }
-        console.log('line - category ', this.state.sortCategory)
-        console.log(this.state.tempTransLine)
         if(this.state.tempTransLine.length === 0) {
-            return(
-                <View>
-                    <Text>No data to display</Text>
-                </View>
-            )
+            return this.displayNoData()
         } else {
             return(
                 <View>
@@ -234,14 +228,8 @@ export default class Dashboard extends Component{
                 color: '#ECF0F1'
             }
         }
-        console.log('pie - category ', this.state.sortCategory)
-        console.log(this.state.tempTransPie)
         if(this.state.tempTransPie.length === 0) {
-            return(
-                <View>
-                    <Text>No data to display</Text>
-                </View>
-            )
+            return this.displayNoData()
         } else {
             return(
                 <View>
@@ -253,6 +241,8 @@ export default class Dashboard extends Component{
                         color="#2980B9"
                         pallete={[
                             {'r':25,'g':99,'b':201},
+                            {'r':240,'g':100,'b':180},
+                            {'r':201,'g':89,'b':250},
                             {'r':24,'g':175,'b':35},
                             {'r':190,'g':31,'b':69},
                             {'r':100,'g':36,'b':199},
@@ -316,8 +306,7 @@ export default class Dashboard extends Component{
         maxDate.setDate(max)
 
         // get the data filtered by current month
-        // if(this.state.sortCategory === 'All') {
-        if(category === 'All') {
+        if(category === 'Date') {
             this.listenForTaskRef(this.transRef.ref.orderByChild('date').startAt(minDate.toISOString()).endAt(maxDate.toISOString()))
         } else {
             this.listenForTransRefPie(this.transRef.ref.orderByChild('date').startAt(minDate.toISOString()).endAt(maxDate.toISOString()))
@@ -354,11 +343,13 @@ export default class Dashboard extends Component{
                             </View>
                         </TouchableHighlight>
                     </View>
-                    <View >
+                    <View style={styles.toolbar}>
+                       <Text style={{color: '#fff'}}>Show by: </Text>
                         <Picker
+                            style={styles.picker}
                             selectedValue={this.state.sortCategory}
                             onValueChange={(val) => this.pickerChange(val)}>
-                            <Picker.Item label='All' value='All'/>
+                            <Picker.Item label='Date' value='Date'/>
                             <Picker.Item label='Category' value='Category'/>
                         </Picker>
                     </View>
@@ -374,6 +365,8 @@ const styles = StyleSheet.create({
         flex:1
     },
     nav: {
+        backgroundColor: '#8C8C8C',
+        height: 40,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -384,9 +377,8 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     text:{
-      paddingVertical: 30,
       textAlign: "center",
-      color: "#ffffff"
+      color: "#ffffff",
     },
     image:{
         tintColor: '#fff',
@@ -399,5 +391,14 @@ const styles = StyleSheet.create({
     label:{
         color: "#ffffff"
     },
-
+    picker: {
+        color: "#ffffff",
+        width: 100,
+    },
+    toolbar: {
+        height:40,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    }, 
 })
