@@ -34,7 +34,7 @@ export default class Dashboard extends Component{
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
     }
     componentWillMount() {
-        this.getSelectedMonthData(this.state.currentMonth)
+        this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
         this.disablePrevButtonNav(this.state.currentMonth)
     }
     listenForTaskRef(transRef) {
@@ -75,7 +75,8 @@ export default class Dashboard extends Component{
                 this.setState({
                     tempTransLine: [newTransactions],
                 })
-                console.log('set temp trans line')
+                console.log('counter more than 0, set temp trans line')
+                console.log(newTransactions)
             } else {
                 this.setState({
                     tempTransLine: [],
@@ -297,6 +298,7 @@ export default class Dashboard extends Component{
         // get min date
         var minDate = new Date()
         minDate.setMonth(month)
+        minDate.setDate(1)        
 
         // get max date
         var maxDate = new Date()
