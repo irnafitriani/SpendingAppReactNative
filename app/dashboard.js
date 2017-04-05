@@ -6,9 +6,12 @@ import {
     Picker,
     Platform,
     StyleSheet,
+    TextInput,
     TouchableHighlight,
+    TouchableOpacity
 } from 'react-native'
 import Firebase from 'firebase'
+import ReactNativePicker from 'react-native-picker'
 import { Bar, StockLine, SmoothLine, Pie } from 'react-native-pathjs-charts'
 const background = require("../images/background.jpg");
 
@@ -318,6 +321,34 @@ export default class Dashboard extends Component{
         this.setState({sortCategory: category})
         this.getSelectedMonthData(this.state.currentMonth, category)
     }
+     showCategoryPicker() {
+        ReactNativePicker.init({
+            pickerData: ['Date', 'Category'],
+            onPickerConfirm: pickedValue => {
+                if (pickedValue[0] !== '') {
+                    this.setState({
+                        sortCategory: pickedValue[0]
+                    })
+                }
+                this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
+            },
+            onPickerCancel: pickedValue => {
+                console.log('category cancel ', pickedValue)
+            },
+            onPickerSelect: pickedValue => {
+                console.log('category select ', pickedValue)
+            }
+        })
+        ReactNativePicker.show()
+        this.setCatPickerShow(true)
+    }
+
+     setCatPickerShow(isDisplayed) {
+        this.setState({
+            isCatPickerOpen: isDisplayed
+        })
+    }
+
     render(){
         return(
             <Image 
@@ -343,17 +374,29 @@ export default class Dashboard extends Component{
                                 <Image source={arrowRight} style={{tintColor: this.state.nextDisable? '#adadad' : '#ffffff'}}/>
                             </View>
                         </TouchableHighlight>
-                    </View>
+                    </View> 
                     <View style={styles.toolbar}>
+                        <Text style={{color: '#fff'}}>Show by: </Text>
+                        <TouchableOpacity onPress={this.showCategoryPicker.bind(this)} style={{flex: 1}}>
+                        <TextInput
+                            editable={false}
+                            style={styles.input}
+                            underlineColorAndroid="transparent"
+                            value={this.state.sortCategory}
+                        />
+                        </TouchableOpacity>
+                    </View>             
+                    {/*<View style={styles.toolbar}>
                        <Text style={{color: '#fff'}}>Show by: </Text>
                         <Picker
+                            itemStyle={{color:'#ffffff', fontSize: 15, alignItems:'flex-start' }}
                             style={styles.picker}
                             selectedValue={this.state.sortCategory}
                             onValueChange={(val) => this.pickerChange(val)}>
                             <Picker.Item label='Date' value='Date'/>
                             <Picker.Item label='Category' value='Category'/>
                         </Picker>
-                    </View>
+                    </View>*/}
                     {this.setData()}
                 </View>
             </Image>
@@ -395,11 +438,26 @@ const styles = StyleSheet.create({
     picker: {
         color: "#ffffff",
         width: 100,
+        height: 30,
+        backgroundColor: 'red'
     },
     toolbar: {
         height:40,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
-    }, 
+    },
+    inputWrap:{
+      flexDirection: "row",
+      marginVertical: 10,
+      height: 40,
+      backgroundColor:"transparent"
+  },
+  input:{
+      flex : 1,
+      paddingHorizontal: 10,
+      width: 100,
+      backgroundColor: "transparent",
+      color : '#fff'
+  } 
 })
