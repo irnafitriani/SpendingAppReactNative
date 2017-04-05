@@ -345,6 +345,7 @@ export default class Dashboard extends Component{
                     <View style={styles.toolbar}>
                        <Text style={{color: '#fff'}}>Show by: </Text>
                         <Picker
+                            itemStyle={{color:'#ffffff', fontSize: 15}}
                             style={styles.picker}
                             selectedValue={this.state.sortCategory}
                             onValueChange={(val) => this.pickerChange(val)}>
