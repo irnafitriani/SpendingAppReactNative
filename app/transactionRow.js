@@ -29,6 +29,7 @@ export default class TransactionRow extends React.Component {
                         <Text style={styles.titleText}>{this.props.transaction.date}</Text>
                     </View>
                     <Text style={styles.label}>{this.props.transaction.name}</Text>
+                    <Text style={[styles.label, {fontSize: 12}]}>{this.props.transaction.category}</Text>
                 </View>
             </TouchableHighlight>
         )

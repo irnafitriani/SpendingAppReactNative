@@ -70,6 +70,13 @@ export default class TransactionDetail extends React.Component {
                         </View>
                         <Text style={styles.label}>{this.props.transaction.name}</Text>
                     </View>
+                    <View style={styles.row}>
+                        <View style={styles.subRow}>
+                            <Text style={styles.label}>Category</Text>
+                            <Text style={styles.label}>:</Text>
+                        </View>
+                        <Text style={styles.label}>{this.props.transaction.category}</Text>
+                    </View>
                 </View>
 
                 <View style={styles.row}>
