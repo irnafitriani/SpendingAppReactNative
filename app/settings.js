@@ -26,7 +26,7 @@ export default class Settings extends Component{
      constructor(props){
         super(props);
         this.state ={
-            key:'IDR',
+            key:'',
             symbol : 'IDR',
             currency : 'Indonesian Rupiah(IDR)',
             budget: '',
@@ -52,17 +52,18 @@ export default class Settings extends Component{
             var settings = []
             snap.forEach((child) =>{
                 settings.push({
+                    key : child.key,
                     userId : child.val().userId,
                     currency: child.val().currency,
-                    budget : child.val().budget
+                    budget : child.val().budget.toString()
                 })
             })
-            console.log(settings[0].budget)
-            if(settings[0].userId === this.props.userInfo.userId){
+            if(settings.length > 0 && settings[0].userId === this.props.userInfo.userId){
                 this.setState({
                     isExist : true,
                     currency: settings[0].currency,
                     budget: settings[0].budget,
+                    key : settings[0].key
                 })
             }
         })
@@ -94,12 +95,11 @@ export default class Settings extends Component{
         var settingRef = Firebase.database().ref().child('settings')
         if (this.state.isExist === true){
             if(this.state.currency !== '' && this.props.userInfo !== '' && this.state.budget !== '') {
-                    settingRef.child(this.props.userInfo.userId).update({
+                    settingRef.child(this.state.key).update({
                         userId: this.props.userInfo.userId, 
                         currency: this.state.currency, 
                         budget: parseInt(this.state.budget), 
                     })
-
                 // return to transactions list screen
             } else {
                 alert('Please fill all fields.')
