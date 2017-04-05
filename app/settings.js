@@ -28,20 +28,22 @@ export default class Settings extends Component{
         this.state ={
             key:'IDR',
             symbol : 'IDR',
-            name : 'Indonesian Rupiah(IDR)',
+            currency : 'Indonesian Rupiah(IDR)',
             budget: '',
             currencyList: [],
-            selectedCurrency: 'Indonesian Rupiah(IDR)'
+            isExist: false
         }
     }
 
     componentWillMount(){
-        this.listenForSettings()
         var listCurrency = []
         Utils.currency.forEach((currency) =>{
            listCurrency.push(currency.name ) 
         })
         this.setState({currencyList : listCurrency})
+    }
+    componentDidMount(){
+        this.listenForSettings()
     }
 
     listenForSettings(){
@@ -50,12 +52,19 @@ export default class Settings extends Component{
             var settings = []
             snap.forEach((child) =>{
                 settings.push({
-                    userId : child.userId,
-                    currency: child.currency,
-                    budget : child.budget
+                    userId : child.val().userId,
+                    currency: child.val().currency,
+                    budget : child.val().budget
                 })
             })
-            console.log(settings.userId)
+            console.log(settings[0].budget)
+            if(settings[0].userId === this.props.userInfo.userId){
+                this.setState({
+                    isExist : true,
+                    currency: settings[0].currency,
+                    budget: settings[0].budget,
+                })
+            }
         })
     }
 
@@ -65,7 +74,7 @@ export default class Settings extends Component{
             onPickerConfirm: pickedValue => {
                 if (pickedValue[0] !== '') {
                     this.setState({
-                        selectedCurrency: pickedValue[0]
+                        currency: pickedValue[0]
                     })
                 }
             },
@@ -83,16 +92,31 @@ export default class Settings extends Component{
 
     onSavePressed(){
         var settingRef = Firebase.database().ref().child('settings')
-         if(this.state.name !== '' && this.props.userInfo !== '') {
-                this.settingRef.push({
-                    userId: this.props.userInfo.userId, 
-                    name: this.state.name, 
-                    budget: parseInt(this.state.budget), 
-                })
+        if (this.state.isExist === true){
+            if(this.state.currency !== '' && this.props.userInfo !== '' && this.state.budget !== '') {
+                    settingRef.child(this.props.userInfo.userId).update({
+                        userId: this.props.userInfo.userId, 
+                        currency: this.state.currency, 
+                        budget: parseInt(this.state.budget), 
+                    })
 
-            // return to transactions list screen
-        } else {
-            alert('Please fill all fields.')
+                // return to transactions list screen
+            } else {
+                alert('Please fill all fields.')
+            }
+
+        }else{
+                if(this.state.currency !== '' && this.props.userInfo !== '' && this.state.budget !== '') {
+                    settingRef.push({
+                        userId: this.props.userInfo.userId, 
+                        currency: this.state.currency, 
+                        budget: parseInt(this.state.budget), 
+                    })
+
+                // return to transactions list screen
+            } else {
+                alert('Please fill all fields.')
+            }
         }
     }
 
@@ -122,7 +146,7 @@ export default class Settings extends Component{
                                         editable={false}
                                         style={styles.input}
                                         underlineColorAndroid="transparent"
-                                        value={this.state.selectedCurrency}
+                                        value={this.state.currency}
                                     />
                                     </TouchableOpacity>
                                 </View>
