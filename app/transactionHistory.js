@@ -12,15 +12,19 @@ import {
 import ActionButton from 'react-native-action-button'
 import Firebase from 'firebase'
 import TransactionRow from './transactionRow'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+import { ActionCreators } from './Actions'
 
 const sortIcon = require("../images/sort_white.png");
 const background = require("../images/background.jpg");
 
-export default class TransactionHistory extends Component {
+class TransactionHistory extends Component {
     constructor(props) {
         super(props)
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         this.state = {
+            text: 'test text',
             dataSource: ds,
             sortCategory: 'date',
             tempTrans: [],
@@ -30,6 +34,8 @@ export default class TransactionHistory extends Component {
     }
 
     addTransaction() {
+        this.props.addNewTransaction('test action')
+
         this.props.navigator.replace({
             title: 'Add Transaction',
             id: 'AddTransaction',
@@ -112,7 +118,7 @@ export default class TransactionHistory extends Component {
                 resizeMode="cover">
                 <View style={styles.container}>
                 <View style={styles.toolbar}>
-                    <Text style={styles.label}>Sort by: </Text>
+                    <Text style={styles.label}>{this.props.text} Sort by: </Text>
                     <Picker 
                         mode='dropdown' 
                         onValueChange={(picker) => {this.onPickerChange(picker)}}
@@ -190,3 +196,15 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     }
 });
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)
+}
+
+function mapStateToProps(state) {
+    return {
+        text: state.text
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (TransactionHistory)

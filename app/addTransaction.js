@@ -13,14 +13,15 @@ import {
 import DatePicker from 'react-native-datepicker'
 import ReactNativePicker from 'react-native-picker'
 import Firebase from 'firebase'
+import { connect } from 'react-redux';
 
 const background = require('../images/background.jpg')
 const dismissKeyboard = require('dismissKeyboard')
 
-export default class AddTransaction extends React.Component {
+class AddTransaction extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {key: '', date: '', amount: '', description: '', mode: '', category: '', isCatPickerOpen: false}
+        this.state = {addToLog: 'initialize', key: '', date: '', amount: '', description: '', mode: '', category: '', isCatPickerOpen: false}
         this.taskRef = Firebase.database().ref();        
 
         BackAndroid.removeEventListener('hardwareBackPress', () => {})
@@ -175,7 +176,7 @@ export default class AddTransaction extends React.Component {
                                     multiline={true}
                                     style={styles.inputMultiLine}
                                     underlineColorAndroid="transparent"
-                                    value={this.state.description}
+                                    value={this.props.addToLog}
                                 />
                             </View>
                         <View style={styles.buttonContainer}>
@@ -254,3 +255,12 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
 });
+
+function mapStateToProps(state) {
+    console.log('test ', state.addToLog.toString())
+    return {
+        addToLog: state.addToLog
+    }
+}
+
+export default connect(mapStateToProps)(AddTransaction)

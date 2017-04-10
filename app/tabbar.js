@@ -1,4 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { ActionCreators } from './Actions'
 import { BackAndroid } from 'react-native'
 import TabNavigator from 'react-native-tab-navigator'
 import Dashboard from './dashboard'
@@ -16,36 +19,19 @@ const selectedHistory = require("../images/description_white.png")
 const showAccount = require("../images/person.png")
 const settingsIcon = require("../images/settings_black.png")
 
-export default class Tabbar extends Component{
+class Tabbar extends Component{
     constructor(props){
         super(props)
         BackAndroid.removeEventListener('hardwareBackPress', () => {
-            // const routes = this._navigator.getCurrentRoutes();
-            // route = routes[routes.length - 1];
-
-            // if(route.id === 'Login') {
-            //     // back android button pressed at login page, exit app
-            //     return false;
-            // } else {
-            //     // back android button pressed at other than login page, navigate to login page
-            //     this._navigator.replace({
-            //         title: 'Login',
-            //         id: 'Login'
-            //     });
-            //     return true;
-            // }
         })
         BackAndroid.addEventListener('hardwareBackPress', () => {
-            // const routes = this.props.navigator.getCurrentRoutes();
-            // route = routes[routes.length - 1];
-                this.props.navigator.replace({
-                    title: 'Tabbar',
-                    id: 'Tabbar',
-                    selectedTab : this.state.selectedTab,
-                    userInfo: this.props.userInfo,
-                });
-                return true;
-            // }
+            this.props.navigator.replace({
+                title: 'Tabbar',
+                id: 'Tabbar',
+                selectedTab : this.state.selectedTab,
+                userInfo: this.props.userInfo,
+            });
+            return true;
         })
         this.state ={
             selectedTab : this.props.selectedTab,
@@ -99,3 +85,16 @@ export default class Tabbar extends Component{
         )
     }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)        
+}
+
+function mapStateToProps(state) {
+    console.log('test ', state.addToLog)
+    return {
+        addToLog: state.addToLog
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tabbar)
