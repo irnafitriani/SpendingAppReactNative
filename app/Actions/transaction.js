@@ -10,12 +10,3 @@ export function addNewTransaction(transaction) {
     }
 }
 
-export function printToLog(text) {
-    console.log(text)
-    return (dispatch, getState) => {
-        dispatch({
-            type: types.any,
-            text
-        })
-    }
-}

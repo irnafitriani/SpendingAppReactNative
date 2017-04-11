@@ -13,6 +13,10 @@ import {
 import Firebase from 'firebase'
 import ReactNativePicker from 'react-native-picker'
 import { Bar, StockLine, SmoothLine, Pie } from 'react-native-pathjs-charts'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { ActionCreators } from './Actions'
+
 const background = require("../images/background.jpg");
 
 const arrowLeft = require('../images/arrow_left_white.png')
@@ -21,7 +25,7 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                 'August', 'September', 'October', 'November', 'December']
 const maxDates = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-export default class Dashboard extends Component{
+class Dashboard extends Component{
      constructor(props) {
         super(props)
         this.state = {
@@ -37,6 +41,9 @@ export default class Dashboard extends Component{
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
     }
     componentWillMount() {
+        console.log('will mount dashboard - user id ', this.props.userId)
+        this.props.getBudget(this.props.userId)
+        this.props.getCurrency(this.props.userId)
         this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
         this.disablePrevButtonNav(this.state.currentMonth)
     }
@@ -78,8 +85,6 @@ export default class Dashboard extends Component{
                 this.setState({
                     tempTransLine: [newTransactions],
                 })
-                console.log('counter more than 0, set temp trans line')
-                console.log(newTransactions)
             } else {
                 this.setState({
                     tempTransLine: [],
@@ -321,7 +326,7 @@ export default class Dashboard extends Component{
         this.setState({sortCategory: category})
         this.getSelectedMonthData(this.state.currentMonth, category)
     }
-     showCategoryPicker() {
+    showCategoryPicker() {
         ReactNativePicker.init({
             pickerData: ['Date', 'Category'],
             onPickerConfirm: pickedValue => {
@@ -342,13 +347,11 @@ export default class Dashboard extends Component{
         ReactNativePicker.show()
         this.setCatPickerShow(true)
     }
-
-     setCatPickerShow(isDisplayed) {
+    setCatPickerShow(isDisplayed) {
         this.setState({
             isCatPickerOpen: isDisplayed
         })
     }
-
     render(){
         return(
             <Image 
@@ -386,21 +389,21 @@ export default class Dashboard extends Component{
                         />
                         </TouchableOpacity>
                     </View>             
-                    {/*<View style={styles.toolbar}>
-                       <Text style={{color: '#fff'}}>Show by: </Text>
-                        <Picker
-                            itemStyle={{color:'#ffffff', fontSize: 15, alignItems:'flex-start' }}
-                            style={styles.picker}
-                            selectedValue={this.state.sortCategory}
-                            onValueChange={(val) => this.pickerChange(val)}>
-                            <Picker.Item label='Date' value='Date'/>
-                            <Picker.Item label='Category' value='Category'/>
-                        </Picker>
-                    </View>*/}
                     {this.setData()}
+                    <View>
+                        <Text style={{color: '#fff'}}>Budget : {this.props.currency} {this.props.budget} </Text>
+                    </View>
+                    <TouchableHighlight onPress={() => {this.getBudgetLocal()}}>
+                        <Text style={{color: '#fff'}}>Refresh</Text>
+                    </TouchableHighlight>
                 </View>
             </Image>
         )
+    }
+
+    getBudgetLocal() {
+        this.props.getBudget(this.props.userId)
+        this.props.getCurrency(this.props.userId)
     }
 }
 
@@ -461,3 +464,17 @@ const styles = StyleSheet.create({
       color : '#fff'
   } 
 })
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)
+}
+
+function mapStateToProps(state) {
+    return {
+        budget: state.budget,
+        currency: state.currency,
+        userId: state.userId,
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

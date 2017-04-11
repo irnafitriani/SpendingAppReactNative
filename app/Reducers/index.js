@@ -1,6 +1,8 @@
 import {combineReducers} from 'redux'
-import * as transactionReducers from './transaction'
+import * as transactionReducer from './transaction'
+import * as settingReducer from './setting'
 
 export default combineReducers(Object.assign(
-    transactionReducers,
+    transactionReducer,
+    settingReducer,
 ))

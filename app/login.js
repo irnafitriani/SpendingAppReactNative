@@ -13,6 +13,9 @@ import{
     ActivityIndicator,
     Alert
 } from 'react-native'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { ActionCreators } from './Actions'
 import Registration from './registration'
 import Firebase from 'firebase'
 
@@ -22,13 +25,14 @@ const lockIcon = require("../images/lock.png");
 const personIcon = require("../images/person.png");
 const mailIcon = require("../images/mail.png");
 
-export default class Login extends Component{
+class Login extends Component{
     constructor(props){
         super(props)
         this.state ={
             loading: false,
             email: '',
-            password: ''
+            password: '',
+            userId: ''
         }
     }
 
@@ -53,10 +57,15 @@ export default class Login extends Component{
         Firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
             .then((userData) => {
                 this.setState({
-                    loading: false
+                    loading: false,
                 })
                 AsyncStorage.setItem('userData', JSON.stringify(userData));
                 console.log(userData)
+                console.log(userData.uid)
+                this.setState({
+                    userId: userData.uid
+                })
+                this.props.setUserId(userData.uid)
                 this.props.navigator.replace({
                     title: 'Dashboard',
                     id: 'Tabbar',
@@ -200,3 +209,16 @@ const styles = StyleSheet.create({
       textAlign: "center"
   }
 });
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)
+}
+
+function mapStateToProps(state) {
+    console.log(state.userId)
+    return {
+        userId: state.userId
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

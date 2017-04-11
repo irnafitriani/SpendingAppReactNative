@@ -176,7 +176,7 @@ class AddTransaction extends React.Component {
                                     multiline={true}
                                     style={styles.inputMultiLine}
                                     underlineColorAndroid="transparent"
-                                    value={this.props.addToLog}
+                                    value={this.props.addToLog.toString()}
                                 />
                             </View>
                         <View style={styles.buttonContainer}>

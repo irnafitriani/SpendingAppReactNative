@@ -90,11 +90,4 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(ActionCreators, dispatch)        
 }
 
-function mapStateToProps(state) {
-    console.log('test ', state.addToLog)
-    return {
-        addToLog: state.addToLog
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Tabbar)
+export default connect(mapDispatchToProps)(Tabbar)
