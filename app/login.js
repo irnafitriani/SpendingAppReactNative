@@ -63,9 +63,13 @@ class Login extends Component{
                 console.log(userData)
                 console.log(userData.uid)
                 this.setState({
-                    userId: userData.uid
+                    userId: userData.uid,
+                    email: userData.email,
+                    displayName: userData.displayName
                 })
                 this.props.setUserId(userData.uid)
+                this.props.setDisplayName(userData.displayName)
+                this.props.setEmail(userData.email)
                 this.props.navigator.replace({
                     title: 'Dashboard',
                     id: 'Tabbar',
@@ -217,7 +221,9 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     console.log(state.userId)
     return {
-        userId: state.userId
+        userId: state.userId,
+        email: state.email,
+        displayName: state.displayName
     }
 }
 
