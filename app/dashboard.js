@@ -16,6 +16,7 @@ import { Bar, StockLine, SmoothLine, Pie } from 'react-native-pathjs-charts'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { ActionCreators } from './Actions'
+import Utils from './Helpers/utils'
 
 const background = require("../images/background.jpg");
 
@@ -29,6 +30,7 @@ class Dashboard extends Component{
      constructor(props) {
         super(props)
         this.state = {
+            symbol: '-',
             visible: false,
             data: '',
             sortCategory: 'Date',
@@ -44,6 +46,7 @@ class Dashboard extends Component{
         console.log('will mount dashboard - user id ', this.props.userId)
         this.props.getBudget(this.props.userId)
         this.props.getCurrency(this.props.userId)
+        this.getCurrencySymbol()
         this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
         this.disablePrevButtonNav(this.state.currentMonth)
     }
@@ -391,7 +394,7 @@ class Dashboard extends Component{
                     </View>             
                     {this.setData()}
                     <View>
-                        <Text style={{color: '#fff'}}>Budget : {this.props.currency} {this.props.budget} </Text>
+                        <Text style={{color: '#fff'}}>Budget : {this.state.symbol} {this.props.budget} </Text>
                     </View>
                     <TouchableHighlight onPress={() => {this.getBudgetLocal()}}>
                         <Text style={{color: '#fff'}}>Refresh</Text>
@@ -404,6 +407,20 @@ class Dashboard extends Component{
     getBudgetLocal() {
         this.props.getBudget(this.props.userId)
         this.props.getCurrency(this.props.userId)
+        this.getCurrencySymbol()
+    }
+
+    getCurrencySymbol() {
+        var curr = Utils.currency.filter((cur) => {
+            if(cur.name === this.props.currency) {
+                return cur
+            }
+        })
+
+        if(curr !== undefined && curr.length === 1) {
+            var symbol = Utils.symbol[curr[0].key]
+            this.setState({symbol})
+        }
     }
 }
 
