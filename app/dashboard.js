@@ -30,7 +30,7 @@ class Dashboard extends Component{
      constructor(props) {
         super(props)
         this.state = {
-            symbol: '-',
+            symbol: '',
             visible: false,
             data: '',
             sortCategory: 'Date',
@@ -39,6 +39,7 @@ class Dashboard extends Component{
             currentMonth: new Date().getMonth(), 
             nextDisable: true,
             prevDisable: false,
+            totalSpending: 0,
         }
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
     }
@@ -55,6 +56,7 @@ class Dashboard extends Component{
             // initialize the graphic start point
             var newTransactions = [{'x': 0, 'y': 0}];
             var counter = 0
+            this.state.totalSpending = 0
 
             // add transactions to the graphic
             transactions.forEach((transaction) => {
@@ -64,7 +66,10 @@ class Dashboard extends Component{
                     // check if its on the same day with the last pushed transaction
                     var date = transaction.val().date.substr(8)
                     var amount = parseInt(transaction.val().amount)
-                    var latest = newTransactions[ newTransactions.length - 1].x                    
+                    var latest = newTransactions[ newTransactions.length - 1].x 
+
+                    this.state.totalSpending += amount
+
                     if(latest === date) {
                         // its on the same day, then sum the amount
                         amount = newTransactions[ newTransactions.length - 1].y + amount
@@ -101,6 +106,7 @@ class Dashboard extends Component{
             var categories = ['Food & Beverage', 'Grocey & Amenities', 'Healt', 'Entertainment', 'Transportation']
             var amounts = [0, 0, 0, 0, 0]
             var counter = 0
+            this.state.totalSpending = 0
 
             // add transactions to the graphic
             transactions.forEach((transaction) => {
@@ -108,7 +114,7 @@ class Dashboard extends Component{
                     counter = counter + 1
                     var cat = transaction.val().category // === undefined ? 'none' : transaction.val().category
                     var amount = parseInt(transaction.val().amount)
-
+                    this.state.totalSpending += amount
                     if(cat === categories[0]) {
                         amounts[0] = amounts[0] + amount
                     } else if(cat === categories[1]) {
@@ -216,16 +222,16 @@ class Dashboard extends Component{
     setDataPie() {
         let options = {
             margin: {
-                top: 20,
+                top: 0,
                 left: 20,
                 right: 20,
-                bottom: 20
+                bottom: 0
             },
             width: 320,
-            height: 320,
+            height: 300,
             color: '#2980B9',
             r: 50,
-            R: 150,
+            R: 100,
             legendPosition: 'topLeft',
             animate: {
                 type: 'oneByOne',
@@ -395,6 +401,8 @@ class Dashboard extends Component{
                     {this.setData()}
                     <View>
                         <Text style={{color: '#fff'}}>Budget : {this.state.symbol} {this.props.budget} </Text>
+                        <Text style={styles.label}>Spending : {this.state.symbol} {this.state.totalSpending}</Text>
+                        <Text style={styles.label}>Balance : {this.state.symbol} {this.props.budget - this.state.totalSpending}</Text>
                     </View>
                     <TouchableHighlight onPress={() => {this.getBudgetLocal()}}>
                         <Text style={{color: '#fff'}}>Refresh</Text>

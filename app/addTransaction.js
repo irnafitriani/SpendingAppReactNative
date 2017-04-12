@@ -176,7 +176,7 @@ class AddTransaction extends React.Component {
                                     multiline={true}
                                     style={styles.inputMultiLine}
                                     underlineColorAndroid="transparent"
-                                    value={this.props.addToLog.toString()}
+                                    value={this.state.description}
                                 />
                             </View>
                         <View style={styles.buttonContainer}>
@@ -256,11 +256,4 @@ const styles = StyleSheet.create({
     },
 });
 
-function mapStateToProps(state) {
-    console.log('test ', state.addToLog.toString())
-    return {
-        addToLog: state.addToLog
-    }
-}
-
-export default connect(mapStateToProps)(AddTransaction)
+export default connect()(AddTransaction)
