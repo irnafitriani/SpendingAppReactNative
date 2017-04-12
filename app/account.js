@@ -18,13 +18,15 @@ import Firebase from 'firebase'
 const background = require("../images/background.jpg");
 const dismissKeyboard = require('dismissKeyboard')
 
-export default class Account extends Component{
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { ActionCreators } from './Actions'
+
+class Account extends Component{
     constructor(props){
         super(props);
         this.ds = new ListView.DataSource({rowHasChanged:(row1, row2) => row1 !== row2})
         this.state ={
-            name:'',
-            email:'',
             password:'',
             confirmPassword: '',
             userId:'',
@@ -35,6 +37,7 @@ export default class Account extends Component{
     }
     
     componentWillMount() {
+       /* console.log(this.props.email)
         var user = Firebase.auth().currentUser;
         var accountData = []
         if (user != null) {
@@ -47,7 +50,7 @@ export default class Account extends Component{
             this.state.email = accountData[0].email
             this.state.name = accountData[0].name
             this.state.userId = accountData[0].userId
-        }
+        }*/
     }
     onLogoutPressed() {
         this.setState({
@@ -87,8 +90,8 @@ export default class Account extends Component{
             .then(() =>{
                 //Update Success
                 user.updateProfile({
-                displayName: this.state.name,
-                email: this.state.email
+                displayName: this.props.displayName,
+                email: this.props.email
                     }).then(() => {
                         this.setState({
                         loading : false,
@@ -122,27 +125,22 @@ export default class Account extends Component{
                loading: true
            })
         }else{
+            this.props.setDisplayName(this.props.displayName)
+            this.props.setEmail(this.props.email)
            var user = Firebase.auth().currentUser
              user.updateProfile({
-                displayName: this.state.name,
-                email: this.state.email
+                displayName: this.props.displayName,
+                email: this.props.email
                     }).then(() => {
                         this.setState({
                         loading : false,
                     })
+                    console.log(Firebase.auth().currentUser)
                     alert("Data has been saved!")
                 }, function(error) {
                     alert(error.message)
                 });  
         }
-    }
-    setData(profile){
-        console.log(profile.email);
-        this.setState({
-            name: profile.displayName,
-            email: profile.email,
-            userId: profile.uid, 
-        })
     }
     render(){
         var userInfo = this.props.userInfo;
@@ -162,8 +160,8 @@ export default class Account extends Component{
                                         placeholder="Name"
                                         style={styles.input}
                                         underlineColorAndroid="transparent"
-                                        onChangeText={(name) => this.setState({name})}
-                                        value={this.state.name}
+                                        onChangeText={(displayName) => this.props.setDisplayName({displayName})}
+                                        value={this.props.displayName}
                                     />
                                 </View>
                                 <Text style={styles.rowTitle}>Email</Text>
@@ -172,8 +170,8 @@ export default class Account extends Component{
                                         placeholder="Email"
                                         style={styles.input}
                                         underlineColorAndroid="transparent"
-                                        onChangeText={(email) => this.setState({email})}
-                                        value={this.state.email}
+                                        onChangeText={(email) => this.props.setEmail(email)}
+                                        value={this.props.email}
                                     />
                                 </View>
                                 <Text style={styles.rowTitle}>Change Password</Text>                          
@@ -216,8 +214,8 @@ export default class Account extends Component{
                                         .then(() =>{
                                             //Update Success
                                             user.updateProfile({
-                                            displayName: this.state.name,
-                                            email: this.state.email
+                                            displayName: this.props.displayName,
+                                            email: this.props.email
                                                 }).then(() => {
                                                     this.setState({
                                                     loading : false,
@@ -311,3 +309,17 @@ const styles = StyleSheet.create({
       paddingHorizontal: 15
   },
 })
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)
+}
+
+function mapStateToProps(state) {
+    return {
+        userId: state.userId,
+        email: state.email,
+        displayName: state.displayName
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Account)
