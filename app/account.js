@@ -125,8 +125,6 @@ class Account extends Component{
                loading: true
            })
         }else{
-            this.props.setDisplayName(this.props.displayName)
-            this.props.setEmail(this.props.email)
            var user = Firebase.auth().currentUser
              user.updateProfile({
                 displayName: this.props.displayName,
@@ -160,7 +158,7 @@ class Account extends Component{
                                         placeholder="Name"
                                         style={styles.input}
                                         underlineColorAndroid="transparent"
-                                        onChangeText={(displayName) => this.props.setDisplayName({displayName})}
+                                        onChangeText={(displayName) => this.props.setDisplayName(displayName)}
                                         value={this.props.displayName}
                                     />
                                 </View>
