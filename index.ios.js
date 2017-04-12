@@ -3,24 +3,30 @@
  * https://github.com/facebook/react-native
  * @flow
  */
-
-import React, { Component } from 'react';
+import React from 'react'
 import {
   AppRegistry,
-  StyleSheet,
-  Text,
-  View
 } from 'react-native';
-import Registration from './app/registration'
-import Login from './app/login'
 import Navigation from './app/navigation'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import reducer from './app/Reducers'
 
-export default class SpendingApp extends Component {
-  render() {
-    return(
-       <Navigation />
+function configureStore(initialState) {
+  const enhancer = compose(
+    applyMiddleware(
+      thunkMiddleware,
     )
-  }
+  )
+  return createStore(reducer, initialState, enhancer)
 }
 
-AppRegistry.registerComponent('SpendingApp', () => SpendingApp);
+const store = configureStore({})
+const App = () => (
+  <Provider store={store}>
+    <Navigation/>
+  </Provider>
+)
+
+AppRegistry.registerComponent('SpendingApp', () => App);

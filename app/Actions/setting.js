@@ -1,6 +1,7 @@
 import * as types from '../Helpers/actionTypes'
 import firebase from 'firebase'
 
+/*
 export function setUserId(userId) {
     console.log('setting action user id ', userId   )
     return (dispatch, getState) => {
@@ -9,7 +10,7 @@ export function setUserId(userId) {
             userId
         })
     }
-}
+}*/
 
 export function getBudget(userId) {
     console.log('get budget action')
