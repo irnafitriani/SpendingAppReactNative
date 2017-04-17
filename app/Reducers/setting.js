@@ -1,5 +1,6 @@
 import createReducer from '../Helpers/createReducer'
 import * as types from '../Helpers/actionTypes'
+import firebase from 'firebase'
 
 export const userId = createReducer('', {
     [types.USER_ID](state, action) {
@@ -20,9 +21,7 @@ export const budget = createReducer(0, {
 
 export const currency = createReducer('', {    
     [types.CURRENCY](state, action) {
-        if(action.userId !== undefined) {
-            state = action.currency
-        }
-        return state
+        return action.currency
     }
 })
+

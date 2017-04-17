@@ -47,7 +47,7 @@ class Dashboard extends Component{
         console.log('will mount dashboard - user id ', this.props.userId)
         this.props.getBudget(this.props.userId)
         this.props.getCurrency(this.props.userId)
-        this.getCurrencySymbol()
+        // this.getCurrencySymbol()
         this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
         this.disablePrevButtonNav(this.state.currentMonth)
     }
@@ -415,21 +415,21 @@ class Dashboard extends Component{
     getBudgetLocal() {
         this.props.getBudget(this.props.userId)
         this.props.getCurrency(this.props.userId)
-        this.getCurrencySymbol()
+        // this.getCurrencySymbol()
     }
 
-    getCurrencySymbol() {
-        var curr = Utils.currency.filter((cur) => {
-            if(cur.name === this.props.currency) {
-                return cur
-            }
-        })
+    // getCurrencySymbol() {
+    //     var curr = Utils.currency.filter((cur) => {
+    //         if(cur.name === this.props.currency) {
+    //             return cur
+    //         }
+    //     })
 
-        if(curr !== undefined && curr.length === 1) {
-            var symbol = Utils.symbol[curr[0].key]
-            this.setState({symbol})
-        }
-    }
+    //     if(curr !== undefined && curr.length === 1) {
+    //         var symbol = Utils.symbol[curr[0].key]
+    //         this.setState({symbol})
+    //     }
+    // }
 }
 
 const styles = StyleSheet.create({

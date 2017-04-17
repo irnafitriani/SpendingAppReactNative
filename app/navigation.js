@@ -6,6 +6,7 @@ import ForgotPassword from './forgotPassword'
 import AddTransaction from './addTransaction'
 import TransactionHistory from './transactionHistory'
 import TransactionDetail from './transactionDetail'
+import BudgetSetting from './budget'
 import Tabbar from './tabbar'
 
 export default class Navigation extends Component{
@@ -44,6 +45,9 @@ export default class Navigation extends Component{
             case 'TransactionDetail':
                 return(<TransactionDetail navigator={ navigator } selectedTab={route.selectedTab}  
                         userInfo={route.userInfo} transaction={route.transaction} />)
+            case 'BudgetSetting':
+                return(<BudgetSetting navigator={ navigator } selectedTab={route.selectedTab}  
+                        userInfo={route.userInfo} />)
             case 'Tabbar':
                 return(<Tabbar navigator={ navigator } selectedTab={route.selectedTab} userInfo={route.userInfo}/>)
         }
