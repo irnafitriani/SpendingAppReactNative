@@ -21,9 +21,19 @@ export const budget = createReducer(0, {
             //     })
             // })
             console.log('budget in setting reducer ', action.budget)
-            state = action.budget
+            var newState = action.budget
         }
-        return state
+        return newState
+    }
+})
+
+export const symbolCurrency = createReducer('', {
+    [types.SYMBOLCURRENCY](state, action){
+        if(action.userId !== undefined){
+             console.log('symbol', action.symbolCurrency)
+             var newState = action.symbolCurrency
+        }
+        return newState
     }
 })
 
@@ -38,8 +48,8 @@ export const currency = createReducer('', {
             //     })
             // })
             console.log('currency in setting reducer ', action.currency)
-            state = action.currency
+            var newState = action.currency
         }
-        return state
+        return newState
     }
 })

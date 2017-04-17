@@ -8,7 +8,8 @@ import {
     StyleSheet,
     TextInput,
     TouchableHighlight,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native'
 import Firebase from 'firebase'
 import ReactNativePicker from 'react-native-picker'
@@ -39,17 +40,22 @@ class Dashboard extends Component{
             currentMonth: new Date().getMonth(), 
             nextDisable: true,
             prevDisable: false,
+            loading: false
         }
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
     }
+
     componentWillMount() {
-        console.log('will mount dashboard - user id ', this.props.userId)
+        this.setState({
+            loading: true
+        })
         this.props.getBudget(this.props.userId)
         this.props.getCurrency(this.props.userId)
-        this.getCurrencySymbol()
+        // this.props.getCurrencySymbol(this.props.currency)
         this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
         this.disablePrevButtonNav(this.state.currentMonth)
     }
+
     listenForTaskRef(transRef) {
         transRef.on('value', (transactions) => {
             // initialize the graphic start point
@@ -93,6 +99,9 @@ class Dashboard extends Component{
                     tempTransLine: [],
                 })
             }
+        })
+        this.setState({
+            loading: false
         })
     }
     listenForTransRefPie(transRef) {
@@ -141,6 +150,9 @@ class Dashboard extends Component{
                     tempTransPie: [],
                 })
             }
+        })
+         this.setState({
+            loading: false
         })
     }
     displayNoData(){ 
@@ -394,11 +406,15 @@ class Dashboard extends Component{
                     </View>             
                     {this.setData()}
                     <View>
-                        <Text style={{color: '#fff'}}>Budget : {this.state.symbol} {this.props.budget} </Text>
+                        <Text style={{color: '#fff'}}>Budget : {this.props.symbolCurrency} {this.props.budget} </Text>
                     </View>
                     <TouchableHighlight onPress={() => {this.getBudgetLocal()}}>
                         <Text style={{color: '#fff'}}>Refresh</Text>
                     </TouchableHighlight>
+                     <ActivityIndicator
+                                animating = {this.state.loading}
+                                color='#111'
+                                size = 'large'></ActivityIndicator>
                 </View>
             </Image>
         )
@@ -407,21 +423,21 @@ class Dashboard extends Component{
     getBudgetLocal() {
         this.props.getBudget(this.props.userId)
         this.props.getCurrency(this.props.userId)
-        this.getCurrencySymbol()
+        // this.props.getCurrencySymbol(this.props.currency)
     }
 
-    getCurrencySymbol() {
-        var curr = Utils.currency.filter((cur) => {
-            if(cur.name === this.props.currency) {
-                return cur
-            }
-        })
+    // getCurrencySymbol() {
+    //     var curr = Utils.currency.filter((cur) => {
+    //         if(cur.name === this.props.currency) {
+    //             return cur
+    //         }
+    //     })
 
-        if(curr !== undefined && curr.length === 1) {
-            var symbol = Utils.symbol[curr[0].key]
-            this.setState({symbol})
-        }
-    }
+    //     if(curr !== undefined && curr.length === 1) {
+    //         var symbol = Utils.symbol[curr[0].key]
+    //         this.setState({symbol})
+    //     }
+    // }
 }
 
 const styles = StyleSheet.create({
@@ -491,6 +507,7 @@ function mapStateToProps(state) {
         budget: state.budget,
         currency: state.currency,
         userId: state.userId,
+        symbolCurrency : state.symbolCurrency
     }
 }
 
