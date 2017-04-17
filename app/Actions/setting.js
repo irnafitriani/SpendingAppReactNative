@@ -1,6 +1,7 @@
 import * as types from '../Helpers/actionTypes'
 import Utils from '../Helpers/utils'
 import firebase from 'firebase'
+import Utils from '../Helpers/utils'
 
 export function setUserId(userId) {
     console.log('setting action user id ', userId   )
@@ -67,11 +68,15 @@ export function getCurrency(userId) {
         settingRef.on('value', (settings) => {
             settings.forEach((setting) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 currency = setting.val().currency
                 console.log('acton get currency ', currency)
 =======
                 var currency = this.getCurrencySymbol(setting.val().currency)
 >>>>>>> 2322f2a6575c93bef2d1c428db1f0c58ef8fb856
+=======
+                var currency = getCurrencySymbol(setting.val().currency)
+>>>>>>> 42ce6a3928b847da327a757c0f599d2e92f79a2a
                 dispatch({
                     type: types.CURRENCY,
                     userId,
@@ -84,8 +89,8 @@ export function getCurrency(userId) {
 
 export function getCurrencySymbol(currency) {
     return Utils.currency.filter((cur) => {
-        if(cur.name === this.props.currency) {
+        if(cur.name === currency) {
             return cur
         }
-    })
+    })[0].key
 }

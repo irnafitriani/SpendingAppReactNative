@@ -44,6 +44,7 @@ export const symbolCurrency = createReducer('', {
 export const currency = createReducer('', {    
     [types.CURRENCY](state, action) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         if(action.userId !== undefined) {
             // var settingRef = firebase.database().ref().child('settings').orderByChild('userId').equalTo(action.userId)
             // settingRef.on('value', (settings) => {
@@ -57,6 +58,9 @@ export const currency = createReducer('', {
         }
         return newState
 =======
+=======
+        console.log('currency reducer ', action.currency)
+>>>>>>> 42ce6a3928b847da327a757c0f599d2e92f79a2a
         return action.currency
 >>>>>>> 2322f2a6575c93bef2d1c428db1f0c58ef8fb856
     }
