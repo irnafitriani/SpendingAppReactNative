@@ -1,5 +1,6 @@
 import createReducer from '../Helpers/createReducer'
 import * as types from '../Helpers/actionTypes'
+import firebase from 'firebase'
 
 export const userId = createReducer('', {
     [types.USER_ID](state, action) {
@@ -11,8 +12,8 @@ export const userId = createReducer('', {
 
 export const budget = createReducer(0, {    
     [types.BUDGET](state, action) {
-            console.log('budget in setting reducer ')
         if(action.userId !== undefined) {
+<<<<<<< HEAD
             // var settingRef = firebase.database().ref().child('settings').orderByChild('userId').equalTo(action.userId)
             // settingRef.on('value', (settings) => {
             //     settings.forEach((setting) => {
@@ -22,6 +23,9 @@ export const budget = createReducer(0, {
             // })
             console.log('budget in setting reducer ', action.budget)
             var newState = action.budget
+=======
+            state = action.budget
+>>>>>>> 2322f2a6575c93bef2d1c428db1f0c58ef8fb856
         }
         return newState
     }
@@ -39,6 +43,7 @@ export const symbolCurrency = createReducer('', {
 
 export const currency = createReducer('', {    
     [types.CURRENCY](state, action) {
+<<<<<<< HEAD
         if(action.userId !== undefined) {
             // var settingRef = firebase.database().ref().child('settings').orderByChild('userId').equalTo(action.userId)
             // settingRef.on('value', (settings) => {
@@ -51,5 +56,9 @@ export const currency = createReducer('', {
             var newState = action.currency
         }
         return newState
+=======
+        return action.currency
+>>>>>>> 2322f2a6575c93bef2d1c428db1f0c58ef8fb856
     }
 })
+

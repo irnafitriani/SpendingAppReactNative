@@ -19,6 +19,7 @@ import Separator from './Helpers/separator'
 import Firebase from 'firebase'
 import ReactNativePicker from 'react-native-picker'
 const background = require("../images/background.jpg");
+const info = require("../images/info.png")
 const dismissKeyboard = require('dismissKeyboard')
 import Utils from './Helpers/utils'
 
@@ -126,8 +127,17 @@ export default class Settings extends Component{
         })
     }
 
-    render(){
+    openBudgetDetail() {
+        console.log('open budget detail')
+        this.props.navigator.replace({
+            title: 'Budget Setting',
+            id: 'BudgetSetting',
+            userInfo: this.props.userInfo,
+            selectedTab : this.props.selectedTab,
+        })
+    }
 
+    render(){
         return(
             <TouchableWithoutFeedback
                 onPress={() => dismissKeyboard()}
@@ -159,6 +169,9 @@ export default class Settings extends Component{
                                         onChangeText={(budget) => this.setState({budget})}
                                         value={this.state.budget}
                                     />
+                                    <TouchableHighlight onPress={this.openBudgetDetail.bind(this)}>
+                                        <Image source={info}/>
+                                    </TouchableHighlight>
                                 </View>
                         </View>
                         <View style={styles.buttonContainer}>

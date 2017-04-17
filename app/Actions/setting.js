@@ -2,7 +2,6 @@ import * as types from '../Helpers/actionTypes'
 import Utils from '../Helpers/utils'
 import firebase from 'firebase'
 
-/*
 export function setUserId(userId) {
     console.log('setting action user id ', userId   )
     return (dispatch, getState) => {
@@ -11,16 +10,18 @@ export function setUserId(userId) {
             userId
         })
     }
-}*/
+}
 
 export function getBudget(userId) {
-    console.log('get budget action')
     return (dispatch, getState) => {
-        var budget = 0
         var settingRef = firebase.database().ref().child('settings').orderByChild('userId').equalTo(userId)
         settingRef.on('value', (settings) => {
             settings.forEach((setting) => {
+<<<<<<< HEAD
                 budget = setting.val().budget
+=======
+                var budget = setting.val().budget
+>>>>>>> 2322f2a6575c93bef2d1c428db1f0c58ef8fb856
                 dispatch({
                     type: types.BUDGET,
                     userId,
@@ -31,6 +32,7 @@ export function getBudget(userId) {
     }
 }
 
+<<<<<<< HEAD
 export function setSymbolCurrency(symbolCurrency) {
     console.log('setting action symbol currency ', symbolCurrency   )
     return (dispatch, getState) => {
@@ -38,6 +40,8 @@ export function setSymbolCurrency(symbolCurrency) {
             type: types.SYMBOLCURRENCY,
             symbolCurrency
         })
+=======
+>>>>>>> 2322f2a6575c93bef2d1c428db1f0c58ef8fb856
     }
 }
 
@@ -58,14 +62,16 @@ export function getCurrencySymbol(currency) {
     }
 
 export function getCurrency(userId) {
-    console.log('get currency action with user id ', userId)
     return (dispatch, getState) => {
-        var currency = ''
         var settingRef = firebase.database().ref().child('settings').orderByChild('userId').equalTo(userId)
         settingRef.on('value', (settings) => {
             settings.forEach((setting) => {
+<<<<<<< HEAD
                 currency = setting.val().currency
                 console.log('acton get currency ', currency)
+=======
+                var currency = this.getCurrencySymbol(setting.val().currency)
+>>>>>>> 2322f2a6575c93bef2d1c428db1f0c58ef8fb856
                 dispatch({
                     type: types.CURRENCY,
                     userId,
@@ -74,4 +80,12 @@ export function getCurrency(userId) {
             })
         })
     }
+}
+
+export function getCurrencySymbol(currency) {
+    return Utils.currency.filter((cur) => {
+        if(cur.name === this.props.currency) {
+            return cur
+        }
+    })
 }
