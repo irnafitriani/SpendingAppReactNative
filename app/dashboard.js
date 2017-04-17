@@ -400,9 +400,9 @@ class Dashboard extends Component{
                     </View>             
                     {this.setData()}
                     <View>
-                        <Text style={{color: '#fff'}}>Budget : {this.state.symbol} {this.props.budget} </Text>
-                        <Text style={styles.label}>Spending : {this.state.symbol} {this.state.totalSpending}</Text>
-                        <Text style={styles.label}>Balance : {this.state.symbol} {this.props.budget - this.state.totalSpending}</Text>
+                        <Text style={{color: '#fff'}}>Budget : {this.props.currency} {this.props.budget} </Text>
+                        <Text style={styles.label}>Spending : {this.props.currency} {this.state.totalSpending}</Text>
+                        <Text style={styles.label}>Balance : {this.props.currency} {this.props.budget - this.state.totalSpending}</Text>
                     </View>
                     <TouchableHighlight onPress={() => {this.getBudgetLocal()}}>
                         <Text style={{color: '#fff'}}>Refresh</Text>

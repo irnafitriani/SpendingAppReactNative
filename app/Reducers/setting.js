@@ -21,6 +21,7 @@ export const budget = createReducer(0, {
 
 export const currency = createReducer('', {    
     [types.CURRENCY](state, action) {
+        console.log('currency reducer ', action.currency)
         return action.currency
     }
 })

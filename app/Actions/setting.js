@@ -1,5 +1,6 @@
 import * as types from '../Helpers/actionTypes'
 import firebase from 'firebase'
+import Utils from '../Helpers/utils'
 
 export function setUserId(userId) {
     console.log('setting action user id ', userId   )
@@ -33,7 +34,7 @@ export function getCurrency(userId) {
         var settingRef = firebase.database().ref().child('settings').orderByChild('userId').equalTo(userId)
         settingRef.on('value', (settings) => {
             settings.forEach((setting) => {
-                var currency = this.getCurrencySymbol(setting.val().currency)
+                var currency = getCurrencySymbol(setting.val().currency)
                 dispatch({
                     type: types.CURRENCY,
                     userId,
@@ -46,8 +47,8 @@ export function getCurrency(userId) {
 
 export function getCurrencySymbol(currency) {
     return Utils.currency.filter((cur) => {
-        if(cur.name === this.props.currency) {
+        if(cur.name === currency) {
             return cur
         }
-    })
+    })[0].key
 }
