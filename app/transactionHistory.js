@@ -46,9 +46,6 @@ class TransactionHistory extends Component {
     }
 
     componentWillMount() {
-        console.log(this.props.userId)
-        this.props.getCurrency(this.props.userId)
-        console.log(this.props.getCurrency(this.props.userId))        
         var tempRef = this.transRef.ref.orderByChild('date')
         this.setState({ firstMount: true})
         this.listenForTaskRef(tempRef)
