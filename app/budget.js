@@ -9,6 +9,9 @@ import {
     View,
 } from 'react-native'
 import firebase from 'firebase'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { ActionCreators } from './Actions'
 
 const background = require("../images/background.jpg");
 const dismissKeyboard = require('dismissKeyboard')
@@ -18,10 +21,43 @@ class Budget extends Component {
         super(props)
         this.state = {
             budgets: [0, 0, 0, 0, 0],
+            month: new Date().getMonth(),
+            year:new Date().getFullYear() ,
             categories: ['Food & Beverage', 'Grocery & Amenities', 'Health', 'Entertainment', 'Transportation'],
         }
         this.budgetRef = firebase.database().ref('budgets')
     }
+
+    componentWillMount(){
+        // this.listenForBudgets()
+    }
+
+    // listenForBudgets(){
+    //   var budgetRef = firebase.database().ref('budgets').orderByChild('userId').equalTo(this.props.userInfo.userId)
+    //     budgetRef.on('value',(snap) =>{
+    //         snap.forEach((child) =>{
+    //             if (child.val().year == this.state.year && child.val().month == this.state.month){
+    //                 this.setState({
+    //                     month: child.val().month,
+    //                     year: child.val().year,
+    //                     budgets: child.val().budgets,
+    //                     categories: child.val().categories
+    //                 })
+    //                 this.calculateTotalBudget(this.state.budgets)
+    //             }
+    //         })
+    //     })
+    // }
+
+    // calculateTotalBudget(budgets){
+    //     var totalBudget = 0
+    //     for(let i = 0; i < budgets.length; i++){
+    //         totalBudget += budgets[i]
+    //     }
+    //     this.props.setTotalBudget(totalBudget)
+    //     return totalBudget
+    // }
+
     onCancelPressed() {
         ReactNativePicker.hide()
         this.props.navigator.replace({
@@ -39,6 +75,7 @@ class Budget extends Component {
             userInfo: this.props.userInfo,
         })
     }
+
     onSavePressed() {
         if(this.state.mode === 'Update Budget') {
             this.budgetRef.child(this.props.transaction.key).update({
@@ -56,6 +93,7 @@ class Budget extends Component {
                 budgets: this.state.budgets,
             })
         }
+        this.calculateTotalBudget(this.state.budgets)
         this.onCancelPressed()
     }
     setBudget(index, value) {
@@ -202,4 +240,14 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Budget
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)
+}
+
+function mapStateToProps(state) {
+    return {
+        budget: state.budget
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Budget)

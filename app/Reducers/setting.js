@@ -12,17 +12,8 @@ export const userId = createReducer('', {
 
 export const budget = createReducer(0, {    
     [types.BUDGET](state, action) {
-        if(action.userId !== undefined) {
-            // var settingRef = firebase.database().ref().child('settings').orderByChild('userId').equalTo(action.userId)
-            // settingRef.on('value', (settings) => {
-            //     settings.forEach((setting) => {
-            //         var budget = setting.val().budget
-            //         state = budget
-            //     })
-            // })
-            console.log('budget in setting reducer ', action.budget)
-            var newState = action.budget
-        }
+         console.log('budget ', newState)
+        var newState = action.budget !== undefined ? action.budget : state
         return newState
     }
 })

@@ -37,7 +37,8 @@ class Dashboard extends Component{
             sortCategory: 'Date',
             tempTransLine: [],
             tempTransPie: [],
-            currentMonth: new Date().getMonth(), 
+            currentMonth: new Date().getMonth(),
+            currentYear:new Date().getFullYear(), 
             nextDisable: true,
             prevDisable: false,
             loading: false,
@@ -47,10 +48,9 @@ class Dashboard extends Component{
     }
 
     componentWillMount() {
-        this.props.getBudget(this.props.userId)
+        this.props.getBudget(this.props.userId,this.state.currentYear, this.state.currentMonth)
+        console.log(this.props.budget)
         this.props.getCurrency(this.props.userId)
-        // this.props.getCurrencySymbol(this.props.currency)
-        // this.getCurrencySymbol()
         this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
         this.disablePrevButtonNav(this.state.currentMonth)
     }
@@ -427,7 +427,7 @@ class Dashboard extends Component{
     }
 
     getBudgetLocal() {
-        this.props.getBudget(this.props.userId)
+        this.props.getBudget(this.props.userId,this.state.currentYear, this.state.currentMonth)
         this.props.getCurrency(this.props.userId)
         // this.props.getCurrencySymbol(this.props.currency)
         // this.getCurrencySymbol()

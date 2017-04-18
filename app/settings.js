@@ -18,12 +18,16 @@ import Prompt from 'react-native-prompt'
 import Separator from './Helpers/separator'
 import Firebase from 'firebase'
 import ReactNativePicker from 'react-native-picker'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { ActionCreators } from './Actions'
+
 const background = require("../images/background.jpg");
 const info = require("../images/info.png")
 const dismissKeyboard = require('dismissKeyboard')
 import Utils from './Helpers/utils'
 
-export default class Settings extends Component{
+class Settings extends Component{
      constructor(props){
         super(props);
         this.state ={
@@ -44,6 +48,7 @@ export default class Settings extends Component{
         this.setState({currencyList : listCurrency})
     }
     componentDidMount(){
+        console.log(this.props.budget)
         this.listenForSettings()
     }
 
@@ -56,14 +61,14 @@ export default class Settings extends Component{
                     key : child.key,
                     userId : child.val().userId,
                     currency: child.val().currency,
-                    budget : child.val().budget.toString()
+                    // budget : child.val().budget.toString()
                 })
             })
             if(settings.length > 0 && settings[0].userId === this.props.userInfo.userId){
                 this.setState({
                     isExist : true,
                     currency: settings[0].currency,
-                    budget: settings[0].budget,
+                    // budget: settings[0].budget,
                     key : settings[0].key
                 })
             }
@@ -99,7 +104,7 @@ export default class Settings extends Component{
                     settingRef.child(this.state.key).update({
                         userId: this.props.userInfo.userId, 
                         currency: this.state.currency, 
-                        budget: parseInt(this.state.budget), 
+                        // budget: parseInt(this.state.budget), 
                     })
                 // return to transactions list screen
             } else {
@@ -111,7 +116,7 @@ export default class Settings extends Component{
                     settingRef.push({
                         userId: this.props.userInfo.userId, 
                         currency: this.state.currency, 
-                        budget: parseInt(this.state.budget), 
+                        // budget: parseInt(this.state.budget), 
                     })
 
                 // return to transactions list screen
@@ -166,8 +171,7 @@ export default class Settings extends Component{
                                         placeholder="Budget"
                                         style={styles.input}
                                         underlineColorAndroid="transparent"
-                                        onChangeText={(budget) => this.setState({budget})}
-                                        value={this.state.budget}
+                                        value={this.props.budget}
                                     />
                                     <TouchableHighlight onPress={this.openBudgetDetail.bind(this)}>
                                         <Image source={info}/>
@@ -240,3 +244,15 @@ const styles = StyleSheet.create({
       paddingHorizontal: 15
   },
 })
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)
+}
+
+function mapStateToProps(state) {
+    return {
+        budget: state.budget
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings)
