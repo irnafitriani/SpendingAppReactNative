@@ -7,6 +7,7 @@ import AddTransaction from './addTransaction'
 import TransactionHistory from './transactionHistory'
 import TransactionDetail from './transactionDetail'
 import BudgetSetting from './budget'
+import DashboardDetail from './dashboardDetail'
 import Tabbar from './tabbar'
 
 export default class Navigation extends Component{
@@ -48,8 +49,12 @@ export default class Navigation extends Component{
             case 'BudgetSetting':
                 return(<BudgetSetting navigator={ navigator } selectedTab={route.selectedTab}  
                         userInfo={route.userInfo} />)
+            case 'DashboardDetail':
+                return(<DashboardDetail navigator={ navigator } selectedTab={route.selectedTab}  
+                        userInfo={route.userInfo} spents={route.spents} currentMonth={route.currentMonth} />)
             case 'Tabbar':
-                return(<Tabbar navigator={ navigator } selectedTab={route.selectedTab} userInfo={route.userInfo}/>)
+                return(<Tabbar navigator={ navigator } selectedTab={route.selectedTab} 
+                    userInfo={route.userInfo} currentMonth={route.currentMonth} />)
         }
     }
     render(){
