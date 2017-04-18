@@ -10,6 +10,7 @@ import {
     TouchableHighlight,
     TouchableOpacity,
     TouchableWithoutFeedback,
+    ActivityIndicator
 } from 'react-native'
 import Firebase from 'firebase'
 import ReactNativePicker from 'react-native-picker'
@@ -38,23 +39,24 @@ class Dashboard extends Component{
             tempTransLine: [],
             tempTransPie: [],
             currentMonth: this.props.currentMonth === undefined? new Date().getMonth() : this.props.currentMonth, 
+            currentYear:new Date().getFullYear(), 
             nextDisable: true,
             prevDisable: false,
+            loading: false,
             totalSpending: 0,
             spents: [],
         }
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
     }
+
     componentWillMount() {
-        console.log('props current month ', this.props.currentMonth)
-        console.log('state current month ', this.state.currentMonth)
-        console.log('will mount dashboard - user id ', this.props.userId)
-        this.props.getBudget(this.props.userId)
+        this.props.getBudget(this.props.userId,this.state.currentYear, this.state.currentMonth)
         this.props.getCurrency(this.props.userId)
         this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
         this.disablePrevButtonNav(this.state.currentMonth)
         this.disableNextButtonNav(this.state.currentMonth)
     }
+
     listenForTaskRef(transRef) {
         transRef.on('value', (transactions) => {
             // initialize the graphic start point
@@ -121,6 +123,9 @@ class Dashboard extends Component{
             // update spents for each category
             this.setState({spents: amounts})
         })
+        this.setState({
+            loading: false
+        })
     }
     listenForTransRefPie(transRef) {
         transRef.on('value', (transactions) => {
@@ -172,6 +177,9 @@ class Dashboard extends Component{
 
             // update spents for each category
             this.setState({spents: amounts})
+        })
+         this.setState({
+            loading: false
         })
     }
     displayNoData(){ 
@@ -448,17 +456,22 @@ class Dashboard extends Component{
                             </TouchableWithoutFeedback>
                         </View>
                     </View>
+                    <TouchableHighlight onPress={() => {this.getBudgetLocal()}}>
+                        <Text style={{color: '#fff'}}>Refresh</Text>
+                    </TouchableHighlight>
+                     <ActivityIndicator
+                                animating = {this.state.loading}
+                                color='#111'
+                                size = 'large' />
                 </View>
             </Image>
         )
     }
     getBudgetLocal() {
-        this.props.getBudget(this.props.userId)
+        this.props.getBudget(this.props.userId,this.state.currentYear, this.state.currentMonth)
         this.props.getCurrency(this.props.userId)
     }
     openDashboardDetail() {
-        // var array = [0, 0, 0, 0]
-        // this.props.calculateTotalBudget(array)
         this.props.navigator.replace({
             title: 'Dashboard Detail',
             id: 'DashboardDetail',
@@ -538,6 +551,7 @@ function mapStateToProps(state) {
         budget: state.budget,
         currency: state.currency,
         userId: state.userId,
+        symbolCurrency : state.symbolCurrency
     }
 }
 

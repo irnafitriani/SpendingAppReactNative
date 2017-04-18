@@ -5,8 +5,11 @@ import {
     TouchableHighlight,
     View,
 } from 'react-native'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+import { ActionCreators } from './Actions'
 
-export default class TransactionRow extends React.Component {
+class TransactionRow extends React.Component {
     openTransactionDetail() {
         console.log('key :' + this.props.transaction.key),
         this.props.navigator.replace({
@@ -25,7 +28,7 @@ export default class TransactionRow extends React.Component {
                 onPress={this.openTransactionDetail.bind(this)}>
                 <View style={styles.rowWrapper}>
                     <View style={styles.row}>
-                        <Text style={styles.titleText}>Amount : Rp {this.props.transaction.amount}</Text>
+                        <Text style={styles.titleText}>Amount : {this.props.currency} {this.props.transaction.amount}</Text>
                         <Text style={styles.titleText}>{this.props.transaction.date}</Text>
                     </View>
                     <Text style={styles.label}>{this.props.transaction.name}</Text>
@@ -65,3 +68,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
 });
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ActionCreators, dispatch)
+}
+
+function mapStateToProps(state) {
+    return {
+        budget: state.budget,
+        currency: state.currency,
+        userId: state.userId,
+        symbolCurrency : state.symbolCurrency
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionRow)

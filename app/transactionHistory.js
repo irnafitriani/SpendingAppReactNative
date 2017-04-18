@@ -45,7 +45,7 @@ class TransactionHistory extends Component {
         })
     }
 
-    componentWillMount() {        
+    componentWillMount() {
         var tempRef = this.transRef.ref.orderByChild('date')
         this.setState({ firstMount: true})
         this.listenForTaskRef(tempRef)
@@ -203,7 +203,9 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        text: state.text
+        text: state.text,
+        currency: state.currency,
+        userId: state.userId,
     }
 }
 

@@ -61,7 +61,7 @@ export default class TransactionDetail extends React.Component {
                             <Text style={styles.label}>Amount</Text>
                             <Text style={styles.label}>:</Text>
                         </View>
-                        <Text style={styles.label}>Rp. {this.props.transaction.amount}</Text>
+                        <Text style={styles.label}>{this.props.currency} {this.props.transaction.amount}</Text>
                     </View>
                     <View style={styles.row}>
                         <View style={styles.subRow}>

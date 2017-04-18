@@ -12,16 +12,34 @@ export const userId = createReducer('', {
 
 export const budget = createReducer(0, {    
     [types.BUDGET](state, action) {
-        if(action.userId !== undefined) {
-            state = action.budget
+         console.log('budget ', newState)
+        var newState = action.budget !== undefined ? action.budget : state
+        return newState
+    }
+})
+
+export const symbolCurrency = createReducer('', {
+    [types.SYMBOLCURRENCY](state, action){
+        if(action.userId !== undefined){
+             console.log('symbol', action.symbolCurrency)
+             var newState = action.symbolCurrency
         }
-        return state
+        return newState
     }
 })
 
 export const currency = createReducer('', {    
     [types.CURRENCY](state, action) {
-        console.log('currency reducer ', action.currency)
+        if(action.userId !== undefined) {
+            // var settingRef = firebase.database().ref().child('settings').orderByChild('userId').equalTo(action.userId)
+            // settingRef.on('value', (settings) => {
+            //     settings.forEach((setting) => {
+            //         var budget = setting.val().currency
+            //         state = budget
+            //     })
+            // })
+            console.log('currency in setting reducer ', action.currency)
+        }
         return action.currency
     }
 })
