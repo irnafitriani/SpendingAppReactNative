@@ -456,9 +456,6 @@ class Dashboard extends Component{
                             </TouchableWithoutFeedback>
                         </View>
                     </View>
-                    <TouchableHighlight onPress={() => {this.getBudgetLocal()}}>
-                        <Text style={{color: '#fff'}}>Refresh</Text>
-                    </TouchableHighlight>
                      <ActivityIndicator
                                 animating = {this.state.loading}
                                 color='#111'
@@ -466,10 +463,6 @@ class Dashboard extends Component{
                 </View>
             </Image>
         )
-    }
-    getBudgetLocal() {
-        this.props.getBudget(this.props.userId,this.state.currentYear, this.state.currentMonth)
-        this.props.getCurrency(this.props.userId)
     }
     openDashboardDetail() {
         this.props.navigator.replace({
