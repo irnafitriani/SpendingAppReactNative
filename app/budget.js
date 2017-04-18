@@ -7,6 +7,7 @@ import {
     TouchableWithoutFeedback,
     StyleSheet,
     View,
+    Platform
 } from 'react-native'
 import firebase from 'firebase'
 import { connect } from 'react-redux'
@@ -43,7 +44,6 @@ class Budget extends Component {
                         budgets: child.val().budgets,
                         categories: child.val().categories
                     })
-                    this.calculateTotalBudget(this.state.budgets)
                 }
             })
         })
@@ -84,7 +84,6 @@ class Budget extends Component {
                 budgets: this.state.budgets,
             })
         }
-        this.calculateTotalBudget(this.state.budgets)
         this.onCancelPressed()
     }
     setBudget(index, value) {
@@ -104,7 +103,7 @@ class Budget extends Component {
                     source={background}
                     resizeMode="cover">
                     <View style={styles.container}>
-                        <View style={styles.inputWrap}>
+                        <View style={[styles.inputWrap, {marginTop: (Platform.OS === 'ios') ? 30 : 0, }]}>
                             <Text style={styles.label}>
                                 {this.state.categories[0]}
                             </Text>
@@ -185,7 +184,7 @@ class Budget extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex:1,  
     },
     background: {
         width: null,
@@ -223,7 +222,7 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         paddingLeft: 10,
         paddingRight: 10,
-        backgroundColor:"transparent"
+        backgroundColor:"transparent",
     },
     input:{
         flex: 1,
