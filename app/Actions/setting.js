@@ -46,9 +46,11 @@ export function getCurrency(userId) {
 }
 
 export function getCurrencySymbol(currency) {
-    return Utils.currency.filter((cur) => {
+    var key = Utils.currency.filter((cur) => {
         if(cur.name === currency) {
             return cur
         }
     })[0].key
+
+    return Utils.symbol[key]
 }

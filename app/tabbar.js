@@ -49,7 +49,8 @@ class Tabbar extends Component{
                         {<Dashboard 
                             selectedTab={this.state.selectedTab}
                             userInfo={this.props.userInfo}
-                            navigator={this.props.navigator} />}
+                            navigator={this.props.navigator}
+                            currentMonth={this.props.currentMonth} />}
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'transaction'}

@@ -8,7 +8,8 @@ import {
     StyleSheet,
     TextInput,
     TouchableHighlight,
-    TouchableOpacity
+    TouchableOpacity,
+    TouchableWithoutFeedback,
 } from 'react-native'
 import Firebase from 'firebase'
 import ReactNativePicker from 'react-native-picker'
@@ -19,7 +20,7 @@ import { ActionCreators } from './Actions'
 import Utils from './Helpers/utils'
 
 const background = require("../images/background.jpg");
-
+const info = require("../images/info.png")
 const arrowLeft = require('../images/arrow_left_white.png')
 const arrowRight = require('../images/arrow_right_white.png')
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -36,20 +37,23 @@ class Dashboard extends Component{
             sortCategory: 'Date',
             tempTransLine: [],
             tempTransPie: [],
-            currentMonth: new Date().getMonth(), 
+            currentMonth: this.props.currentMonth === undefined? new Date().getMonth() : this.props.currentMonth, 
             nextDisable: true,
             prevDisable: false,
             totalSpending: 0,
+            spents: [],
         }
         this.transRef = Firebase.database().ref().orderByChild('userId').equalTo(this.props.userInfo.userId);
     }
     componentWillMount() {
+        console.log('props current month ', this.props.currentMonth)
+        console.log('state current month ', this.state.currentMonth)
         console.log('will mount dashboard - user id ', this.props.userId)
         this.props.getBudget(this.props.userId)
         this.props.getCurrency(this.props.userId)
-        // this.getCurrencySymbol()
         this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
         this.disablePrevButtonNav(this.state.currentMonth)
+        this.disableNextButtonNav(this.state.currentMonth)
     }
     listenForTaskRef(transRef) {
         transRef.on('value', (transactions) => {
@@ -57,7 +61,9 @@ class Dashboard extends Component{
             var newTransactions = [{'x': 0, 'y': 0}];
             var counter = 0
             this.state.totalSpending = 0
-
+            var categories = ['Food & Beverage', 'Grocey & Amenities', 'Healt', 'Entertainment', 'Transportation']
+            var amounts = [0, 0, 0, 0, 0]
+            
             // add transactions to the graphic
             transactions.forEach((transaction) => {
                 if(transaction.val().userId === this.props.userInfo.userId) {
@@ -67,6 +73,19 @@ class Dashboard extends Component{
                     var date = transaction.val().date.substr(8)
                     var amount = parseInt(transaction.val().amount)
                     var latest = newTransactions[ newTransactions.length - 1].x 
+
+                    var cat = transaction.val().category
+                    if(cat === categories[0]) {
+                        amounts[0] = amounts[0] + amount
+                    } else if(cat === categories[1]) {
+                        amounts[1] = amounts[1] + amount
+                    } else if(cat === categories[2]) {
+                        amounts[2] = amounts[2] + amount
+                    } else if(cat === categories[3]) {
+                        amounts[3] = amounts[3] + amount
+                    } else {
+                        amounts[4] = amounts[4] + amount
+                    }
 
                     this.state.totalSpending += amount
 
@@ -98,6 +117,9 @@ class Dashboard extends Component{
                     tempTransLine: [],
                 })
             }
+
+            // update spents for each category
+            this.setState({spents: amounts})
         })
     }
     listenForTransRefPie(transRef) {
@@ -112,7 +134,7 @@ class Dashboard extends Component{
             transactions.forEach((transaction) => {
                 if(transaction.val().userId === this.props.userInfo.userId) {
                     counter = counter + 1
-                    var cat = transaction.val().category // === undefined ? 'none' : transaction.val().category
+                    var cat = transaction.val().category
                     var amount = parseInt(transaction.val().amount)
                     this.state.totalSpending += amount
                     if(cat === categories[0]) {
@@ -147,6 +169,9 @@ class Dashboard extends Component{
                     tempTransPie: [],
                 })
             }
+
+            // update spents for each category
+            this.setState({spents: amounts})
         })
     }
     displayNoData(){ 
@@ -398,38 +423,51 @@ class Dashboard extends Component{
                         />
                         </TouchableOpacity>
                     </View>             
-                    {this.setData()}
-                    <View>
-                        <Text style={{color: '#fff'}}>Budget : {this.props.currency} {this.props.budget} </Text>
-                        <Text style={styles.label}>Spending : {this.props.currency} {this.state.totalSpending}</Text>
-                        <Text style={styles.label}>Balance : {this.props.currency} {this.props.budget - this.state.totalSpending}</Text>
+                    <View style={{flex: 1, justifyContent:'space-between'}}>
+                        {this.setData()}
+                        <View style={{padding: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            <View style={{flex: 1}}>
+                                <View style={{flexDirection:'row'}}>
+                                    <Text style={[styles.label, {width: 80}]}>Budget</Text>
+                                    <Text style={styles.label}>:  {this.props.currency}. </Text>
+                                    <Text style={styles.label}>  {this.props.budget}</Text>
+                                </View>
+                                <View style={{flexDirection:'row'}}>
+                                    <Text style={[styles.label, {width: 80}]}>Spending</Text>
+                                    <Text style={styles.label}>:  {this.props.currency}. </Text>
+                                    <Text style={styles.label}>  {this.state.totalSpending}</Text>
+                                </View>
+                                <View style={{flexDirection:'row'}}>
+                                    <Text style={[styles.label, {width: 80}]}>Balance</Text>
+                                    <Text style={styles.label}>:  {this.props.currency}. </Text>
+                                    <Text style={styles.label}>  {this.props.budget - this.state.totalSpending}</Text>
+                                </View>
+                            </View>
+                            <TouchableWithoutFeedback onPress={() => this.openDashboardDetail()}>
+                                <Image source={info} />
+                            </TouchableWithoutFeedback>
+                        </View>
                     </View>
-                    <TouchableHighlight onPress={() => {this.getBudgetLocal()}}>
-                        <Text style={{color: '#fff'}}>Refresh</Text>
-                    </TouchableHighlight>
                 </View>
             </Image>
         )
     }
-
     getBudgetLocal() {
         this.props.getBudget(this.props.userId)
         this.props.getCurrency(this.props.userId)
-        // this.getCurrencySymbol()
     }
-
-    // getCurrencySymbol() {
-    //     var curr = Utils.currency.filter((cur) => {
-    //         if(cur.name === this.props.currency) {
-    //             return cur
-    //         }
-    //     })
-
-    //     if(curr !== undefined && curr.length === 1) {
-    //         var symbol = Utils.symbol[curr[0].key]
-    //         this.setState({symbol})
-    //     }
-    // }
+    openDashboardDetail() {
+        // var array = [0, 0, 0, 0]
+        // this.props.calculateTotalBudget(array)
+        this.props.navigator.replace({
+            title: 'Dashboard Detail',
+            id: 'DashboardDetail',
+            userInfo: this.props.userInfo,
+            selectedTab : this.props.selectedTab,
+            spents: this.state.spents,
+            currentMonth: this.state.currentMonth,
+        })
+    }
 }
 
 const styles = StyleSheet.create({
@@ -461,7 +499,8 @@ const styles = StyleSheet.create({
         width: null,
     },
     label:{
-        color: "#ffffff"
+        color: "#ffffff",
+        // width: 80,
     },
     picker: {
         color: "#ffffff",

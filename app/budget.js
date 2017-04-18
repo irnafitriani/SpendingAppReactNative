@@ -23,15 +23,6 @@ class Budget extends Component {
         this.budgetRef = firebase.database().ref('budgets')
     }
     onCancelPressed() {
-        ReactNativePicker.hide()
-        this.props.navigator.replace({
-            title: 'Dashboard',
-            id: 'Tabbar',
-            selectedTab: 'transaction',
-            userInfo: this.props.userInfo,
-        })
-    }
-    onCancelPressed() {
         this.props.navigator.replace({
             title: 'Settings',
             id: 'Tabbar',
