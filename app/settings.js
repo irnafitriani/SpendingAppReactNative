@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { ActionCreators } from './Actions'
 
-const background = require("../images/background.jpg");
+const background = require("../images/background2.jpeg");
 const info = require("../images/info.png")
 const dismissKeyboard = require('dismissKeyboard')
 import Utils from './Helpers/utils'

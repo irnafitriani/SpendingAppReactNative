@@ -15,7 +15,7 @@ import ReactNativePicker from 'react-native-picker'
 import Firebase from 'firebase'
 import { connect } from 'react-redux';
 
-const background = require('../images/background.jpg')
+const background = require("../images/background2.jpeg");
 const dismissKeyboard = require('dismissKeyboard')
 
 class AddTransaction extends React.Component {

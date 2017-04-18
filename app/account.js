@@ -15,7 +15,7 @@ import {
 import Prompt from 'react-native-prompt'
 import Separator from './Helpers/separator'
 import Firebase from 'firebase'
-const background = require("../images/background.jpg");
+const background = require("../images/background2.jpeg");
 const dismissKeyboard = require('dismissKeyboard')
 
 import { connect } from 'react-redux'

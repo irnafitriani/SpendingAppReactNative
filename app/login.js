@@ -20,7 +20,7 @@ import Registration from './registration'
 import Firebase from 'firebase'
 
 const dismissKeyboard = require('dismissKeyboard');
-const background = require("../images/background.jpg");
+const background = require("../images/background2.jpeg");
 const lockIcon = require("../images/lock.png");
 const personIcon = require("../images/person.png");
 const mailIcon = require("../images/mail.png");

@@ -17,7 +17,7 @@ import { bindActionCreators } from 'redux';
 import { ActionCreators } from './Actions'
 
 const sortIcon = require("../images/sort_white.png");
-const background = require("../images/background.jpg");
+const background = require("../images/background2.jpeg");
 
 class TransactionHistory extends Component {
     constructor(props) {

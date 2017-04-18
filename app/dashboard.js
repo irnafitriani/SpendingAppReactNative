@@ -20,7 +20,7 @@ import { bindActionCreators } from 'redux'
 import { ActionCreators } from './Actions'
 import Utils from './Helpers/utils'
 
-const background = require("../images/background.jpg");
+const background = require("../images/background2.jpeg");
 const info = require("../images/info.png")
 const arrowLeft = require('../images/arrow_left_white.png')
 const arrowRight = require('../images/arrow_right_white.png')

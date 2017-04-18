@@ -7,7 +7,7 @@ import {
     Image
 } from 'react-native'
 import Firebase from 'firebase'
-const background = require('../images/background.jpg')
+const background = require("../images/background2.jpeg");
 
 export default class TransactionDetail extends React.Component {
     constructor() {

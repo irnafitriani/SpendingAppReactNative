@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import firebase from 'firebase'
 
-const background = require("../images/background.jpg")
+const background = require("../images/background2.jpeg");
 
 class DashboardDetail extends Component{
     constructor(props) {
