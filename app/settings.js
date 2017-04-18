@@ -34,7 +34,6 @@ class Settings extends Component{
             key:'',
             symbol : 'IDR',
             currency : 'Indonesian Rupiah(IDR)',
-            budget: '',
             currencyList: [],
             isExist: false
         }
@@ -48,7 +47,6 @@ class Settings extends Component{
         this.setState({currencyList : listCurrency})
     }
     componentDidMount(){
-        console.log(this.props.budget)
         this.listenForSettings()
     }
 
@@ -112,7 +110,7 @@ class Settings extends Component{
             }
 
         }else{
-                if(this.state.currency !== '' && this.props.userInfo !== '' && this.state.budget !== '') {
+                if(this.state.currency !== '' && this.props.userInfo !== '') {
                     settingRef.push({
                         userId: this.props.userInfo.userId, 
                         currency: this.state.currency, 
@@ -171,7 +169,7 @@ class Settings extends Component{
                                         placeholder="Budget"
                                         style={styles.input}
                                         underlineColorAndroid="transparent"
-                                        value={this.props.budget}
+                                        value={this.props.budget.toString()}
                                     />
                                     <TouchableHighlight onPress={this.openBudgetDetail.bind(this)}>
                                         <Image source={info}/>
@@ -251,6 +249,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
+        userId: state.userId,
         budget: state.budget
     }
 }

@@ -29,25 +29,25 @@ class Budget extends Component {
     }
 
     componentWillMount(){
-        // this.listenForBudgets()
+        this.listenForBudgets()
     }
 
-    // listenForBudgets(){
-    //   var budgetRef = firebase.database().ref('budgets').orderByChild('userId').equalTo(this.props.userInfo.userId)
-    //     budgetRef.on('value',(snap) =>{
-    //         snap.forEach((child) =>{
-    //             if (child.val().year == this.state.year && child.val().month == this.state.month){
-    //                 this.setState({
-    //                     month: child.val().month,
-    //                     year: child.val().year,
-    //                     budgets: child.val().budgets,
-    //                     categories: child.val().categories
-    //                 })
-    //                 this.calculateTotalBudget(this.state.budgets)
-    //             }
-    //         })
-    //     })
-    // }
+    listenForBudgets(){
+      var budgetRef = firebase.database().ref('budgets').orderByChild('userId').equalTo(this.props.userInfo.userId)
+        budgetRef.on('value',(snap) =>{
+            snap.forEach((child) =>{
+                if (child.val().year == this.state.year && child.val().month == this.state.month){
+                    this.setState({
+                        month: child.val().month,
+                        year: child.val().year,
+                        budgets: child.val().budgets,
+                        categories: child.val().categories
+                    })
+                    this.calculateTotalBudget(this.state.budgets)
+                }
+            })
+        })
+    }
 
     // calculateTotalBudget(budgets){
     //     var totalBudget = 0

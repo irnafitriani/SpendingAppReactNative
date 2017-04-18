@@ -49,7 +49,6 @@ class Dashboard extends Component{
 
     componentWillMount() {
         this.props.getBudget(this.props.userId,this.state.currentYear, this.state.currentMonth)
-        console.log(this.props.budget)
         this.props.getCurrency(this.props.userId)
         this.getSelectedMonthData(this.state.currentMonth, this.state.sortCategory)
         this.disablePrevButtonNav(this.state.currentMonth)
