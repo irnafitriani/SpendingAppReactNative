@@ -40,6 +40,8 @@ class Settings extends Component{
     }
 
     componentWillMount(){
+        this.props.getBudgetSetting(this.props.userId)
+        console.log('setting will mount')
         var listCurrency = []
         Utils.currency.forEach((currency) =>{
            listCurrency.push(currency.name ) 
@@ -47,6 +49,7 @@ class Settings extends Component{
         this.setState({currencyList : listCurrency})
     }
     componentDidMount(){
+        console.log('setting did mount')
         this.listenForSettings()
     }
 
@@ -93,7 +96,6 @@ class Settings extends Component{
         ReactNativePicker.show()
         this.setCatPickerShow(true)
     }
-
 
     onSavePressed(){
         var settingRef = Firebase.database().ref().child('settings')
@@ -169,7 +171,7 @@ class Settings extends Component{
                                         placeholder="Budget"
                                         style={styles.input}
                                         underlineColorAndroid="transparent"
-                                        value={this.props.budget.toString()}
+                                        value={this.props.budgetSetting.toString()}
                                     />
                                     <TouchableHighlight onPress={this.openBudgetDetail.bind(this)}>
                                         <Image source={info}/>
@@ -250,7 +252,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         userId: state.userId,
-        budget: state.budget
+        budget: state.budget,
+        budgetSetting: state.budgetSetting,
     }
 }
 

@@ -261,7 +261,7 @@ class Dashboard extends Component{
                 bottom: 0
             },
             width: 320,
-            height: 300,
+            height: 280,
             color: '#2980B9',
             r: 50,
             R: 100,
@@ -287,7 +287,9 @@ class Dashboard extends Component{
                         data={this.state.tempTransPie} 
                         options={options} 
                         accessorKey="total"
-                        margin={{top: 20, left: 20, right: 20, bottom: 20}}
+                        margin={{top: 0, left: 20, right: 20, bottom: 0}}
+                        alignItems='center'
+                        justifyContent='center'
                         color="#2980B9"
                         pallete={[
                             {'r':25,'g':99,'b':201},
@@ -300,7 +302,7 @@ class Dashboard extends Component{
                             {'r':198,'g':84,'b':45}
                         ]}
                         r={50}
-                        R={150}
+                        R={120}
                         label={{
                             fontFamily: 'Arial',
                             fontSize: 8,
@@ -318,6 +320,7 @@ class Dashboard extends Component{
             if(month > 11) {
                 month = month - 12
             }
+            this.props.getBudget(this.props.userId,this.state.currentYear, month)
             this.setState({currentMonth: month})
             this.getSelectedMonthData(month, this.state.sortCategory)
             this.disablePrevButtonNav(month)
@@ -330,6 +333,7 @@ class Dashboard extends Component{
             if(month < 0) {
                 month = month + 12
             }
+            this.props.getBudget(this.props.userId,this.state.currentYear, month)
             this.setState({currentMonth: month})
             this.getSelectedMonthData(month, this.state.sortCategory)
             this.disableNextButtonNav(month)

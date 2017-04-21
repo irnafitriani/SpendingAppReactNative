@@ -25,6 +25,8 @@ class Budget extends Component {
             month: new Date().getMonth(),
             year:new Date().getFullYear() ,
             categories: ['Food & Beverage', 'Grocery & Amenities', 'Health', 'Entertainment', 'Transportation'],
+            isExist: false,
+            key: '',
         }
         this.budgetRef = firebase.database().ref('budgets')
     }
@@ -42,21 +44,14 @@ class Budget extends Component {
                         month: child.val().month,
                         year: child.val().year,
                         budgets: child.val().budgets,
-                        categories: child.val().categories
+                        categories: child.val().categories,
+                        isExist: true,
+                        key: child.key,
                     })
                 }
             })
         })
     }
-
-    // calculateTotalBudget(budgets){
-    //     var totalBudget = 0
-    //     for(let i = 0; i < budgets.length; i++){
-    //         totalBudget += budgets[i]
-    //     }
-    //     this.props.setTotalBudget(totalBudget)
-    //     return totalBudget
-    // }
 
     onCancelPressed() {
         this.props.navigator.replace({
@@ -68,14 +63,17 @@ class Budget extends Component {
     }
 
     onSavePressed() {
-        if(this.state.mode === 'Update Budget') {
-            this.budgetRef.child(this.props.transaction.key).update({
-                userId: this.props.userInfo.userId, name: this.state.description, 
-                amount: parseInt(this.state.amount), date: this.state.date, category: this.state.category,
+        var month= new Date().getMonth()
+        var year= new Date().getFullYear()
+        if(this.state.isExist && this.state.key !== '') {
+            this.budgetRef.child(this.state.key).update({
+                userId: this.props.userInfo.userId,
+                month: month,
+                year: year,
+                categories: this.state.categories,
+                budgets: this.state.budgets,
             })
         } else {
-            var month= new Date().getMonth()
-            var year= new Date().getFullYear()
             this.budgetRef.push({
                 userId: this.props.userInfo.userId,
                 month: month,
@@ -86,6 +84,7 @@ class Budget extends Component {
         }
         this.onCancelPressed()
     }
+
     setBudget(index, value) {
         var temp = this.state.budgets
         temp[index] = parseInt(value === '' ? 0 : value)
@@ -93,6 +92,7 @@ class Budget extends Component {
             budgets: temp
         })
     }
+
     render() {
         return(
             <TouchableWithoutFeedback 

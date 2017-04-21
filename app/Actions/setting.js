@@ -31,8 +31,10 @@ export function calculateTotalBudget(budgets){
 
 export function getBudget(userId, year, month) {
     return (dispatch, getState) => {
+        var counter = 0
         var budgetRef = firebase.database().ref('budgets').orderByChild('userId').equalTo(userId)
         budgetRef.on('value', (budgetArray) => {
+            console.log('number of budget children ', budgetArray.numChildren())
             budgetArray.forEach((budgetChild) => {
                 if (budgetChild.val().year == year && budgetChild.val().month == month){
                     var budget = calculateTotalBudget(budgetChild.val().budgets)
@@ -41,6 +43,36 @@ export function getBudget(userId, year, month) {
                         userId,
                         budget,
                     })
+                } else { 
+                    counter++
+                        if(counter === budgetArray.numChildren()) {
+                        var budget = 0
+                        dispatch({
+                            type: types.BUDGET,
+                            userId,
+                            budget,
+                        })
+                    }
+                }
+            })
+        })
+    }
+}
+
+export function getBudgetSetting(userId) {
+    console.log('get budget setting action')
+    return (dispatch, getState) => {
+        var budgetRef = firebase.database().ref('budgets').orderByChild('userId').equalTo(userId)
+        budgetRef.on('value', (budgetArray) => {
+            budgetArray.forEach((budgetChild) => {
+                if (budgetChild.val().year == new Date().getFullYear() && budgetChild.val().month == new Date().getMonth()){
+                    var budgetSetting = calculateTotalBudget(budgetChild.val().budgets)
+                    dispatch({
+                        type: types.BUDGET,
+                        userId,
+                        budgetSetting,
+                    })
+                    console.log('get budget setting action ', budgetSetting)
                 }
             })
         })
