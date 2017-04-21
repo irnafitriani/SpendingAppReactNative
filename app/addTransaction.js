@@ -64,7 +64,7 @@ class AddTransaction extends React.Component {
     }
 
     onSavePressed() {
-        if(this.state.description !== '' && this.state.amount !== '' && this.state.date !== '' && this.state.category !== '') {
+        if((this.state.description !== '' && this.state.description !== undefined) && (this.state.amount !== '' && this.state.amount !== undefined) && (this.state.date !== '' && this.state.date !== undefined) && (this.state.category !== '' && this.state.category !== undefined)) {
             if(this.state.mode === 'Edit Transaction') {
                 this.taskRef.child(this.props.transaction.key).update({
                     userId: this.props.userInfo.userId, name: this.state.description, 
