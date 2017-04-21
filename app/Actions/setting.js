@@ -68,7 +68,7 @@ export function getBudgetSetting(userId) {
                 if (budgetChild.val().year == new Date().getFullYear() && budgetChild.val().month == new Date().getMonth()){
                     var budgetSetting = calculateTotalBudget(budgetChild.val().budgets)
                     dispatch({
-                        type: types.BUDGET,
+                        type: types.BUDGET_SETTING,
                         userId,
                         budgetSetting,
                     })
