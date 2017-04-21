@@ -21,6 +21,7 @@ import ReactNativePicker from 'react-native-picker'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { ActionCreators } from './Actions'
+import Api from './Helpers/api'
 
 const background = require("../images/background.jpg");
 const info = require("../images/info.png")
@@ -34,6 +35,8 @@ class Settings extends Component{
             key:'',
             symbol : 'IDR',
             currency : 'Indonesian Rupiah(IDR)',
+            exchangeCurrency: '',
+            exchangeRate: '',
             currencyList: [],
             isExist: false
         }
@@ -76,14 +79,22 @@ class Settings extends Component{
         })
     }
 
-    showCurrencyPicker() {
+    showCurrencyPicker(type) {
         ReactNativePicker.init({
             pickerData: this.state.currencyList,
             onPickerConfirm: pickedValue => {
                 if (pickedValue[0] !== '') {
-                    this.setState({
-                        currency: pickedValue[0]
-                    })
+                    if(type !== 'forex') {
+                        this.setState({
+                            currency: pickedValue[0]
+                        })
+                    } else {
+                        var index = this.state.currencyList.indexOf(pickedValue[0])
+                        this.setExchangeRate('USD')
+                        this.setState({
+                            exchangeCurrency: pickedValue[0]
+                        })
+                    }
                 }
             },
             onPickerCancel: pickedValue => {
@@ -142,6 +153,11 @@ class Settings extends Component{
         })
     }
 
+    setExchangeRate(base) {
+        var json = Api.get('?base='+base)
+        console.log(json)
+    }
+
     render(){
         return(
             <TouchableWithoutFeedback
@@ -176,6 +192,24 @@ class Settings extends Component{
                                     <TouchableHighlight onPress={this.openBudgetDetail.bind(this)}>
                                         <Image source={info}/>
                                     </TouchableHighlight>
+                                </View>
+
+                                <Text style={styles.rowTitle}>Foreign Exchange Rate</Text>
+                                <View style={{height: 120}} >
+                                    <TouchableOpacity onPress={this.showCurrencyPicker.bind(this, 'forex')} style={{flex: 1}}>
+                                        <TextInput
+                                            placeholder="Currency"
+                                            editable={false}
+                                            style={[styles.input, {marginTop: 10}]}
+                                            value={this.state.exchangeCurrency}
+                                            underlineColorAndroid="transparent"/>
+                                    </TouchableOpacity>
+                                    <TextInput
+                                        placeholder='Rate'
+                                        editable={false}
+                                        value={this.state.exchangeRate}
+                                        style={[styles.input, {marginTop: 10}]}
+                                        underlineColorAndroid='transparent'/>
                                 </View>
                         </View>
                         <View style={styles.buttonContainer}>
