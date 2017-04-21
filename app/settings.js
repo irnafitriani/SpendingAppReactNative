@@ -154,8 +154,14 @@ class Settings extends Component{
     }
 
     setExchangeRate(base) {
-        var json = Api.get('?base='+base)
-        console.log(json)
+        var json;
+        Api.get('?base=USD').then(resp => {
+            console.log(resp)
+            json = resp
+            console.log('json dalam ', json)
+        })
+        
+        console.log('json luar ', json)
     }
 
     render(){
