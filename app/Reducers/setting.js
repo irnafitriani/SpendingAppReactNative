@@ -32,6 +32,12 @@ export const symbolCurrency = createReducer('', {
     }
 })
 
+export const forexRate = createReducer('', {
+    [types.FOREX_RATE](state, action){
+        return action.rate
+    }
+})
+
 export const currency = createReducer('', {    
     [types.CURRENCY](state, action) {
         return action.currency

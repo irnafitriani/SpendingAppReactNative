@@ -96,11 +96,25 @@ export function getCurrency(userId) {
     }
 }
 
-export function getCurrencySymbol(currency) {
-    var key = Utils.currency.filter((cur) => {
+export function getExchangeRate(exchangeCurrency, rates) {
+    return (dispatch, getState) => {
+        var key =getCurrrencyKey(exchangeCurrency)
+        var rate = rates[key]
+        dispatch({
+            type: types.FOREX_RATE,
+            rate,
+        })
+    }
+}
+
+function getCurrrencyKey(currency) {
+    return Utils.currency.filter((cur) => {
         if(cur.name === currency) {
             return cur
         }
     })[0].key
-    return Utils.symbol[key]
+}
+
+function getCurrencySymbol(currency) {
+    return Utils.symbol[getCurrrencyKey(currency)]
 }

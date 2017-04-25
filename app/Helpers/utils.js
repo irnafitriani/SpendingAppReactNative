@@ -31,6 +31,7 @@ var Utils = {
 		{ "key" : "SGD", "name" : "Singapore Dollar(SGD)" },
 		{ "key" : "THB", "name" : "Thai Baht(THB)" },
 		{ "key" : "TRY", "name" : "Turkish Lira(TRY)" },
+		{ "key" : "USD", "name" : "United States Dollar(USD)" },		
 		{ "key" : "ZAR", "name" : "South African Rand(ZAR)" }
 		
 	],
@@ -65,6 +66,7 @@ var Utils = {
 		"SGD" : '$',
 		"TRY" : '₺₺',
 		"THB" : '฿',
+		"USD" : '$',
 		"ZAR" : 'R'		
 	},
 	getIconUrl: function(icon) {

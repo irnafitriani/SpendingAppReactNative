@@ -33,10 +33,9 @@ class Settings extends Component{
         super(props);
         this.state ={
             key:'',
-            symbol : 'IDR',
-            currency : 'Indonesian Rupiah(IDR)',
+            symbol : '$',
+            currency : 'United States Dollar(USD)',
             exchangeCurrency: '',
-            exchangeRate: '',
             currencyList: [],
             isExist: false
         }
@@ -44,15 +43,14 @@ class Settings extends Component{
 
     componentWillMount(){
         this.props.getBudgetSetting(this.props.userId)
-        console.log('setting will mount')
         var listCurrency = []
         Utils.currency.forEach((currency) =>{
            listCurrency.push(currency.name ) 
         })
         this.setState({currencyList : listCurrency})
     }
+
     componentDidMount(){
-        console.log('setting did mount')
         this.listenForSettings()
     }
 
@@ -65,14 +63,12 @@ class Settings extends Component{
                     key : child.key,
                     userId : child.val().userId,
                     currency: child.val().currency,
-                    // budget : child.val().budget.toString()
                 })
             })
             if(settings.length > 0 && settings[0].userId === this.props.userInfo.userId){
                 this.setState({
                     isExist : true,
                     currency: settings[0].currency,
-                    // budget: settings[0].budget,
                     key : settings[0].key
                 })
             }
@@ -90,10 +86,10 @@ class Settings extends Component{
                         })
                     } else {
                         var index = this.state.currencyList.indexOf(pickedValue[0])
-                        this.setExchangeRate('USD')
                         this.setState({
                             exchangeCurrency: pickedValue[0]
                         })
+                        this.setExchangeRate(pickedValue[0])
                     }
                 }
             },
@@ -112,25 +108,19 @@ class Settings extends Component{
         var settingRef = Firebase.database().ref().child('settings')
         if (this.state.isExist === true){
             if(this.state.currency !== '' && this.props.userInfo !== '' && this.state.budget !== '') {
-                    settingRef.child(this.state.key).update({
-                        userId: this.props.userInfo.userId, 
-                        currency: this.state.currency, 
-                        // budget: parseInt(this.state.budget), 
-                    })
-                // return to transactions list screen
+                settingRef.child(this.state.key).update({
+                    userId: this.props.userInfo.userId, 
+                    currency: this.state.currency, 
+                })
             } else {
                 alert('Please fill all fields.')
             }
-
         }else{
-                if(this.state.currency !== '' && this.props.userInfo !== '') {
-                    settingRef.push({
-                        userId: this.props.userInfo.userId, 
-                        currency: this.state.currency, 
-                        // budget: parseInt(this.state.budget), 
-                    })
-
-                // return to transactions list screen
+            if(this.state.currency !== '' && this.props.userInfo !== '') {
+                settingRef.push({
+                    userId: this.props.userInfo.userId, 
+                    currency: this.state.currency, 
+                })
             } else {
                 alert('Please fill all fields.')
             }
@@ -153,15 +143,13 @@ class Settings extends Component{
         })
     }
 
-    setExchangeRate(base) {
-        var json;
-        Api.get('?base=USD').then(resp => {
-            console.log(resp)
-            json = resp
-            console.log('json dalam ', json)
+    setExchangeRate(exchangeCurrency) {
+        var base = this.state.currency.substr(this.state.currency.indexOf('(') + 1, 3)
+        Api.get('?base='+base).then(resp => {
+            this.props.getExchangeRate(this.state.exchangeCurrency, resp)
+        }).catch( (ex) => {
+            console.log(ex);
         })
-        
-        console.log('json luar ', json)
     }
 
     render(){
@@ -191,6 +179,7 @@ class Settings extends Component{
                                 <View style={styles.inputWrap}>
                                     <TextInput
                                         placeholder="Budget"
+                                        editable={false}
                                         style={styles.input}
                                         underlineColorAndroid="transparent"
                                         value={this.props.budgetSetting.toString()}
@@ -201,20 +190,20 @@ class Settings extends Component{
                                 </View>
 
                                 <Text style={styles.rowTitle}>Foreign Exchange Rate</Text>
-                                <View style={{height: 120}} >
-                                    <TouchableOpacity onPress={this.showCurrencyPicker.bind(this, 'forex')} style={{flex: 1}}>
+                                <View style={{height: 110, justifyContent:'space-between'}} >
+                                    <TouchableOpacity onPress={this.showCurrencyPicker.bind(this, 'forex')} style={{height: 60, flex: 1}}>
                                         <TextInput
                                             placeholder="Currency"
                                             editable={false}
-                                            style={[styles.input, {marginTop: 10}]}
+                                            style={[styles.input, {flex: 1}]}
                                             value={this.state.exchangeCurrency}
                                             underlineColorAndroid="transparent"/>
                                     </TouchableOpacity>
                                     <TextInput
                                         placeholder='Rate'
                                         editable={false}
-                                        value={this.state.exchangeRate}
-                                        style={[styles.input, {marginTop: 10}]}
+                                        value={this.props.forexRate.toString()}
+                                        style={[styles.input, {marginTop: 10, flex: 1}]}
                                         underlineColorAndroid='transparent'/>
                                 </View>
                         </View>
@@ -230,7 +219,6 @@ class Settings extends Component{
             </TouchableWithoutFeedback>
         )
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -294,6 +282,7 @@ function mapStateToProps(state) {
         userId: state.userId,
         budget: state.budget,
         budgetSetting: state.budgetSetting,
+        forexRate: state.forexRate,
     }
 }
 
