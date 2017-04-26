@@ -1,13 +1,12 @@
 import 'react-native';
 import React from 'react';
-import Index from '../index.ios.js';
+import ForgotPassword from '../app/forgotPassword.js';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
-
-test('renders correctly', () => {
+it('renders correctly', () => {
   const tree = renderer.create(
-    <Index />
+    <ForgotPassword />
   ).toJSON();
   expect(tree).toMatchSnapshot()
 });
