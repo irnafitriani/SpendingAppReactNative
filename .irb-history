@@ -1,0 +1,8 @@
+start_test_server_in_background
+query("*")
+clear
+query("*")
+clear
+start_test_server_in_background
+calabash-ios console
+query("*")
