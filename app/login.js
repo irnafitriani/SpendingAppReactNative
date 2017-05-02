@@ -109,6 +109,7 @@ class Login extends Component{
                                     />
                                 </View>
                                 <TextInput
+                                    testID="test-id-textfield-email"
                                     placeholder="Email"
                                     style={styles.input}
                                     underlineColorAndroid="transparent"
@@ -125,6 +126,7 @@ class Login extends Component{
                                     />
                                 </View>
                                 <TextInput
+                                    testID="test-id-textfield-password"
                                     placeholder="Password"
                                     secureTextEntry
                                     style={styles.input}
@@ -134,18 +136,19 @@ class Login extends Component{
                                 />
                             </View>
                             <TouchableOpacity activeOpacity={.5}
+                                testID="test-id-buttonSignIn"
                                 onPress= {this.signIn.bind(this)}>
                                 <View style={styles.button}>
                                     <Text style={styles.buttonText}>Sign In</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity activeOpacity={.5}
+                            <TouchableOpacity testID="test-id-buttonSignUp" activeOpacity={.5}
                                 onPress={ this.goToSignUp.bind(this) }>
                                 <View>
                                     <Text style={styles.signUp}>Do not have an account, Sign Up!</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity activeOpacity={.5}
+                            <TouchableOpacity testID="test-id-buttonForgot" activeOpacity={.5}
                                 onPress={ this.gotToForgotPassword.bind(this) }>
                                 <View>
                                     <Text style={styles.signUp}>Forgot Password?</Text>

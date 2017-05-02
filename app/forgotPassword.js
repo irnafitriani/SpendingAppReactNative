@@ -46,7 +46,7 @@ export default class ForgotPassword extends Component{
                     })
                 }])
             })
-            .catch(function(error){
+            .catch((error)=>  {
                 Alert.alert('Reset Password',error.message,[{text:'OK', onPress: () => 
                     this.setState({
                         loading: false
@@ -75,6 +75,7 @@ export default class ForgotPassword extends Component{
                                     />
                                 </View>
                                 <TextInput
+                                    testID = "test-id-textfield"
                                     placeholder="Email"
                                     style={styles.input}
                                     underlineColorAndroid="transparent"
@@ -83,6 +84,7 @@ export default class ForgotPassword extends Component{
                                 />
                             </View>
                             <TouchableOpacity activeOpacity={.5}
+                                testID = 'test-id-button'
                                 onPress={this.resetPassword.bind(this)}>
                                 <View style={styles.button}>
                                     <Text style={styles.buttonText}>Reset Password</Text>

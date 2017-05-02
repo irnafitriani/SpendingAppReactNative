@@ -1,0 +1,17 @@
+query
+query("UIButton")
+query("*)
+cucumber -v
+quit
+start_test_server_in_background
+query("*")
+start_test_server_in_background
+start_test_server_in_background
+query("*")
+query ("UIButton")
+query ("UITextField")
+query ("UITextField").first.keys
+cucumber -v
+quit
+query("UITextField")
+quit
