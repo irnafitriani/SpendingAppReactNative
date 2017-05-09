@@ -46,4 +46,40 @@ describe('reducers', () => {
         ).toEqual({...initialState,displayName:'displayname'});
     });
 
+    it('should return new State with email set', () => {
+        expect(
+            reducer(initialState, {type:types.EMAIL,email:'user1@domain.com'})
+        ).toEqual({...initialState,email:'user1@domain.com'});
+    });
+
+    it('should return new State with budget set', () => {
+        expect(
+            reducer(initialState, {type:types.BUDGET,budget:9000})
+        ).toEqual({...initialState,budget:9000});
+    });
+
+    it('should return new State with budget set', () => {
+        expect(
+            reducer(initialState, {type:types.BUDGET_SETTING,budgetSetting:9000})
+        ).toEqual({...initialState,budgetSetting:9000});
+    });
+
+    it('should return new State with symbolCurrency set', () => {
+        expect(
+            reducer(initialState, {type:types.SYMBOLCURRENCY,symbolCurrency:'Rp'})
+        ).toEqual({...initialState,symbolCurrency:'Rp'});
+    });
+
+    it('should return new State with rate set', () => {
+        expect(
+            reducer(initialState, {type:types.FOREX_RATE,rate:1200})
+        ).toEqual({...initialState,rate:1200});
+    });
+
+    it('should return new State with rate set', () => {
+        expect(
+            reducer(initialState, {type:types.CURRENCY,currency:'Indonesian Rupiah(IDR)'})
+        ).toEqual({...initialState,currency:'Indonesian Rupiah(IDR)'});
+    });
+
 });
